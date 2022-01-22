@@ -1,7 +1,7 @@
 
 import sys, os
 import unittest
-from datetime import datetime, timedelta
+import datetime
 
 from githubpy import *
 
@@ -45,8 +45,8 @@ class BasicTests(unittest.TestCase):
         
         ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
         
-        since = datetime(2021, 9, 2)
-        until = datetime(2021, 9, 3)
+        since = datetime.datetime(2021, 9, 2)
+        until = datetime.datetime(2021, 9, 3)
         
         ##
         ## We tailor the query to a known repo with a known history

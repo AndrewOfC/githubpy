@@ -11,7 +11,9 @@ class GitHubClient(GitHubClientBase):
         token=token, 
         usesession=usesession)
 
+    #
     # get /
+    #
     def MetaRoot(self, ):
         """Get Hypermedia links to resources accessible in GitHub's REST API
         
@@ -36,7 +38,9 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
+    #
     # get /meta
+    #
     def MetaGet(self, ):
         """
         
@@ -64,7 +68,9 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
+    #
     # get /octocat
+    #
     def MetaGetOctocat(self, s:str=None):
         """Get the octocat as ASCII art
         
@@ -92,7 +98,9 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
+    #
     # get /zen
+    #
     def MetaGetZen(self, ):
         """Get a random sentence from the Zen of GitHub
         /zen
@@ -115,7 +123,9 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
+    #
     # get /admin/hooks
+    #
     def EnterpriseAdminListGlobalWebhooks(self, accept='application/vnd.github.superpro-preview+json', per_page=30, page=1):
         """
         
@@ -149,8 +159,8 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # post /admin/hooks
-    def EnterpriseAdminCreateGlobalWebhook(self, config:dict, name:str, events:list=None, active:bool=True):
+
+    def EnterpriseAdminCreateGlobalWebhook(self, config:dict, name:str, events:list=[], active:bool=True):
         """
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#create-a-global-webhook
@@ -173,6 +183,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/hooks", 
                           json=data,
@@ -185,7 +196,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/hooks/{hook_id}
+    #
     def EnterpriseAdminGetGlobalWebhook(self, hook_id:int):
         """
         
@@ -211,8 +224,8 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # patch /admin/hooks/{hook_id}
-    def EnterpriseAdminUpdateGlobalWebhook(self, hook_id:int,config:dict=None, events:list=None, active:bool=True):
+
+    def EnterpriseAdminUpdateGlobalWebhook(self, hook_id:int,config:dict=None, events:list=[], active:bool=True):
         """Parameters that are not provided will be overwritten with the default value or removed if no default exists.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#update-a-global-webhook
@@ -234,6 +247,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/hooks/{hook_id}", 
                           json=data,
@@ -246,7 +260,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /admin/hooks/{hook_id}
+    #
     def EnterpriseAdminDeleteGlobalWebhook(self, hook_id:int,accept='application/vnd.github.superpro-preview+json'):
         """
         
@@ -275,7 +291,7 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # post /admin/hooks/{hook_id}/pings
+
     def EnterpriseAdminPingGlobalWebhook(self, hook_id:int):
         """This will trigger a [ping event](https://docs.github.com/enterprise-server@3.3/webhooks/#ping-event) to be sent to the webhook.
         
@@ -293,6 +309,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/hooks/{hook_id}/pings", 
                           json=data,
@@ -305,7 +322,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/keys
+    #
     def EnterpriseAdminListPublicKeys(self, per_page=30, page=1, direction='desc', sort='created', since:str=None):
         """
         
@@ -345,7 +364,9 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
+    #
     # delete /admin/keys/{key_ids}
+    #
     def EnterpriseAdminDeletePublicKey(self, key_ids:str):
         """
         
@@ -371,7 +392,7 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # patch /admin/ldap/teams/{team_id}/mapping
+
     def EnterpriseAdminUpdateLdapMappingForTeam(self, team_id:int,ldap_dn:str):
         """Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://help.github.com/enterprise/admin/guides/user-management/using-ldap/#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.3/rest/reference/teams/#create-a-team) endpoint to create a team with LDAP mapping.
         
@@ -390,6 +411,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/ldap/teams/{team_id}/mapping", 
                           json=data,
@@ -402,7 +424,7 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
-    # post /admin/ldap/teams/{team_id}/sync
+
     def EnterpriseAdminSyncLdapMappingForTeam(self, team_id:int):
         """Note that this API call does not automatically initiate an LDAP sync. Rather, if a `201` is returned, the sync job is queued successfully, and is performed when the instance is ready.
         
@@ -419,6 +441,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/ldap/teams/{team_id}/sync", 
                           json=data,
@@ -431,7 +454,7 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
-    # patch /admin/ldap/users/{username}/mapping
+
     def EnterpriseAdminUpdateLdapMappingForUser(self, username:str,ldap_dn:str):
         """
         
@@ -450,6 +473,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/ldap/users/{username}/mapping", 
                           json=data,
@@ -462,7 +486,7 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
-    # post /admin/ldap/users/{username}/sync
+
     def EnterpriseAdminSyncLdapMappingForUser(self, username:str):
         """Note that this API call does not automatically initiate an LDAP sync. Rather, if a `201` is returned, the sync job is queued successfully, and is performed when the instance is ready.
         
@@ -479,6 +503,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/ldap/users/{username}/sync", 
                           json=data,
@@ -491,7 +516,7 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
-    # post /admin/organizations
+
     def EnterpriseAdminCreateOrg(self, admin:str, login:str, profile_name:str=None):
         """
         
@@ -513,6 +538,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/organizations", 
                           json=data,
@@ -525,7 +551,7 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
-    # patch /admin/organizations/{org}
+
     def EnterpriseAdminUpdateOrgName(self, org:str,login:str):
         """
         
@@ -544,6 +570,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/organizations/{org}", 
                           json=data,
@@ -556,7 +583,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/pre-receive-environments
+    #
     def EnterpriseAdminListPreReceiveEnvironments(self, per_page=30, page=1, direction='desc', sort='created'):
         """
         
@@ -593,7 +622,7 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # post /admin/pre-receive-environments
+
     def EnterpriseAdminCreatePreReceiveEnvironment(self, image_url:str, name:str):
         """
         
@@ -613,6 +642,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/pre-receive-environments", 
                           json=data,
@@ -625,7 +655,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/pre-receive-environments/{pre_receive_environment_id}
+    #
     def EnterpriseAdminGetPreReceiveEnvironment(self, pre_receive_environment_id:int):
         """
         
@@ -651,7 +683,7 @@ class GitHubClient(GitHubClientBase):
             
         
         return UnexpectedResult(r)
-    # patch /admin/pre-receive-environments/{pre_receive_environment_id}
+
     def EnterpriseAdminUpdatePreReceiveEnvironment(self, pre_receive_environment_id:int,name:str=None, image_url:str=None):
         """You cannot modify the default environment. If you attempt to modify the default environment, you will receive a `422 Unprocessable Entity` response.
         
@@ -672,6 +704,7 @@ class GitHubClient(GitHubClientBase):
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/pre-receive-environments/{pre_receive_environment_id}", 
                           json=data,
@@ -687,7 +720,9 @@ class GitHubClient(GitHubClientBase):
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /admin/pre-receive-environments/{pre_receive_environment_id}
+    #
     def EnterpriseAdminDeletePreReceiveEnvironment(self, pre_receive_environment_id:int):
         """If you attempt to delete an environment that cannot be deleted, you will receive a `422 Unprocessable Entity` response.
 
@@ -722,7 +757,7 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
-    # post /admin/pre-receive-environments/{pre_receive_environment_id}/downloads
+
     def EnterpriseAdminStartPreReceiveEnvironmentDownload(self, pre_receive_environment_id:int):
         """Triggers a new download of the environment tarball from the environment's `image_url`. When the download is finished, the newly downloaded tarball will overwrite the existing environment.
 
@@ -746,6 +781,7 @@ The possible error messages are:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/pre-receive-environments/{pre_receive_environment_id}/downloads", 
                           json=data,
@@ -761,7 +797,9 @@ The possible error messages are:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/pre-receive-environments/{pre_receive_environment_id}/downloads/latest
+    #
     def EnterpriseAdminGetDownloadStatusForPreReceiveEnvironment(self, pre_receive_environment_id:int):
         """In addition to seeing the download status at the "[Get a pre-receive environment](#get-a-pre-receive-environment)" endpoint, there is also this separate endpoint for just the download status.
         
@@ -787,7 +825,9 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
+    #
     # get /admin/pre-receive-hooks
+    #
     def EnterpriseAdminListPreReceiveHooks(self, per_page=30, page=1, direction='desc', sort='created'):
         """
         
@@ -824,7 +864,7 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
-    # post /admin/pre-receive-hooks
+
     def EnterpriseAdminCreatePreReceiveHook(self, environment:dict, script_repository:dict, script:str, name:str, enforcement:str=None, allow_downstream_configuration:bool=None):
         """
         
@@ -852,6 +892,7 @@ The possible error messages are:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/pre-receive-hooks", 
                           json=data,
@@ -864,7 +905,9 @@ The possible error messages are:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /admin/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminGetPreReceiveHook(self, pre_receive_hook_id:int):
         """
         
@@ -890,7 +933,7 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
-    # patch /admin/pre-receive-hooks/{pre_receive_hook_id}
+
     def EnterpriseAdminUpdatePreReceiveHook(self, pre_receive_hook_id:int,name:str=None, script:str=None, script_repository:dict=None, environment:dict=None, enforcement:str=None, allow_downstream_configuration:bool=None):
         """
         
@@ -919,6 +962,7 @@ The possible error messages are:
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/pre-receive-hooks/{pre_receive_hook_id}", 
                           json=data,
@@ -931,7 +975,9 @@ The possible error messages are:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /admin/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminDeletePreReceiveHook(self, pre_receive_hook_id:int):
         """
         
@@ -957,7 +1003,9 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
+    #
     # get /admin/tokens
+    #
     def EnterpriseAdminListPersonalAccessTokens(self, per_page=30, page=1):
         """Lists personal access tokens for all users, including admin users.
         
@@ -988,7 +1036,9 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
+    #
     # delete /admin/tokens/{token_id}
+    #
     def EnterpriseAdminDeletePersonalAccessToken(self, token_id:int):
         """Deletes a personal access token. Returns a `403 - Forbidden` status when a personal access token is in use. For example, if you access this endpoint with the same personal access token that you are trying to delete, you will receive this error.
         
@@ -1014,7 +1064,7 @@ The possible error messages are:
             
         
         return UnexpectedResult(r)
-    # post /admin/users
+
     def EnterpriseAdminCreateUser(self, login:str, email:str=None):
         """If an external authentication mechanism is used, the login name should match the login name in the external system. If you are using LDAP authentication, you should also [update the LDAP mapping](https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#update-ldap-mapping-for-a-user) for the user.
 
@@ -1038,6 +1088,7 @@ If the login name or email address is already associated with an account, the se
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/users", 
                           json=data,
@@ -1050,7 +1101,7 @@ If the login name or email address is already associated with an account, the se
             
 
         return UnexpectedResult(r.status_code)
-    # patch /admin/users/{username}
+
     def EnterpriseAdminUpdateUsernameForUser(self, username:str,login:str):
         """
         
@@ -1069,6 +1120,7 @@ If the login name or email address is already associated with an account, the se
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/admin/users/{username}", 
                           json=data,
@@ -1081,7 +1133,9 @@ If the login name or email address is already associated with an account, the se
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /admin/users/{username}
+    #
     def EnterpriseAdminDeleteUser(self, username:str):
         """Deleting a user will delete all their repositories, gists, applications, and personal settings. [Suspending a user](https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#suspend-a-user) is often a better option.
 
@@ -1109,8 +1163,8 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
-    # post /admin/users/{username}/authorizations
-    def EnterpriseAdminCreateImpersonationOAuthToken(self, username:str,scopes:list=None):
+
+    def EnterpriseAdminCreateImpersonationOAuthToken(self, username:str,scopes:list=[]):
         """
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#create-an-impersonation-oauth-token
@@ -1128,6 +1182,7 @@ You can delete any user account except your own.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/admin/users/{username}/authorizations", 
                           json=data,
@@ -1140,7 +1195,9 @@ You can delete any user account except your own.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /admin/users/{username}/authorizations
+    #
     def EnterpriseAdminDeleteImpersonationOAuthToken(self, username:str):
         """
         
@@ -1166,7 +1223,9 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/announcement
+    #
     def EnterpriseAdminGetAnnouncement(self, ):
         """Gets the current message and expiration date of the global announcement banner in your enterprise.
         /enterprise/announcement
@@ -1189,7 +1248,7 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
-    # patch /enterprise/announcement
+
     def EnterpriseAdminSetAnnouncement(self, announcement:str, expires_at:datetime=None):
         """Sets the message and expiration time for the global announcement banner in your enterprise.
         /enterprise/announcement
@@ -1207,6 +1266,7 @@ You can delete any user account except your own.
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/enterprise/announcement", 
                           json=data,
@@ -1219,7 +1279,9 @@ You can delete any user account except your own.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /enterprise/announcement
+    #
     def EnterpriseAdminRemoveAnnouncement(self, ):
         """Removes the global announcement banner in your enterprise.
         /enterprise/announcement
@@ -1242,7 +1304,9 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/settings/license
+    #
     def EnterpriseAdminGetLicenseInformation(self, ):
         """
         
@@ -1267,7 +1331,9 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/all
+    #
     def EnterpriseAdminGetAllStats(self, ):
         """
         
@@ -1292,7 +1358,9 @@ You can delete any user account except your own.
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/comments
+    #
     def EnterpriseAdminGetCommentStats(self, ):
         """
         
@@ -1313,11 +1381,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseCommentStats(**r.json())
+            return EnterpriseCommentOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/gists
+    #
     def EnterpriseAdminGetGistStats(self, ):
         """
         
@@ -1338,11 +1408,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseGistStats(**r.json())
+            return EnterpriseGistOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/hooks
+    #
     def EnterpriseAdminGetHooksStats(self, ):
         """Get hooks statistics
         
@@ -1363,11 +1435,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return HooksEnterpriseStats(**r.json())
+            return EnterpriseHookOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/issues
+    #
     def EnterpriseAdminGetIssueStats(self, ):
         """
         
@@ -1388,11 +1462,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseIssueStats(**r.json())
+            return EnterpriseIssueOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/milestones
+    #
     def EnterpriseAdminGetMilestoneStats(self, ):
         """
         
@@ -1413,11 +1489,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseMilestoneStats(**r.json())
+            return EnterpriseMilestoneOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/orgs
+    #
     def EnterpriseAdminGetOrgStats(self, ):
         """
         
@@ -1438,11 +1516,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseOrganizationStats(**r.json())
+            return EnterpriseOrganizationOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/pages
+    #
     def EnterpriseAdminGetPagesStats(self, ):
         """
         
@@ -1463,11 +1543,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterprisePagesStats(**r.json())
+            return EnterprisePageOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/pulls
+    #
     def EnterpriseAdminGetPullRequestStats(self, ):
         """
         
@@ -1488,11 +1570,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterprisePullRequestStats(**r.json())
+            return EnterprisePullRequestOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/repos
+    #
     def EnterpriseAdminGetRepoStats(self, ):
         """Get repository statistics
         
@@ -1513,11 +1597,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return RepositoryEnterpriseStats(**r.json())
+            return EnterpriseRepositoryOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprise/stats/users
+    #
     def EnterpriseAdminGetUserStats(self, ):
         """
         
@@ -1538,11 +1624,13 @@ You can delete any user account except your own.
     
         
         if r.status_code == 200:
-            return EnterpriseUserStats(**r.json())
+            return EnterpriseUserOverview(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/permissions
+    #
     def EnterpriseAdminGetGithubActionsPermissionsEnterprise(self, enterprise:str):
         """Gets the GitHub Actions permissions policy for organizations and allowed actions in an enterprise.
 
@@ -1570,7 +1658,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
         
         return UnexpectedResult(r)
-    # put /enterprises/{enterprise}/actions/permissions
+
     def EnterpriseAdminSetGithubActionsPermissionsEnterprise(self, enterprise:str,enabled_organizations:str, allowed_actions:str=None):
         """Sets the GitHub Actions permissions policy for organizations and allowed actions in an enterprise.
 
@@ -1593,6 +1681,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/permissions", 
                           json=data,
@@ -1605,7 +1694,9 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /enterprises/{enterprise}/actions/permissions/organizations
+    #
     def EnterpriseAdminListSelectedOrganizationsEnabledGithubActionsEnterprise(self, enterprise:str,per_page=30, page=1):
         """Lists the organizations that are selected to have GitHub Actions enabled in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1639,7 +1730,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
         
         return UnexpectedResult(r)
-    # put /enterprises/{enterprise}/actions/permissions/organizations
+
     def EnterpriseAdminSetSelectedOrganizationsEnabledGithubActionsEnterprise(self, enterprise:str,selected_organization_ids:list):
         """Replaces the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1660,6 +1751,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/permissions/organizations", 
                           json=data,
@@ -1672,7 +1764,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
 
         return UnexpectedResult(r.status_code)
-    # put /enterprises/{enterprise}/actions/permissions/organizations/{org_id}
+
     def EnterpriseAdminEnableSelectedOrganizationGithubActionsEnterprise(self, enterprise:str, org_id:int):
         """Adds an organization to the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1692,6 +1784,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/permissions/organizations/{org_id}", 
                           json=data,
@@ -1704,7 +1797,9 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /enterprises/{enterprise}/actions/permissions/organizations/{org_id}
+    #
     def EnterpriseAdminDisableSelectedOrganizationGithubActionsEnterprise(self, enterprise:str, org_id:int):
         """Removes an organization from the list of selected organizations that are enabled for GitHub Actions in an enterprise. To use this endpoint, the enterprise permission policy for `enabled_organizations` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1733,7 +1828,9 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/permissions/selected-actions
+    #
     def EnterpriseAdminGetAllowedActionsEnterprise(self, enterprise:str):
         """Gets the selected actions that are allowed in an enterprise. To use this endpoint, the enterprise permission policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1761,7 +1858,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
         
         return UnexpectedResult(r)
-    # put /enterprises/{enterprise}/actions/permissions/selected-actions
+
     def EnterpriseAdminSetAllowedActionsEnterprise(self, enterprise:str,patterns_allowed:list, github_owned_allowed:bool):
         """Sets the actions that are allowed in an enterprise. To use this endpoint, the enterprise permission policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an enterprise](#set-github-actions-permissions-for-an-enterprise)."
 
@@ -1784,6 +1881,7 @@ You must authenticate using an access token with the `admin:enterprise` scope to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/permissions/selected-actions", 
                           json=data,
@@ -1796,7 +1894,9 @@ You must authenticate using an access token with the `admin:enterprise` scope to
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /enterprises/{enterprise}/actions/runner-groups
+    #
     def EnterpriseAdminListSelfHostedRunnerGroupsForEnterprise(self, enterprise:str,per_page=30, page=1):
         """Lists all self-hosted runner groups for an enterprise.
 
@@ -1830,8 +1930,8 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # post /enterprises/{enterprise}/actions/runner-groups
-    def EnterpriseAdminCreateSelfHostedRunnerGroupForEnterprise(self, enterprise:str,name:str, visibility:str=None, selected_organization_ids:list=None, runners:list=None, allows_public_repositories:bool=False):
+
+    def EnterpriseAdminCreateSelfHostedRunnerGroupForEnterprise(self, enterprise:str,name:str, visibility:str=None, selected_organization_ids:list=[], runners:list=[], allows_public_repositories:bool=False):
         """Creates a new self-hosted runner group for an enterprise.
 
 You must authenticate using an access token with the `manage_runners:enterprise` scope to use this endpoint.
@@ -1859,6 +1959,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.post(f"{self._url}/enterprises/{enterprise}/actions/runner-groups", 
                           json=data,
@@ -1871,7 +1972,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
+    #
     def EnterpriseAdminGetSelfHostedRunnerGroupForEnterprise(self, enterprise:str, runner_group_id:int):
         """Gets a specific self-hosted runner group for an enterprise.
 
@@ -1900,7 +2003,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # patch /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
+
     def EnterpriseAdminUpdateSelfHostedRunnerGroupForEnterprise(self, enterprise:str, runner_group_id:int,name:str=None, visibility:str='all', allows_public_repositories:bool=False):
         """Updates the `name` and `visibility` of a self-hosted runner group in an enterprise.
 
@@ -1926,6 +2029,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}", 
                           json=data,
@@ -1938,7 +2042,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}
+    #
     def EnterpriseAdminDeleteSelfHostedRunnerGroupFromEnterprise(self, enterprise:str, runner_group_id:int):
         """Deletes a self-hosted runner group for an enterprise.
 
@@ -1967,7 +2073,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations
+    #
     def EnterpriseAdminListOrgAccessToSelfHostedRunnerGroupInEnterprise(self, enterprise:str, runner_group_id:int,per_page=30, page=1):
         """Lists the organizations with access to a self-hosted runner group.
 
@@ -2002,7 +2110,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # put /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations
+
     def EnterpriseAdminSetOrgAccessToSelfHostedRunnerGroupInEnterprise(self, enterprise:str, runner_group_id:int,selected_organization_ids:list):
         """Replaces the list of organizations that have access to a self-hosted runner configured in an enterprise.
 
@@ -2024,6 +2132,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", 
                           json=data,
@@ -2036,7 +2145,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
-    # put /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations/{org_id}
+
     def EnterpriseAdminAddOrgAccessToSelfHostedRunnerGroupInEnterprise(self, enterprise:str, runner_group_id:int, org_id:int):
         """Adds an organization to the list of selected organizations that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an enterprise](#create-a-self-hosted-runner-group-for-an-enterprise)."
 
@@ -2057,6 +2166,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations/{org_id}", 
                           json=data,
@@ -2069,7 +2179,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations/{org_id}
+    #
     def EnterpriseAdminRemoveOrgAccessToSelfHostedRunnerGroupInEnterprise(self, enterprise:str, runner_group_id:int, org_id:int):
         """Removes an organization from the list of selected organizations that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an enterprise](#create-a-self-hosted-runner-group-for-an-enterprise)."
 
@@ -2099,7 +2211,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners
+    #
     def EnterpriseAdminListSelfHostedRunnersInGroupForEnterprise(self, enterprise:str, runner_group_id:int,per_page=30, page=1):
         """Lists the self-hosted runners that are in a specific enterprise group.
 
@@ -2134,7 +2248,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # put /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners
+
     def EnterpriseAdminSetSelfHostedRunnersInGroupForEnterprise(self, enterprise:str, runner_group_id:int,runners:list):
         """Replaces the list of self-hosted runners that are part of an enterprise runner group.
 
@@ -2156,6 +2270,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", 
                           json=data,
@@ -2168,7 +2283,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
-    # put /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
+
     def EnterpriseAdminAddSelfHostedRunnerToGroupForEnterprise(self, enterprise:str, runner_group_id:int, runner_id:int):
         """Adds a self-hosted runner to a runner group configured in an enterprise.
 
@@ -2190,6 +2305,7 @@ scope to use this endpoint.
         
         }
         
+
         
         r = self._session.put(f"{self._url}/enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}", 
                           json=data,
@@ -2202,7 +2318,9 @@ scope to use this endpoint.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
+    #
     def EnterpriseAdminRemoveSelfHostedRunnerFromGroupForEnterprise(self, enterprise:str, runner_group_id:int, runner_id:int):
         """Removes a self-hosted runner from a group configured in an enterprise. The runner is then returned to the default group.
 
@@ -2232,7 +2350,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/runners
+    #
     def EnterpriseAdminListSelfHostedRunnersForEnterprise(self, enterprise:str,per_page=30, page=1):
         """Lists all self-hosted runners configured for an enterprise.
 
@@ -2266,7 +2386,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/actions/runners/downloads
+    #
     def EnterpriseAdminListRunnerApplicationsForEnterprise(self, enterprise:str):
         """Lists binaries for the runner application that you can download and run.
 
@@ -2294,7 +2416,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # post /enterprises/{enterprise}/actions/runners/registration-token
+
     def EnterpriseAdminCreateRegistrationTokenForEnterprise(self, enterprise:str):
         """Returns a token that you can pass to the `config` script. The token expires after one hour.
 
@@ -2321,6 +2443,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
         
         }
         
+
         
         r = self._session.post(f"{self._url}/enterprises/{enterprise}/actions/runners/registration-token", 
                           json=data,
@@ -2333,7 +2456,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
             
 
         return UnexpectedResult(r.status_code)
-    # post /enterprises/{enterprise}/actions/runners/remove-token
+
     def EnterpriseAdminCreateRemoveTokenForEnterprise(self, enterprise:str):
         """Returns a token that you can pass to the `config` script to remove a self-hosted runner from an enterprise. The token expires after one hour.
 
@@ -2361,6 +2484,7 @@ endpoint.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/enterprises/{enterprise}/actions/runners/remove-token", 
                           json=data,
@@ -2373,7 +2497,9 @@ endpoint.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /enterprises/{enterprise}/actions/runners/{runner_id}
+    #
     def EnterpriseAdminGetSelfHostedRunnerForEnterprise(self, enterprise:str, runner_id:int):
         """Gets a specific self-hosted runner configured in an enterprise.
 
@@ -2402,7 +2528,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # delete /enterprises/{enterprise}/actions/runners/{runner_id}
+    #
     def EnterpriseAdminDeleteSelfHostedRunnerFromEnterprise(self, enterprise:str, runner_id:int):
         """Forces the removal of a self-hosted runner from an enterprise. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.
 
@@ -2431,7 +2559,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /enterprises/{enterprise}/audit-log
+    #
     def EnterpriseAdminGetAuditLog(self, enterprise:str,phrase:str=None, after:str=None, before:str=None, direction='desc', page=1, per_page=30):
         """Gets the audit log for an enterprise. To use this endpoint, you must be an enterprise admin, and you must use an access token with the `admin:enterprise` scope.
         
@@ -2476,7 +2606,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/pre-receive-hooks
+    #
     def EnterpriseAdminListPreReceiveHooksForOrg(self, org:str,per_page=30, page=1, direction='desc', sort='created'):
         """List all pre-receive hooks that are enabled or testing for this organization as well as any disabled hooks that can be configured at the organization level. Globally disabled pre-receive hooks that do not allow downstream configuration are not listed.
         
@@ -2514,7 +2646,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminGetPreReceiveHookForOrg(self, org:str, pre_receive_hook_id:int):
         """
         
@@ -2541,7 +2675,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}
+
     def EnterpriseAdminUpdatePreReceiveHookEnforcementForOrg(self, org:str, pre_receive_hook_id:int,enforcement:str=None, allow_downstream_configuration:bool=None):
         """For pre-receive hooks which are allowed to be configured at the org level, you can set `enforcement` and `allow_downstream_configuration`
         
@@ -2563,6 +2697,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}", 
                           json=data,
@@ -2575,7 +2710,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminRemovePreReceiveHookEnforcementForOrg(self, org:str, pre_receive_hook_id:int):
         """Removes any overrides for this hook at the org level for this org.
         
@@ -2602,7 +2739,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pre-receive-hooks
+    #
     def EnterpriseAdminListPreReceiveHooksForRepo(self, owner:str, repo:str,per_page=30, page=1, direction='desc', sort='created'):
         """List all pre-receive hooks that are enabled or testing for this repository as well as any disabled hooks that are allowed to be enabled at the repository level. Pre-receive hooks that are disabled at a higher level and are not configurable will not be listed.
         
@@ -2641,7 +2780,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminGetPreReceiveHookForRepo(self, owner:str, repo:str, pre_receive_hook_id:int):
         """
         
@@ -2669,7 +2810,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/pre-receive-hooks/{pre_receive_hook_id}
+
     def EnterpriseAdminUpdatePreReceiveHookEnforcementForRepo(self, owner:str, repo:str, pre_receive_hook_id:int,enforcement:str=None):
         """For pre-receive hooks which are allowed to be configured at the repo level, you can set `enforcement`
         
@@ -2690,6 +2831,7 @@ You must authenticate using an access token with the `manage_runners:enterprise`
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/pre-receive-hooks/{pre_receive_hook_id}", 
                           json=data,
@@ -2702,7 +2844,9 @@ You must authenticate using an access token with the `manage_runners:enterprise`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pre-receive-hooks/{pre_receive_hook_id}
+    #
     def EnterpriseAdminRemovePreReceiveHookEnforcementForRepo(self, owner:str, repo:str, pre_receive_hook_id:int):
         """Deletes any overridden enforcement on this repository for the specified hook.
 
@@ -2732,7 +2876,9 @@ Responds with effective values inherited from owner and/or global level.
             
         
         return UnexpectedResult(r)
+    #
     # get /setup/api/configcheck
+    #
     def EnterpriseAdminGetConfigurationStatus(self, ):
         """This endpoint allows you to check the status of the most recent configuration process:
 
@@ -2768,7 +2914,7 @@ The different statuses are:
             
         
         return UnexpectedResult(r)
-    # post /setup/api/configure
+
     def EnterpriseAdminStartConfigurationProcess(self, ):
         """This endpoint allows you to start a configuration process at any time for your updated settings to take effect:
         
@@ -2784,6 +2930,7 @@ The different statuses are:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/setup/api/configure", 
                           json=data,
@@ -2796,7 +2943,9 @@ The different statuses are:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /setup/api/maintenance
+    #
     def EnterpriseAdminGetMaintenanceStatus(self, ):
         """Check your installation's maintenance status:
         
@@ -2821,7 +2970,7 @@ The different statuses are:
             
         
         return UnexpectedResult(r)
-    # post /setup/api/maintenance
+
     def EnterpriseAdminEnableOrDisableMaintenanceMode(self, maintenance:str):
         """**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
         
@@ -2843,6 +2992,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
         
         }
         
+
         
         r = self._session.post(f"{self._url}/setup/api/maintenance", 
                           json=data,
@@ -2855,7 +3005,9 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /setup/api/settings
+    #
     def EnterpriseAdminGetSettings(self, ):
         """
         
@@ -2880,7 +3032,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
         
         return UnexpectedResult(r)
-    # put /setup/api/settings
+
     def EnterpriseAdminSetSettings(self, settings:str):
         """For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.3/rest/reference/enterprise-admin#get-settings).
 
@@ -2900,6 +3052,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
         
         }
         
+
         
         r = self._session.put(f"{self._url}/setup/api/settings", 
                           json=data,
@@ -2912,7 +3065,9 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /setup/api/settings/authorized-keys
+    #
     def EnterpriseAdminGetAllAuthorizedSshKeys(self, ):
         """
         
@@ -2938,7 +3093,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
         
         return UnexpectedResult(r)
-    # post /setup/api/settings/authorized-keys
+
     def EnterpriseAdminAddAuthorizedSshKey(self, authorized_key:str):
         """**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
         
@@ -2956,6 +3111,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
         
         }
         
+
         
         r = self._session.post(f"{self._url}/setup/api/settings/authorized-keys", 
                           json=data,
@@ -2969,7 +3125,9 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /setup/api/settings/authorized-keys
+    #
     def EnterpriseAdminRemoveAuthorizedSshKey(self, ):
         """**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode).
         
@@ -2995,7 +3153,7 @@ The possible values for `when` are `now` or any date parseable by [mojombo/chron
             
         
         return UnexpectedResult(r)
-    # post /setup/api/start
+
     def EnterpriseAdminCreateEnterpriseServerLicense(self, license:str, password:str=None, settings:str=None):
         """When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.
 
@@ -3026,6 +3184,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
         
         }
         
+
         
         r = self._session.post(f"{self._url}/setup/api/start", 
                           json=data,
@@ -3038,7 +3197,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
             
 
         return UnexpectedResult(r.status_code)
-    # post /setup/api/upgrade
+
     def EnterpriseAdminUpgradeLicense(self, license:str=None):
         """This API upgrades your license and also triggers the configuration process.
 
@@ -3058,6 +3217,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
         
         }
         
+
         
         r = self._session.post(f"{self._url}/setup/api/upgrade", 
                           json=data,
@@ -3070,7 +3230,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
             
 
         return UnexpectedResult(r.status_code)
-    # put /users/{username}/site_admin
+
     def EnterpriseAdminPromoteUserToBeSiteAdministrator(self, username:str):
         """Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-verbs)."
         
@@ -3087,6 +3247,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
         
         }
         
+
         
         r = self._session.put(f"{self._url}/users/{username}/site_admin", 
                           json=data,
@@ -3099,7 +3260,9 @@ When using this endpoint, your GitHub instance must have a password set. This ca
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /users/{username}/site_admin
+    #
     def EnterpriseAdminDemoteSiteAdministrator(self, username:str):
         """You can demote any user account except your own.
         
@@ -3125,7 +3288,7 @@ When using this endpoint, your GitHub instance must have a password set. This ca
             
         
         return UnexpectedResult(r)
-    # put /users/{username}/suspended
+
     def EnterpriseAdminSuspendUser(self, username:str,reason:str=None):
         """If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://help.github.com/enterprise/admin/guides/user-management/using-ldap), Active Directory LDAP-authenticated users cannot be suspended through this API. If you attempt to suspend an Active Directory LDAP-authenticated user through this API, it will return a `403` response.
 
@@ -3148,6 +3311,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.put(f"{self._url}/users/{username}/suspended", 
                           json=data,
@@ -3160,7 +3324,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /users/{username}/suspended
+    #
     def EnterpriseAdminUnsuspendUser(self, username:str):
         """If your GitHub instance uses [LDAP Sync with Active Directory LDAP servers](https://help.github.com/enterprise/admin/guides/user-management/using-ldap), this API is disabled and will return a `403` response. Active Directory LDAP-authenticated users cannot be unsuspended using the API.
         
@@ -3186,7 +3352,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /app
+    #
     def AppsGetAuthenticated(self, ):
         """Returns the GitHub App associated with the authentication credentials used. To see how many app installations are associated with this GitHub App, see the `installations_count` in the response. For more details about your app's installations, see the "[List installations for the authenticated app](https://docs.github.com/enterprise-server@3.3/rest/reference/apps#list-installations-for-the-authenticated-app)" endpoint.
 
@@ -3209,11 +3377,11 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
     
         
         if r.status_code == 200:
-            return GithubApp(**r.json())
+            return Integration(**r.json())
             
         
         return UnexpectedResult(r)
-    # post /app-manifests/{code}/conversions
+
     def AppsCreateFromManifest(self, code:str,object:object):
         """Use this endpoint to complete the handshake necessary when implementing the [GitHub App Manifest flow](https://docs.github.com/enterprise-server@3.3/apps/building-github-apps/creating-github-apps-from-a-manifest/). When you create a GitHub App with the manifest flow, you receive a temporary `code` used to retrieve the GitHub App's `id`, `pem` (private key), and `webhook_secret`.
         
@@ -3232,6 +3400,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
         
         }
         
+
         
         r = self._session.post(f"{self._url}/app-manifests/{code}/conversions", 
                           json=data,
@@ -3240,7 +3409,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
                           
         
         if r.status_code == 201:
-            return GithubApp(**r.json())
+            return Integration(**r.json())
             
         if r.status_code == 404:
             return BasicError(**r.json())
@@ -3250,7 +3419,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /app/hook/config
+    #
     def AppsGetWebhookConfigForApp(self, ):
         """Returns the webhook configuration for a GitHub App. For more information about configuring a webhook for your app, see "[Creating a GitHub App](/developers/apps/creating-a-github-app)."
 
@@ -3277,7 +3448,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
-    # patch /app/hook/config
+
     def AppsUpdateWebhookConfigForApp(self, url:str=None, content_type:str=None, secret:str=None, insecure_ssl=None):
         """Updates the webhook configuration for a GitHub App. For more information about configuring a webhook for your app, see "[Creating a GitHub App](/developers/apps/creating-a-github-app)."
 
@@ -3303,6 +3474,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/app/hook/config", 
                           json=data,
@@ -3315,7 +3487,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /app/hook/deliveries
+    #
     def AppsListWebhookDeliveries(self, per_page=30, cursor:str=None):
         """Returns a list of webhook deliveries for the webhook configured for a GitHub App.
 
@@ -3354,7 +3528,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
+    #
     # get /app/hook/deliveries/{delivery_id}
+    #
     def AppsGetWebhookDelivery(self, delivery_id:int):
         """Returns a delivery for the webhook configured for a GitHub App.
 
@@ -3388,7 +3564,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
-    # post /app/hook/deliveries/{delivery_id}/attempts
+
     def AppsRedeliverWebhookDelivery(self, delivery_id:int):
         """Redeliver a delivery for the webhook configured for a GitHub App.
 
@@ -3407,6 +3583,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
         
         }
         
+
         
         r = self._session.post(f"{self._url}/app/hook/deliveries/{delivery_id}/attempts", 
                           json=data,
@@ -3425,7 +3602,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /app/installations
+    #
     def AppsListInstallations(self, per_page=30, page=1, since:datetime=None, outdated:str=None):
         """You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
 
@@ -3464,7 +3643,9 @@ The permissions the installation has are included under the `permissions` key.
             
         
         return UnexpectedResult(r)
+    #
     # get /app/installations/{installation_id}
+    #
     def AppsGetInstallation(self, installation_id:int):
         """Enables an authenticated GitHub App to find an installation's information using the installation id. The installation's account type (`target_type`) will be either an organization or a user account, depending which account the repository belongs to.
 
@@ -3498,7 +3679,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
+    #
     # delete /app/installations/{installation_id}
+    #
     def AppsDeleteInstallation(self, installation_id:int):
         """Uninstalls a GitHub App on a user, organization, or business account. If you prefer to temporarily suspend an app's access to your account's resources, then we recommend the "[Suspend an app installation](https://docs.github.com/enterprise-server@3.3/rest/reference/apps/#suspend-an-app-installation)" endpoint.
 
@@ -3529,8 +3712,8 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
-    # post /app/installations/{installation_id}/access_tokens
-    def AppsCreateInstallationAccessToken(self, installation_id:int,repositories:list=None, repository_ids:list=None, permissions:dict=None):
+
+    def AppsCreateInstallationAccessToken(self, installation_id:int,repositories:list=[], repository_ids:list=[], permissions:dict=None):
         """Creates an installation access token that enables a GitHub App to make authenticated API requests for the app's installation on an organization or individual account. Installation tokens expire one hour from the time you create them. Using an expired token produces a status code of `401 - Unauthorized`, and requires creating a new installation token. By default the installation token has access to all repositories that the installation can access. To restrict the access to specific repositories, you can provide the `repository_ids` when creating the token. When you omit `repository_ids`, the response does not contain the `repositories` key.
 
 You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint.
@@ -3554,6 +3737,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
         
         }
         
+
         
         r = self._session.post(f"{self._url}/app/installations/{installation_id}/access_tokens", 
                           json=data,
@@ -3581,7 +3765,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
 
         return UnexpectedResult(r.status_code)
-    # put /app/installations/{installation_id}/suspended
+
     def AppsSuspendInstallation(self, installation_id:int):
         """Suspends a GitHub App on a user, organization, or business account, which blocks the app from accessing the account's resources. When a GitHub App is suspended, the app's access to the GitHub Enterprise Server API or webhook events is blocked for that account.
 
@@ -3600,6 +3784,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
         
         }
         
+
         
         r = self._session.put(f"{self._url}/app/installations/{installation_id}/suspended", 
                           json=data,
@@ -3615,7 +3800,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /app/installations/{installation_id}/suspended
+    #
     def AppsUnsuspendInstallation(self, installation_id:int):
         """Removes a GitHub App installation suspension.
 
@@ -3646,7 +3833,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
+    #
     # delete /applications/{client_id}/grant
+    #
     def AppsDeleteAuthorization(self, client_id:str):
         """OAuth application owners can revoke a grant for their OAuth application and a specific user. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. You must also provide a valid OAuth `access_token` as an input parameter and the grant for the token's owner will be deleted.
 Deleting an OAuth application's grant will also delete all OAuth tokens associated with the application for the user. Once deleted, the application will have no access to the user's account and will no longer be listed on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized).
@@ -3676,7 +3865,9 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
         
         return UnexpectedResult(r)
+    #
     # delete /applications/{client_id}/grants/{access_token}
+    #
     def AppsRevokeGrantForApplication(self, client_id:str, access_token:str):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
 
@@ -3707,7 +3898,7 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
         
         return UnexpectedResult(r)
-    # post /applications/{client_id}/token
+
     def AppsCheckToken(self, client_id:str,access_token:str):
         """OAuth applications can use a special API method for checking OAuth token validity without exceeding the normal rate limits for failed login attempts. Authentication works differently with this particular endpoint. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#basic-authentication) to use this endpoint, where the username is the OAuth application `client_id` and the password is its `client_secret`. Invalid tokens will return `404 NOT FOUND`.
         
@@ -3726,6 +3917,7 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
         
         }
         
+
         
         r = self._session.post(f"{self._url}/applications/{client_id}/token", 
                           json=data,
@@ -3744,7 +3936,7 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
 
         return UnexpectedResult(r.status_code)
-    # patch /applications/{client_id}/token
+
     def AppsResetToken(self, client_id:str,access_token:str):
         """OAuth applications can use this API method to reset a valid OAuth token without end-user involvement. Applications must save the "token" property in the response because changes take effect immediately. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
         
@@ -3763,6 +3955,7 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/applications/{client_id}/token", 
                           json=data,
@@ -3778,7 +3971,9 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /applications/{client_id}/token
+    #
     def AppsDeleteToken(self, client_id:str):
         """OAuth application owners can revoke a single token for an OAuth application. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password.
         
@@ -3807,8 +4002,8 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
         
         return UnexpectedResult(r)
-    # post /applications/{client_id}/token/scoped
-    def AppsScopeToken(self, client_id:str,access_token:str, target:str=None, target_id:int=None, repositories:list=None, repository_ids:list=None, permissions:dict=None):
+
+    def AppsScopeToken(self, client_id:str,access_token:str, target:str=None, target_id:int=None, repositories:list=[], repository_ids:list=[], permissions:dict=None):
         """Use a non-scoped user-to-server OAuth access token to create a repository scoped and/or permission scoped user-to-server OAuth access token. You can specify which repositories the token can access and which permissions are granted to the token. You must use [Basic Authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#basic-authentication) when accessing this endpoint, using the OAuth application's `client_id` and `client_secret` as the username and password. Invalid tokens will return `404 NOT FOUND`.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/apps#create-a-scoped-access-token
@@ -3836,6 +4031,7 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
         
         }
         
+
         
         r = self._session.post(f"{self._url}/applications/{client_id}/token/scoped", 
                           json=data,
@@ -3860,7 +4056,9 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /applications/{client_id}/tokens/{access_token}
+    #
     def AppsCheckAuthorization(self, client_id:str, access_token:str):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
 
@@ -3885,14 +4083,14 @@ OAuth applications can use a special API method for checking OAuth token validit
     
         
         if r.status_code == 200:
-            return Authorization(**r.json())
+            return NullableAuthorization(**r.json())
             
         if r.status_code == 404:
             return BasicError(**r.json())
             
         
         return UnexpectedResult(r)
-    # post /applications/{client_id}/tokens/{access_token}
+
     def AppsResetAuthorization(self, client_id:str, access_token:str):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
 
@@ -3912,6 +4110,7 @@ OAuth applications can use this API method to reset a valid OAuth token without 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/applications/{client_id}/tokens/{access_token}", 
                           json=data,
@@ -3924,7 +4123,9 @@ OAuth applications can use this API method to reset a valid OAuth token without 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /applications/{client_id}/tokens/{access_token}
+    #
     def AppsRevokeAuthorizationForApplication(self, client_id:str, access_token:str):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue OAuth endpoints that contain `access_token` in the path parameter. We have introduced new endpoints that allow you to securely manage tokens for OAuth Apps by moving `access_token` to the request body. For more information, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-app-endpoint/).
 
@@ -3953,7 +4154,9 @@ OAuth application owners can revoke a single token for an OAuth application. You
             
         
         return UnexpectedResult(r)
+    #
     # get /apps/{app_slug}
+    #
     def AppsGetBySlug(self, app_slug:str):
         """**Note**: The `:app_slug` is just the URL-friendly name of your GitHub App. You can find this on the settings page for your GitHub App (e.g., `https://github.com/settings/apps/:app_slug`).
 
@@ -3977,7 +4180,7 @@ If the GitHub App you specify is public, you can access this endpoint without au
     
         
         if r.status_code == 200:
-            return GithubApp(**r.json())
+            return Integration(**r.json())
             
         if r.status_code == 403:
             return BasicError(**r.json())
@@ -3990,7 +4193,9 @@ If the GitHub App you specify is public, you can access this endpoint without au
             
         
         return UnexpectedResult(r)
+    #
     # get /installation/repositories
+    #
     def AppsListReposAccessibleToInstallation(self, per_page=30, page=1):
         """List repositories that an app installation can access.
 
@@ -4032,7 +4237,9 @@ You must use an [installation access token](https://docs.github.com/enterprise-s
             
         
         return UnexpectedResult(r)
+    #
     # delete /installation/token
+    #
     def AppsRevokeInstallationAccessToken(self, ):
         """Revokes the installation token you're using to authenticate as an installation and access this endpoint.
 
@@ -4061,7 +4268,9 @@ You must use an [installation access token](https://docs.github.com/enterprise-s
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/installation
+    #
     def AppsGetOrgInstallation(self, org:str):
         """Enables an authenticated GitHub App to find the organization's installation information.
 
@@ -4089,7 +4298,7 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/content_references/{content_reference_id}/attachments
+
     def AppsCreateContentAttachment(self, owner:str, repo:str, content_reference_id:int,body:str, title:str):
         """Creates an attachment under a content reference URL in the body or comment of an issue or pull request. Use the `id` and `repository` `full_name` of the content reference from the [`content_reference` event](https://docs.github.com/enterprise-server@3.3/webhooks/event-payloads/#content_reference) to create an attachment.
 
@@ -4116,6 +4325,7 @@ You must use an [installation access token](https://docs.github.com/enterprise-s
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/content_references/{content_reference_id}/attachments", 
                           json=data,
@@ -4146,7 +4356,9 @@ You must use an [installation access token](https://docs.github.com/enterprise-s
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/installation
+    #
     def AppsGetRepoInstallation(self, owner:str, repo:str):
         """Enables an authenticated GitHub App to find the repository's installation information. The installation's account type will be either an organization or a user account, depending which account the repository belongs to.
 
@@ -4181,7 +4393,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
+    #
     # get /user/installations
+    #
     def AppsListInstallationsForAuthenticatedUser(self, per_page=30, page=1):
         """Lists installations of your GitHub App that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
 
@@ -4230,7 +4444,9 @@ You can find the permissions for the installation under the `permissions` key.
             
         
         return UnexpectedResult(r)
+    #
     # get /user/installations/{installation_id}/repositories
+    #
     def AppsListInstallationReposForAuthenticatedUser(self, installation_id:int,per_page=30, page=1):
         """List repositories that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access for an installation.
 
@@ -4277,7 +4493,7 @@ The access the user has to each repository is included in the hash under the `pe
             
         
         return UnexpectedResult(r)
-    # put /user/installations/{installation_id}/repositories/{repository_id}
+
     def AppsAddRepoToInstallationForAuthenticatedUser(self, installation_id:int, repository_id:int):
         """Add a single repository to an installation. The authenticated user must have admin access to the repository.
 
@@ -4297,6 +4513,7 @@ You must use a personal access token (which you can create via the [command line
         
         }
         
+
         
         r = self._session.put(f"{self._url}/user/installations/{installation_id}/repositories/{repository_id}", 
                           json=data,
@@ -4318,7 +4535,9 @@ You must use a personal access token (which you can create via the [command line
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /user/installations/{installation_id}/repositories/{repository_id}
+    #
     def AppsRemoveRepoFromInstallationForAuthenticatedUser(self, installation_id:int, repository_id:int):
         """Remove a single repository from an installation. The authenticated user must have admin access to the repository.
 
@@ -4356,7 +4575,9 @@ You must use a personal access token (which you can create via the [command line
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/installation
+    #
     def AppsGetUserInstallation(self, username:str):
         """Enables an authenticated GitHub App to find the user’s installation information.
 
@@ -4384,7 +4605,9 @@ You must use a [JWT](https://docs.github.com/enterprise-server@3.3/apps/building
             
         
         return UnexpectedResult(r)
+    #
     # get /applications/grants
+    #
     def OauthAuthorizationsListGrants(self, per_page=30, page=1, client_id:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
@@ -4432,7 +4655,9 @@ You can use this API to list the set of OAuth applications that have been grante
             
         
         return UnexpectedResult(r)
+    #
     # get /applications/grants/{grant_id}
+    #
     def OauthAuthorizationsGetGrant(self, grant_id:int):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
         
@@ -4467,7 +4692,9 @@ You can use this API to list the set of OAuth applications that have been grante
             
         
         return UnexpectedResult(r)
+    #
     # delete /applications/grants/{grant_id}
+    #
     def OauthAuthorizationsDeleteGrant(self, grant_id:int):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
@@ -4504,7 +4731,9 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
         
         return UnexpectedResult(r)
+    #
     # get /authorizations
+    #
     def OauthAuthorizationsListAuthorizations(self, per_page=30, page=1, client_id:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
         
@@ -4550,8 +4779,8 @@ Deleting an OAuth application's grant will also delete all OAuth tokens associat
             
         
         return UnexpectedResult(r)
-    # post /authorizations
-    def OauthAuthorizationsCreateAuthorization(self, scopes:list=None, note:str=None, note_url:str=None, client_id:str=None, client_secret:str=None, fingerprint:str=None):
+
+    def OauthAuthorizationsCreateAuthorization(self, scopes:list=[], note:str=None, note_url:str=None, client_id:str=None, client_secret:str=None, fingerprint:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
 **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
@@ -4588,6 +4817,7 @@ Organizations that enforce SAML SSO require personal access tokens to be allowed
         
         }
         
+
         
         r = self._session.post(f"{self._url}/authorizations", 
                           json=data,
@@ -4615,8 +4845,8 @@ Organizations that enforce SAML SSO require personal access tokens to be allowed
             
 
         return UnexpectedResult(r.status_code)
-    # put /authorizations/clients/{client_id}
-    def OauthAuthorizationsGetOrCreateAuthorizationForApp(self, client_id:str,client_secret:str, scopes:list=None, note:str=None, note_url:str=None, fingerprint:str=None):
+
+    def OauthAuthorizationsGetOrCreateAuthorizationForApp(self, client_id:str,client_secret:str, scopes:list=[], note:str=None, note_url:str=None, fingerprint:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
 **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
@@ -4650,6 +4880,7 @@ If you have two-factor authentication setup, Basic Authentication for this endpo
         
         }
         
+
         
         r = self._session.put(f"{self._url}/authorizations/clients/{client_id}", 
                           json=data,
@@ -4677,8 +4908,8 @@ If you have two-factor authentication setup, Basic Authentication for this endpo
             
 
         return UnexpectedResult(r.status_code)
-    # put /authorizations/clients/{client_id}/{fingerprint}
-    def OauthAuthorizationsGetOrCreateAuthorizationForAppAndFingerprint(self, client_id:str, fingerprint:str,client_secret:str, scopes:list=None, note:str=None, note_url:str=None):
+
+    def OauthAuthorizationsGetOrCreateAuthorizationForAppAndFingerprint(self, client_id:str, fingerprint:str,client_secret:str, scopes:list=[], note:str=None, note_url:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
 **Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).
@@ -4709,6 +4940,7 @@ If you have two-factor authentication setup, Basic Authentication for this endpo
         
         }
         
+
         
         r = self._session.put(f"{self._url}/authorizations/clients/{client_id}/{fingerprint}", 
                           json=data,
@@ -4727,7 +4959,9 @@ If you have two-factor authentication setup, Basic Authentication for this endpo
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /authorizations/{authorization_id}
+    #
     def OauthAuthorizationsGetAuthorization(self, authorization_id:int):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
         
@@ -4762,8 +4996,8 @@ If you have two-factor authentication setup, Basic Authentication for this endpo
             
         
         return UnexpectedResult(r)
-    # patch /authorizations/{authorization_id}
-    def OauthAuthorizationsUpdateAuthorization(self, authorization_id:int,scopes:list=None, add_scopes:list=None, remove_scopes:list=None, note:str=None, note_url:str=None, fingerprint:str=None):
+
+    def OauthAuthorizationsUpdateAuthorization(self, authorization_id:int,scopes:list=[], add_scopes:list=[], remove_scopes:list=[], note:str=None, note_url:str=None, fingerprint:str=None):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
 
 If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.3/rest/overview/other-authentication-methods#working-with-two-factor-authentication)."
@@ -4795,6 +5029,7 @@ You can only send one of these scope keys at a time.
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/authorizations/{authorization_id}", 
                           json=data,
@@ -4810,7 +5045,9 @@ You can only send one of these scope keys at a time.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /authorizations/{authorization_id}
+    #
     def OauthAuthorizationsDeleteAuthorization(self, authorization_id:int):
         """**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.3/rest/reference/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).
         
@@ -4845,7 +5082,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /codes_of_conduct
+    #
     def CodesOfConductGetAllCodesOfConduct(self, ):
         """
         
@@ -4873,7 +5112,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /codes_of_conduct/{key}
+    #
     def CodesOfConductGetConductCode(self, key:str):
         """
         
@@ -4905,7 +5146,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /emojis
+    #
     def EmojisGet(self, ):
         """Lists all the emojis available to use on GitHub Enterprise Server.
         
@@ -4933,7 +5176,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /events
+    #
     def ActivityListPublicEvents(self, per_page=30, page=1):
         """We delay the public events feed by five minutes, which means the most recent event returned by the public events API actually occurred at least five minutes ago.
         
@@ -4973,7 +5218,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /feeds
+    #
     def ActivityGetFeeds(self, ):
         """GitHub Enterprise Server provides several timeline resources in [Atom](http://en.wikipedia.org/wiki/Atom_(standard)) format. The Feeds API lists all the feeds available to the authenticated user:
 
@@ -5008,7 +5255,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /networks/{owner}/{repo}/events
+    #
     def ActivityListPublicEventsForRepoNetwork(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -5053,7 +5302,9 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
+    #
     # get /notifications
+    #
     def ActivityListNotificationsForAuthenticatedUser(self, all:bool=None, participating:bool=None, since:datetime=None, before:datetime=None, per_page=30, page=1):
         """List all notifications for the current user, sorted by most recently updated.
         
@@ -5108,7 +5359,7 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
-    # put /notifications
+
     def ActivityMarkNotificationsAsRead(self, last_read_at:datetime=None, read:bool=None):
         """Marks all notifications as "read" removes it from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List notifications for the authenticated user](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#list-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
         
@@ -5128,6 +5379,7 @@ You can only send one of these scope keys at a time.
         
         }
         
+
         
         r = self._session.put(f"{self._url}/notifications", 
                           json=data,
@@ -5152,7 +5404,9 @@ You can only send one of these scope keys at a time.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /notifications/threads/{thread_id}
+    #
     def ActivityGetThread(self, thread_id:int):
         """
         
@@ -5187,7 +5441,7 @@ You can only send one of these scope keys at a time.
             
         
         return UnexpectedResult(r)
-    # patch /notifications/threads/{thread_id}
+
     def ActivityMarkThreadAsRead(self, thread_id:int):
         """
         
@@ -5204,6 +5458,7 @@ You can only send one of these scope keys at a time.
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/notifications/threads/{thread_id}", 
                           json=data,
@@ -5222,7 +5477,9 @@ You can only send one of these scope keys at a time.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /notifications/threads/{thread_id}/subscription
+    #
     def ActivityGetThreadSubscriptionForAuthenticatedUser(self, thread_id:int):
         """This checks to see if the current user is subscribed to a thread. You can also [get a repository subscription](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#get-a-repository-subscription).
 
@@ -5259,7 +5516,7 @@ Note that subscriptions are only generated if a user is participating in a conve
             
         
         return UnexpectedResult(r)
-    # put /notifications/threads/{thread_id}/subscription
+
     def ActivitySetThreadSubscription(self, thread_id:int,ignored:bool=False):
         """If you are watching a repository, you receive notifications for all threads by default. Use this endpoint to ignore future notifications for threads until you comment on the thread or get an **@mention**.
 
@@ -5282,6 +5539,7 @@ Unsubscribing from a conversation in a repository that you are not watching is f
         
         }
         
+
         
         r = self._session.put(f"{self._url}/notifications/threads/{thread_id}/subscription", 
                           json=data,
@@ -5303,7 +5561,9 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /notifications/threads/{thread_id}/subscription
+    #
     def ActivityDeleteThreadSubscription(self, thread_id:int):
         """Mutes all future notifications for a conversation until you comment on the thread or get an **@mention**. If you are watching the repository of the thread, you will still receive notifications. To ignore future notifications for a repository you are watching, use the [Set a thread subscription](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#set-a-thread-subscription) endpoint and set `ignore` to `true`.
         
@@ -5338,7 +5598,9 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/events
+    #
     def ActivityListPublicOrgEvents(self, org:str,per_page=30, page=1):
         """
         
@@ -5370,7 +5632,9 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/events
+    #
     def ActivityListRepoEvents(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -5403,7 +5667,9 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/notifications
+    #
     def ActivityListRepoNotificationsForAuthenticatedUser(self, owner:str, repo:str,all:bool=None, participating:bool=None, since:datetime=None, before:datetime=None, per_page=30, page=1):
         """List all notifications for the current user.
         
@@ -5448,7 +5714,7 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/notifications
+
     def ActivityMarkRepoNotificationsAsRead(self, owner:str, repo:str,last_read_at:datetime=None):
         """Marks all notifications in a repository as "read" removes them from the [default view on GitHub Enterprise Server](https://github.com/notifications). If the number of notifications is too large to complete in one request, you will receive a `202 Accepted` status and GitHub Enterprise Server will run an asynchronous process to mark notifications as "read." To check whether any "unread" notifications remain, you can use the [List repository notifications for the authenticated user](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#list-repository-notifications-for-the-authenticated-user) endpoint and pass the query parameter `all=false`.
         
@@ -5468,6 +5734,7 @@ Unsubscribing from a conversation in a repository that you are not watching is f
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/notifications", 
                           json=data,
@@ -5483,7 +5750,9 @@ Unsubscribing from a conversation in a repository that you are not watching is f
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/stargazers
+    #
     def ActivityListStargazersForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """Lists the people that have starred the repository.
 
@@ -5521,7 +5790,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/subscribers
+    #
     def ActivityListWatchersForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """Lists the people watching the specified repository.
         
@@ -5554,7 +5825,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/subscription
+    #
     def ActivityGetRepoSubscription(self, owner:str, repo:str):
         """
         
@@ -5577,7 +5850,7 @@ You can also find out _when_ stars were created by passing the following custom 
     
         
         if r.status_code == 200:
-            return RepositoryInvitation(**r.json())
+            return RepositorySubscription(**r.json())
             
         if r.status_code == 404:
             return HttpResponse(r)
@@ -5587,7 +5860,7 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/subscription
+
     def ActivitySetRepoSubscription(self, owner:str, repo:str,subscribed:bool=None, ignored:bool=None):
         """If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#delete-a-repository-subscription) completely.
         
@@ -5609,6 +5882,7 @@ You can also find out _when_ stars were created by passing the following custom 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/subscription", 
                           json=data,
@@ -5617,11 +5891,13 @@ You can also find out _when_ stars were created by passing the following custom 
                           
         
         if r.status_code == 200:
-            return RepositoryInvitation(**r.json())
+            return RepositorySubscription(**r.json())
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/subscription
+    #
     def ActivityDeleteRepoSubscription(self, owner:str, repo:str):
         """This endpoint should only be used to stop watching a repository. To control whether or not you wish to receive notifications from a repository, [set the repository's subscription manually](https://docs.github.com/enterprise-server@3.3/rest/reference/activity#set-a-repository-subscription).
         
@@ -5648,7 +5924,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/starred
+    #
     def ActivityListReposStarredByAuthenticatedUser(self, sort='created', direction='desc', per_page=30, page=1):
         """Lists repositories the authenticated user has starred.
 
@@ -5696,7 +5974,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/starred/{owner}/{repo}
+    #
     def ActivityCheckRepoIsStarredByAuthenticatedUser(self, owner:str, repo:str):
         """
         
@@ -5735,7 +6015,7 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
-    # put /user/starred/{owner}/{repo}
+
     def ActivityStarRepoForAuthenticatedUser(self, owner:str, repo:str):
         """Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-verbs)."
         
@@ -5753,6 +6033,7 @@ You can also find out _when_ stars were created by passing the following custom 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/user/starred/{owner}/{repo}", 
                           json=data,
@@ -5777,7 +6058,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /user/starred/{owner}/{repo}
+    #
     def ActivityUnstarRepoForAuthenticatedUser(self, owner:str, repo:str):
         """
         
@@ -5816,7 +6099,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/subscriptions
+    #
     def ActivityListWatchedReposForAuthenticatedUser(self, per_page=30, page=1):
         """Lists repositories the authenticated user is watching.
         
@@ -5856,7 +6141,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/events
+    #
     def ActivityListEventsForAuthenticatedUser(self, username:str,per_page=30, page=1):
         """If you are authenticated as the given user, you will see your private events. Otherwise, you'll only see public events.
         
@@ -5888,7 +6175,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/events/orgs/{org}
+    #
     def ActivityListOrgEventsForAuthenticatedUser(self, username:str, org:str,per_page=30, page=1):
         """This is the user's organization dashboard. You must be authenticated as the user to view this.
         
@@ -5921,7 +6210,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/events/public
+    #
     def ActivityListPublicEventsForUser(self, username:str,per_page=30, page=1):
         """
         
@@ -5953,7 +6244,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/received_events
+    #
     def ActivityListReceivedEventsForUser(self, username:str,per_page=30, page=1):
         """These are events that you've received by watching repos and following users. If you are authenticated as the given user, you will see private events. Otherwise, you'll only see public events.
         
@@ -5985,7 +6278,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/received_events/public
+    #
     def ActivityListReceivedPublicEventsForUser(self, username:str,per_page=30, page=1):
         """
         
@@ -6017,7 +6312,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/starred
+    #
     def ActivityListReposStarredByUser(self, username:str,sort='created', direction='desc', per_page=30, page=1):
         """Lists repositories a user has starred.
 
@@ -6057,7 +6354,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/subscriptions
+    #
     def ActivityListReposWatchedByUser(self, username:str,per_page=30, page=1):
         """Lists repositories a user is watching.
         
@@ -6089,7 +6388,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
+    #
     # get /gists
+    #
     def GistsList(self, since:datetime=None, per_page=30, page=1):
         """Lists the authenticated user's gists or if called anonymously, this endpoint returns all public gists:
         
@@ -6129,7 +6430,7 @@ You can also find out _when_ stars were created by passing the following custom 
             
         
         return UnexpectedResult(r)
-    # post /gists
+
     def GistsCreate(self, files:object, description:str=None, public=None):
         """Allows you to add a new gist with one or more files.
 
@@ -6153,6 +6454,7 @@ You can also find out _when_ stars were created by passing the following custom 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/gists", 
                           json=data,
@@ -6177,7 +6479,9 @@ You can also find out _when_ stars were created by passing the following custom 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /gists/public
+    #
     def GistsListPublic(self, since:datetime=None, per_page=30, page=1):
         """List public gists sorted by most recently updated to least recently updated.
 
@@ -6222,7 +6526,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/starred
+    #
     def GistsListStarred(self, since:datetime=None, per_page=30, page=1):
         """List the authenticated user's starred gists:
         
@@ -6265,7 +6571,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/{gist_id}
+    #
     def GistsGet(self, gist_id:str):
         """
         
@@ -6300,7 +6608,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
-    # patch /gists/{gist_id}
+
     def GistsUpdate(self, gist_id:str,description:str=None, files:object=None):
         """Allows you to update or delete a gist file and rename gist files. Files from the previous version of the gist that aren't explicitly changed during an edit are unchanged.
         
@@ -6321,6 +6629,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/gists/{gist_id}", 
                           json=data,
@@ -6339,7 +6648,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /gists/{gist_id}
+    #
     def GistsDelete(self, gist_id:str):
         """
         
@@ -6374,7 +6685,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/{gist_id}/comments
+    #
     def GistsListComments(self, gist_id:str,per_page=30, page=1):
         """
         
@@ -6415,7 +6728,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
-    # post /gists/{gist_id}/comments
+
     def GistsCreateComment(self, gist_id:str,body:str):
         """
         
@@ -6434,6 +6747,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
         
         }
         
+
         
         r = self._session.post(f"{self._url}/gists/{gist_id}/comments", 
                           json=data,
@@ -6455,7 +6769,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /gists/{gist_id}/comments/{comment_id}
+    #
     def GistsGetComment(self, gist_id:str, comment_id:int):
         """
         
@@ -6491,7 +6807,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
-    # patch /gists/{gist_id}/comments/{comment_id}
+
     def GistsUpdateComment(self, gist_id:str, comment_id:int,body:str):
         """
         
@@ -6511,6 +6827,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/gists/{gist_id}/comments/{comment_id}", 
                           json=data,
@@ -6526,7 +6843,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /gists/{gist_id}/comments/{comment_id}
+    #
     def GistsDeleteComment(self, gist_id:str, comment_id:int):
         """
         
@@ -6562,7 +6881,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/{gist_id}/commits
+    #
     def GistsListCommits(self, gist_id:str,per_page=30, page=1):
         """
         
@@ -6603,7 +6924,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/{gist_id}/forks
+    #
     def GistsListForks(self, gist_id:str,per_page=30, page=1):
         """
         
@@ -6644,7 +6967,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
-    # post /gists/{gist_id}/forks
+
     def GistsFork(self, gist_id:str):
         """**Note**: This was previously `/gists/:gist_id/fork`.
         
@@ -6661,6 +6984,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
         
         }
         
+
         
         r = self._session.post(f"{self._url}/gists/{gist_id}/forks", 
                           json=data,
@@ -6685,7 +7009,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /gists/{gist_id}/star
+    #
     def GistsCheckIsStarred(self, gist_id:str):
         """
         
@@ -6720,7 +7046,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
-    # put /gists/{gist_id}/star
+
     def GistsStar(self, gist_id:str):
         """Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-verbs)."
         
@@ -6737,6 +7063,7 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
         
         }
         
+
         
         r = self._session.put(f"{self._url}/gists/{gist_id}/star", 
                           json=data,
@@ -6758,7 +7085,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /gists/{gist_id}/star
+    #
     def GistsUnstar(self, gist_id:str):
         """
         
@@ -6793,7 +7122,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gists/{gist_id}/{sha}
+    #
     def GistsGetRevision(self, gist_id:str, sha:str):
         """
         
@@ -6829,7 +7160,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/gists
+    #
     def GistsListForUser(self, username:str,since:datetime=None, per_page=30, page=1):
         """Lists public gists for the specified user:
         
@@ -6867,7 +7200,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gitignore/templates
+    #
     def GitignoreGetAllTemplates(self, ):
         """List all templates available to pass as an option when [creating a repository](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#create-a-repository-for-the-authenticated-user).
         
@@ -6895,7 +7230,9 @@ Note: With [pagination](https://docs.github.com/enterprise-server@3.3/rest/overv
             
         
         return UnexpectedResult(r)
+    #
     # get /gitignore/templates/{name}
+    #
     def GitignoreGetTemplate(self, name:str):
         """The API also allows fetching the source of a single template.
 Use the raw [media type](https://docs.github.com/enterprise-server@3.3/rest/overview/media-types/) to get the raw contents.
@@ -6925,7 +7262,9 @@ Use the raw [media type](https://docs.github.com/enterprise-server@3.3/rest/over
             
         
         return UnexpectedResult(r)
+    #
     # get /issues
+    #
     def IssuesList(self, filter='assigned', state='open', labels:str=None, sort='created', direction='desc', since:datetime=None, collab:bool=None, orgs:bool=None, owned:bool=None, pulls:bool=None, per_page=30, page=1):
         """List issues assigned to the authenticated user across all visible repositories including owned repositories, member
 repositories, and organization repositories. You can use the `filter` query parameter to fetch issues that are not
@@ -7008,7 +7347,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/issues
+    #
     def IssuesListForOrg(self, org:str,filter='assigned', state='open', labels:str=None, sort='created', direction='desc', since:datetime=None, per_page=30, page=1):
         """List issues in an organization assigned to the authenticated user.
 
@@ -7071,7 +7412,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/assignees
+    #
     def IssuesListAssignees(self, owner:str, repo:str,per_page=30, page=1):
         """Lists the [available assignees](https://help.github.com/articles/assigning-issues-and-pull-requests-to-other-github-users/) for issues in a repository.
         
@@ -7107,7 +7450,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/assignees/{assignee}
+    #
     def IssuesCheckUserCanBeAssigned(self, owner:str, repo:str, assignee:str):
         """Checks if a user has permission to be assigned to an issue in this repository.
 
@@ -7142,7 +7487,9 @@ Otherwise a `404` status code is returned.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues
+    #
     def IssuesListForRepo(self, owner:str, repo:str,milestone:str=None, state='open', assignee:str=None, creator:str=None, mentioned:str=None, labels:str=None, sort='created', direction='desc', since:datetime=None, per_page=30, page=1):
         """List issues in a repository.
 
@@ -7216,8 +7563,8 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/issues
-    def IssuesCreate(self, owner:str, repo:str,title, body:str=None, assignee:str=None, milestone=None, labels=None, assignees:list=None):
+
+    def IssuesCreate(self, owner:str, repo:str,title, body:str=None, assignee:str=None, milestone=None, labels:list=[], assignees:list=[]):
         """Any user with pull access to a repository can create an issue. If [issues are disabled in the repository](https://help.github.com/articles/disabling-issues/), the API returns a `410 Gone` status.
 
 This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
@@ -7248,6 +7595,15 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
+        #
+        # one or the other must be specified but not
+        # both, not even an empty list[] or string
+        #
+        if not data['assignees']:
+            del data['assignees']
+        if not data['assignee']:
+            del data['assignee']
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues", 
                           json=data,
@@ -7275,7 +7631,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/issues/comments
+    #
     def IssuesListCommentsForRepo(self, owner:str, repo:str,sort='created', direction='desc', since:datetime=None, per_page=30, page=1):
         """By default, Issue Comments are ordered by ascending ID.
         
@@ -7323,7 +7681,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/comments/{comment_id}
+    #
     def IssuesGetComment(self, owner:str, repo:str, comment_id:int):
         """
         
@@ -7354,7 +7714,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/issues/comments/{comment_id}
+
     def IssuesUpdateComment(self, owner:str, repo:str, comment_id:int,body:str):
         """
         
@@ -7375,6 +7735,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/issues/comments/{comment_id}", 
                           json=data,
@@ -7390,7 +7751,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/comments/{comment_id}
+    #
     def IssuesDeleteComment(self, owner:str, repo:str, comment_id:int):
         """
         
@@ -7418,7 +7781,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/events
+    #
     def IssuesListEventsForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -7454,7 +7819,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/events/{event_id}
+    #
     def IssuesGetEvent(self, owner:str, repo:str, event_id:int):
         """
         
@@ -7491,7 +7858,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}
+    #
     def IssuesGet(self, owner:str, repo:str, issue_number:int):
         """The API returns a [`301 Moved Permanently` status](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-redirects-redirects) if the issue was
 [transferred](https://help.github.com/articles/transferring-an-issue-to-another-repository/) to another repository. If
@@ -7541,8 +7910,8 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/issues/{issue_number}
-    def IssuesUpdate(self, owner:str, repo:str, issue_number:int,title=None, body:str=None, assignee:str=None, state:str=None, milestone=None, labels=None, assignees:list=None):
+
+    def IssuesUpdate(self, owner:str, repo:str, issue_number:int,title=None, body:str=None, assignee:str=None, state:str=None, milestone=None, labels:list=[], assignees:list=[]):
         """Issue owners and users with push access can edit an issue.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/issues/#update-an-issue
@@ -7574,6 +7943,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}", 
                           json=data,
@@ -7604,8 +7974,8 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/issues/{issue_number}/assignees
-    def IssuesAddAssignees(self, owner:str, repo:str, issue_number:int,assignees:list=None):
+
+    def IssuesAddAssignees(self, owner:str, repo:str, issue_number:int,assignees:list=[]):
         """Adds up to 10 assignees to an issue. Users already assigned to an issue are not replaced.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/issues#add-assignees-to-an-issue
@@ -7625,6 +7995,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/assignees", 
                           json=data,
@@ -7637,7 +8008,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/{issue_number}/assignees
+    #
     def IssuesRemoveAssignees(self, owner:str, repo:str, issue_number:int):
         """Removes one or more assignees from an issue.
         
@@ -7665,7 +8038,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}/comments
+    #
     def IssuesListComments(self, owner:str, repo:str, issue_number:int,since:datetime=None, per_page=30, page=1):
         """Issue Comments are ordered by ascending ID.
         
@@ -7708,7 +8083,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/issues/{issue_number}/comments
+
     def IssuesCreateComment(self, owner:str, repo:str, issue_number:int,body:str):
         """This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
         
@@ -7729,6 +8104,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/comments", 
                           json=data,
@@ -7753,7 +8129,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}/events
+    #
     def IssuesListEvents(self, owner:str, repo:str, issue_number:int,per_page=30, page=1):
         """
         
@@ -7790,7 +8168,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}/labels
+    #
     def IssuesListLabelsOnIssue(self, owner:str, repo:str, issue_number:int,per_page=30, page=1):
         """
         
@@ -7827,7 +8207,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/issues/{issue_number}/labels
+
     def IssuesAddLabels(self, owner:str, repo:str, issue_number:int,object:object):
         """
         
@@ -7848,6 +8228,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/labels", 
                           json=data,
@@ -7866,7 +8247,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/issues/{issue_number}/labels
+
     def IssuesSetLabels(self, owner:str, repo:str, issue_number:int,object:object):
         """Removes any previous labels and sets the new labels for an issue.
         
@@ -7887,6 +8268,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/labels", 
                           json=data,
@@ -7905,7 +8287,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/{issue_number}/labels
+    #
     def IssuesRemoveAllLabels(self, owner:str, repo:str, issue_number:int):
         """
         
@@ -7936,7 +8320,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
+    #
     def IssuesRemoveLabel(self, owner:str, repo:str, issue_number:int, name:str):
         """Removes the specified label from the issue, and returns the remaining labels on the issue. This endpoint returns a `404 Not Found` status if the label does not exist.
         
@@ -7971,7 +8357,7 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/issues/{issue_number}/lock
+
     def IssuesLock(self, owner:str, repo:str, issue_number:int,lock_reason:str=None):
         """Users with push access can lock an issue or pull request's conversation.
 
@@ -7998,6 +8384,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/lock", 
                           json=data,
@@ -8022,7 +8409,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/{issue_number}/lock
+    #
     def IssuesUnlock(self, owner:str, repo:str, issue_number:int):
         """Users with push access can unlock an issue's conversation.
         
@@ -8056,7 +8445,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}/timeline
+    #
     def IssuesListEventsForTimeline(self, owner:str, repo:str, issue_number:int,per_page=30, page=1):
         """
         
@@ -8096,7 +8487,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/labels
+    #
     def IssuesListLabelsForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -8132,7 +8525,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/labels
+
     def IssuesCreateLabel(self, owner:str, repo:str,name:str, color:str=None, description:str=None):
         """
         
@@ -8156,6 +8549,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/labels", 
                           json=data,
@@ -8174,7 +8568,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/labels/{name}
+    #
     def IssuesGetLabel(self, owner:str, repo:str, name:str):
         """
         
@@ -8205,7 +8601,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/labels/{name}
+
     def IssuesUpdateLabel(self, owner:str, repo:str, name:str,new_name:str=None, color:str=None, description:str=None):
         """
         
@@ -8230,6 +8626,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/labels/{name}", 
                           json=data,
@@ -8242,7 +8639,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/labels/{name}
+    #
     def IssuesDeleteLabel(self, owner:str, repo:str, name:str):
         """
         
@@ -8270,7 +8669,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/milestones
+    #
     def IssuesListMilestones(self, owner:str, repo:str,state='open', sort='due_on', direction='desc', per_page=30, page=1):
         """
         
@@ -8315,7 +8716,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/milestones
+
     def IssuesCreateMilestone(self, owner:str, repo:str,title:str, state:str='open', description:str=None, due_on:datetime=None):
         """
         
@@ -8341,6 +8742,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/milestones", 
                           json=data,
@@ -8359,7 +8761,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/milestones/{milestone_number}
+    #
     def IssuesGetMilestone(self, owner:str, repo:str, milestone_number:int):
         """
         
@@ -8390,7 +8794,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/milestones/{milestone_number}
+
     def IssuesUpdateMilestone(self, owner:str, repo:str, milestone_number:int,title:str=None, state:str='open', description:str=None, due_on:datetime=None):
         """
         
@@ -8417,6 +8821,7 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/milestones/{milestone_number}", 
                           json=data,
@@ -8429,7 +8834,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/milestones/{milestone_number}
+    #
     def IssuesDeleteMilestone(self, owner:str, repo:str, milestone_number:int):
         """
         
@@ -8460,7 +8867,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/milestones/{milestone_number}/labels
+    #
     def IssuesListLabelsForMilestone(self, owner:str, repo:str, milestone_number:int,per_page=30, page=1):
         """
         
@@ -8494,7 +8903,9 @@ Note that, if you choose not to pass any parameters, you'll need to set `Content
             
         
         return UnexpectedResult(r)
+    #
     # get /user/issues
+    #
     def IssuesListForAuthenticatedUser(self, filter='assigned', state='open', labels:str=None, sort='created', direction='desc', since:datetime=None, per_page=30, page=1):
         """List issues across owned and member repositories assigned to the authenticated user.
 
@@ -8559,7 +8970,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /licenses
+    #
     def LicensesGetAllCommonlyUsed(self, featured:bool=None, per_page=30, page=1):
         """
         
@@ -8596,7 +9009,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /licenses/{license}
+    #
     def LicensesGet(self, license:str):
         """
         
@@ -8631,7 +9046,9 @@ request id, use the "[List pull requests](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/license
+    #
     def LicensesGetForRepo(self, owner:str, repo:str):
         """This method returns the contents of the repository's license file, if one is detected.
 
@@ -8660,7 +9077,7 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
             
         
         return UnexpectedResult(r)
-    # post /markdown
+
     def MarkdownRender(self, text:str, mode:str='markdown', context:str=None):
         """
         
@@ -8682,6 +9099,7 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/markdown", 
                           json=data,
@@ -8697,7 +9115,7 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
             
 
         return UnexpectedResult(r.status_code)
-    # post /markdown/raw
+
     def MarkdownRenderRaw(self, text:str):
         """You must send Markdown as plain text (using a `Content-Type` header of `text/plain` or `text/x-markdown`) to this endpoint, rather than using JSON format. In raw mode, [GitHub Flavored Markdown](https://github.github.com/gfm/) is not supported and Markdown will be rendered in plain format like a README.md file. Markdown content must be 400 KB or less.
         
@@ -8711,6 +9129,7 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
         """
     
         
+
         
         r = self._session.post(f"{self._url}/markdown/raw", 
                           data=text,
@@ -8726,7 +9145,9 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /organizations
+    #
     def OrgsList(self, since:int=None, per_page=30):
         """Lists all organizations, in the order that they were created on GitHub Enterprise Server.
 
@@ -8762,7 +9183,9 @@ Similar to [Get repository content](https://docs.github.com/enterprise-server@3.
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}
+    #
     def OrgsGet(self, org:str):
         """To see many of the organization response values, you need to be an authenticated organization owner with the `admin:org` scope. When the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://help.github.com/articles/securing-your-account-with-two-factor-authentication-2fa/).
 
@@ -8793,7 +9216,7 @@ GitHub Apps with the `Organization plan` permission can use this endpoint to ret
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}
+
     def OrgsUpdate(self, org:str,billing_email:str=None, company:str=None, email:str=None, twitter_username:str=None, location:str=None, name:str=None, description:str=None, has_organization_projects:bool=None, has_repository_projects:bool=None, default_repository_permission:str='read', members_can_create_repositories:bool=True, members_can_create_internal_repositories:bool=None, members_can_create_private_repositories:bool=None, members_can_create_public_repositories:bool=None, members_allowed_repository_creation_type:str=None, members_can_create_pages:bool=True, members_can_fork_private_repositories:bool=False, blog:str=None):
         """**Parameter Deprecation Notice:** GitHub Enterprise Server will replace and discontinue `members_allowed_repository_creation_type` in favor of more granular permissions. The new input parameters are `members_can_create_public_repositories`, `members_can_create_private_repositories` for all organizations and `members_can_create_internal_repositories` for organizations associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. For more information, see the [blog post](https://developer.github.com/changes/2019-12-03-internal-visibility-changes).
 
@@ -8873,6 +9296,7 @@ Default: `true`. For more information, see "[Restricting repository creation in 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}", 
                           json=data,
@@ -8891,7 +9315,9 @@ Default: `true`. For more information, see "[Restricting repository creation in 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/audit-log
+    #
     def OrgsGetAuditLog(self, org:str,phrase:str=None, after:str=None, before:str=None, direction='desc', per_page=30, page=1):
         """Gets the audit log for an organization. For more information, see "[Reviewing the audit log for your organization](https://docs.github.com/enterprise-server@3.3/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization)."
 
@@ -8938,7 +9364,9 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/hooks
+    #
     def OrgsListWebhooks(self, org:str,per_page=30, page=1):
         """
         
@@ -8973,7 +9401,7 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/hooks
+
     def OrgsCreateWebhook(self, org:str,config:dict, name:str, events:list=['push'], active:bool=True):
         """Here's how you can create a hook that posts payloads in JSON format:
         
@@ -8998,6 +9426,7 @@ To use this endpoint, you must be an organization owner, and you must use an acc
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/hooks", 
                           json=data,
@@ -9016,7 +9445,9 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/hooks/{hook_id}
+    #
     def OrgsGetWebhook(self, org:str, hook_id:int):
         """Returns a webhook configured in an organization. To get only the webhook `config` properties, see "[Get a webhook configuration for an organization](/rest/reference/orgs#get-a-webhook-configuration-for-an-organization)."
         
@@ -9046,7 +9477,7 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/hooks/{hook_id}
+
     def OrgsUpdateWebhook(self, org:str, hook_id:int,config:dict=None, events:list=['push'], active:bool=True, name:str=None):
         """Updates a webhook configured in an organization. When you update a webhook, the `secret` will be overwritten. If you previously had a `secret` set, you must provide the same `secret` or set a new `secret` or the secret will be removed. If you are only updating individual webhook `config` properties, use "[Update a webhook configuration for an organization](/rest/reference/orgs#update-a-webhook-configuration-for-an-organization)."
         
@@ -9072,6 +9503,7 @@ To use this endpoint, you must be an organization owner, and you must use an acc
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/hooks/{hook_id}", 
                           json=data,
@@ -9090,7 +9522,9 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/hooks/{hook_id}
+    #
     def OrgsDeleteWebhook(self, org:str, hook_id:int):
         """
         
@@ -9120,7 +9554,9 @@ To use this endpoint, you must be an organization owner, and you must use an acc
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/hooks/{hook_id}/config
+    #
     def OrgsGetWebhookConfigForOrg(self, org:str, hook_id:int):
         """Returns the webhook configuration for an organization. To get more information about the webhook, including the `active` state and `events`, use "[Get an organization webhook ](/rest/reference/orgs#get-an-organization-webhook)."
 
@@ -9149,7 +9585,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/hooks/{hook_id}/config
+
     def OrgsUpdateWebhookConfigForOrg(self, org:str, hook_id:int,url:str=None, content_type:str=None, secret:str=None, insecure_ssl=None):
         """Updates the webhook configuration for an organization. To update more information about the webhook, including the `active` state and `events`, use "[Update an organization webhook ](/rest/reference/orgs#update-an-organization-webhook)."
 
@@ -9177,6 +9613,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/hooks/{hook_id}/config", 
                           json=data,
@@ -9189,7 +9626,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/hooks/{hook_id}/deliveries
+    #
     def OrgsListWebhookDeliveries(self, org:str, hook_id:int,per_page=30, cursor:str=None):
         """Returns a list of webhook deliveries for a webhook configured in an organization.
         
@@ -9228,7 +9667,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}
+    #
     def OrgsGetWebhookDelivery(self, org:str, hook_id:int, delivery_id:int):
         """Returns a delivery for a webhook configured in an organization.
         
@@ -9262,7 +9703,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+
     def OrgsRedeliverWebhookDelivery(self, org:str, hook_id:int, delivery_id:int):
         """Redeliver a delivery for a webhook configured in an organization.
         
@@ -9281,6 +9722,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts", 
                           json=data,
@@ -9299,7 +9741,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
 
         return UnexpectedResult(r.status_code)
-    # post /orgs/{org}/hooks/{hook_id}/pings
+
     def OrgsPingWebhook(self, org:str, hook_id:int):
         """This will trigger a [ping event](https://docs.github.com/enterprise-server@3.3/webhooks/#ping-event) to be sent to the hook.
         
@@ -9317,6 +9759,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/hooks/{hook_id}/pings", 
                           json=data,
@@ -9332,7 +9775,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/installations
+    #
     def OrgsListAppInstallations(self, org:str,per_page=30, page=1):
         """Lists all GitHub Apps in an organization. The installation count includes all GitHub Apps installed on repositories in the organization. You must be an organization owner with `admin:read` scope to use this endpoint.
         
@@ -9364,7 +9809,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/members
+    #
     def OrgsListMembers(self, org:str,filter='all', role='all', per_page=30, page=1):
         """List all users who are members of an organization. If the authenticated user is also a member of this organization then both concealed and public members will be returned.
         
@@ -9413,7 +9860,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/members/{username}
+    #
     def OrgsCheckMembershipForUser(self, org:str, username:str):
         """Check if a user is, publicly or privately, a member of the organization.
         
@@ -9446,7 +9895,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
+    #
     # delete /orgs/{org}/members/{username}
+    #
     def OrgsRemoveMember(self, org:str, username:str):
         """Removing a user from this list will remove them from all teams and they will no longer have any access to the organization's repositories.
         
@@ -9476,7 +9927,9 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/memberships/{username}
+    #
     def OrgsGetMembershipForUser(self, org:str, username:str):
         """In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status.
         
@@ -9509,7 +9962,7 @@ Access tokens must have the `admin:org_hook` scope, and GitHub Apps must have th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/memberships/{username}
+
     def OrgsSetMembershipForUser(self, org:str, username:str,role:str='member'):
         """Only authenticated organization owners can add a member to the organization or update the member's role.
 
@@ -9539,6 +9992,7 @@ To prevent abuse, the authenticated user is limited to 50 organization invitatio
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/memberships/{username}", 
                           json=data,
@@ -9557,7 +10011,9 @@ To prevent abuse, the authenticated user is limited to 50 organization invitatio
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/memberships/{username}
+    #
     def OrgsRemoveMembershipForUser(self, org:str, username:str):
         """In order to remove a user's membership with an organization, the authenticated user must be an organization owner.
 
@@ -9592,7 +10048,9 @@ If the specified user is an active member of the organization, this will remove 
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/outside_collaborators
+    #
     def OrgsListOutsideCollaborators(self, org:str,filter='all', per_page=30, page=1):
         """List all users who are outside collaborators of an organization.
         
@@ -9629,7 +10087,7 @@ If the specified user is an active member of the organization, this will remove 
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/outside_collaborators/{username}
+
     def OrgsConvertMemberToOutsideCollaborator(self, org:str, username:str):
         """When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see "[Converting an organization member to an outside collaborator](https://help.github.com/articles/converting-an-organization-member-to-an-outside-collaborator/)".
         
@@ -9647,6 +10105,7 @@ If the specified user is an active member of the organization, this will remove 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/outside_collaborators/{username}", 
                           json=data,
@@ -9668,7 +10127,9 @@ If the specified user is an active member of the organization, this will remove 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/outside_collaborators/{username}
+    #
     def OrgsRemoveOutsideCollaborator(self, org:str, username:str):
         """Removing a user from this list will remove them from all the organization's repositories.
         
@@ -9698,7 +10159,9 @@ If the specified user is an active member of the organization, this will remove 
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/public_members
+    #
     def OrgsListPublicMembers(self, org:str,per_page=30, page=1):
         """Members of an organization can choose to have their membership publicized or not.
         
@@ -9730,7 +10193,9 @@ If the specified user is an active member of the organization, this will remove 
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/public_members/{username}
+    #
     def OrgsCheckPublicMembershipForUser(self, org:str, username:str):
         """
         
@@ -9760,7 +10225,7 @@ If the specified user is an active member of the organization, this will remove 
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/public_members/{username}
+
     def OrgsSetPublicMembershipForAuthenticatedUser(self, org:str, username:str):
         """The user can publicize their own membership. (A user cannot publicize the membership for another user.)
 
@@ -9780,6 +10245,7 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/public_members/{username}", 
                           json=data,
@@ -9795,7 +10261,9 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/public_members/{username}
+    #
     def OrgsRemovePublicMembershipForAuthenticatedUser(self, org:str, username:str):
         """
         
@@ -9822,7 +10290,9 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
         
         return UnexpectedResult(r)
+    #
     # get /user/memberships/orgs
+    #
     def OrgsListMembershipsForAuthenticatedUser(self, state=None, per_page=30, page=1):
         """
         
@@ -9868,7 +10338,9 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
         
         return UnexpectedResult(r)
+    #
     # get /user/memberships/orgs/{org}
+    #
     def OrgsGetMembershipForAuthenticatedUser(self, org:str):
         """
         
@@ -9900,7 +10372,7 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
         
         return UnexpectedResult(r)
-    # patch /user/memberships/orgs/{org}
+
     def OrgsUpdateMembershipForAuthenticatedUser(self, org:str,state:str):
         """
         
@@ -9919,6 +10391,7 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/user/memberships/orgs/{org}", 
                           json=data,
@@ -9940,7 +10413,9 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /user/orgs
+    #
     def OrgsListForAuthenticatedUser(self, per_page=30, page=1):
         """List organizations for the authenticated user.
 
@@ -9984,7 +10459,9 @@ This only lists organizations that your authorization allows you to operate on i
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/orgs
+    #
     def OrgsListForUser(self, username:str,per_page=30, page=1):
         """List [public organization memberships](https://help.github.com/articles/publicizing-or-concealing-organization-membership) for the specified user.
 
@@ -10018,7 +10495,9 @@ This method only lists _public_ memberships, regardless of authentication. If yo
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/permissions
+    #
     def ActionsGetGithubActionsPermissionsOrganization(self, org:str):
         """Gets the GitHub Actions permissions policy for repositories and allowed actions in an organization.
 
@@ -10046,7 +10525,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/permissions
+
     def ActionsSetGithubActionsPermissionsOrganization(self, org:str,enabled_repositories:str, allowed_actions:str=None):
         """Sets the GitHub Actions permissions policy for repositories and allowed actions in an organization.
 
@@ -10071,6 +10550,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/permissions", 
                           json=data,
@@ -10083,7 +10563,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/actions/permissions/repositories
+    #
     def ActionsListSelectedRepositoriesEnabledGithubActionsOrganization(self, org:str,per_page=30, page=1):
         """Lists the selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization)."
 
@@ -10117,7 +10599,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/permissions/repositories
+
     def ActionsSetSelectedRepositoriesEnabledGithubActionsOrganization(self, org:str,selected_repository_ids:list):
         """Replaces the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization)."
 
@@ -10138,6 +10620,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/permissions/repositories", 
                           json=data,
@@ -10150,7 +10633,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
-    # put /orgs/{org}/actions/permissions/repositories/{repository_id}
+
     def ActionsEnableSelectedRepositoryGithubActionsOrganization(self, org:str, repository_id:int):
         """Adds a repository to the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization)."
 
@@ -10170,6 +10653,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/permissions/repositories/{repository_id}", 
                           json=data,
@@ -10182,7 +10666,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/permissions/repositories/{repository_id}
+    #
     def ActionsDisableSelectedRepositoryGithubActionsOrganization(self, org:str, repository_id:int):
         """Removes a repository from the list of selected repositories that are enabled for GitHub Actions in an organization. To use this endpoint, the organization permission policy for `enabled_repositories` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization)."
 
@@ -10211,7 +10697,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/permissions/selected-actions
+    #
     def ActionsGetAllowedActionsOrganization(self, org:str):
         """Gets the selected actions that are allowed in an organization. To use this endpoint, the organization permission policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization).""
 
@@ -10239,7 +10727,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/permissions/selected-actions
+
     def ActionsSetAllowedActionsOrganization(self, org:str,patterns_allowed:list, github_owned_allowed:bool):
         """Sets the actions that are allowed in an organization. To use this endpoint, the organization permission policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for an organization](#set-github-actions-permissions-for-an-organization)."
 
@@ -10266,6 +10754,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/permissions/selected-actions", 
                           json=data,
@@ -10278,7 +10767,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/actions/runner-groups
+    #
     def ActionsListSelfHostedRunnerGroupsForOrg(self, org:str,per_page=30, page=1):
         """Lists all self-hosted runner groups configured in an organization and inherited from an enterprise.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10311,8 +10802,8 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/actions/runner-groups
-    def ActionsCreateSelfHostedRunnerGroupForOrg(self, org:str,name:str, visibility:str='all', selected_repository_ids:list=None, runners:list=None, allows_public_repositories:bool=False):
+
+    def ActionsCreateSelfHostedRunnerGroupForOrg(self, org:str,name:str, visibility:str='all', selected_repository_ids:list=[], runners:list=[], allows_public_repositories:bool=False):
         """The self-hosted runner groups REST API is available with GitHub Enterprise Cloud and GitHub Enterprise Server. For more information, see "[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products)."
 
 Creates a new self-hosted runner group for an organization.
@@ -10342,6 +10833,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/actions/runner-groups", 
                           json=data,
@@ -10354,7 +10846,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/actions/runner-groups/{runner_group_id}
+    #
     def ActionsGetSelfHostedRunnerGroupForOrg(self, org:str, runner_group_id:int):
         """Gets a specific self-hosted runner group for an organization.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10382,7 +10876,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/actions/runner-groups/{runner_group_id}
+
     def ActionsUpdateSelfHostedRunnerGroupForOrg(self, org:str, runner_group_id:int,name:str, visibility:str=None, allows_public_repositories:bool=False):
         """Updates the `name` and `visibility` of a self-hosted runner group in an organization.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10407,6 +10901,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/actions/runner-groups/{runner_group_id}", 
                           json=data,
@@ -10419,7 +10914,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/runner-groups/{runner_group_id}
+    #
     def ActionsDeleteSelfHostedRunnerGroupFromOrg(self, org:str, runner_group_id:int):
         """Deletes a self-hosted runner group for an organization.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10447,7 +10944,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories
+    #
     def ActionsListRepoAccessToSelfHostedRunnerGroupInOrg(self, org:str, runner_group_id:int,page=1, per_page=30):
         """The self-hosted runner groups REST API is available with GitHub Enterprise Cloud and GitHub Enterprise Server. For more information, see "[GitHub's products](https://docs.github.com/github/getting-started-with-github/githubs-products)."
 
@@ -10484,7 +10983,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories
+
     def ActionsSetRepoAccessToSelfHostedRunnerGroupInOrg(self, org:str, runner_group_id:int,selected_repository_ids:list):
         """Replaces the list of repositories that have access to a self-hosted runner group configured in an organization.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10505,6 +11004,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", 
                           json=data,
@@ -10517,7 +11017,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
-    # put /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
+
     def ActionsAddRepoAccessToSelfHostedRunnerGroupInOrg(self, org:str, runner_group_id:int, repository_id:int):
         """Adds a repository to the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization)."
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10537,6 +11037,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}", 
                           json=data,
@@ -10549,7 +11050,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
+    #
     def ActionsRemoveRepoAccessToSelfHostedRunnerGroupInOrg(self, org:str, runner_group_id:int, repository_id:int):
         """Removes a repository from the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see "[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization)."
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10578,7 +11081,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/runner-groups/{runner_group_id}/runners
+    #
     def ActionsListSelfHostedRunnersInGroupForOrg(self, org:str, runner_group_id:int,per_page=30, page=1):
         """Lists self-hosted runners that are in a specific organization group.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10612,7 +11117,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/runner-groups/{runner_group_id}/runners
+
     def ActionsSetSelfHostedRunnersInGroupForOrg(self, org:str, runner_group_id:int,runners:list):
         """Replaces the list of self-hosted runners that are part of an organization runner group.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10633,6 +11138,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/runner-groups/{runner_group_id}/runners", 
                           json=data,
@@ -10645,7 +11151,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
-    # put /orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
+
     def ActionsAddSelfHostedRunnerToGroupForOrg(self, org:str, runner_group_id:int, runner_id:int):
         """Adds a self-hosted runner to a runner group configured in an organization.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10665,6 +11171,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}", 
                           json=data,
@@ -10677,7 +11184,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
+    #
     def ActionsRemoveSelfHostedRunnerFromGroupForOrg(self, org:str, runner_group_id:int, runner_id:int):
         """Removes a self-hosted runner from a group configured in an organization. The runner is then returned to the default group.
 You must authenticate using an access token with the `admin:org` scope to use this endpoint.
@@ -10706,7 +11215,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/runners
+    #
     def ActionsListSelfHostedRunnersForOrg(self, org:str,per_page=30, page=1):
         """Lists all self-hosted runners configured in an organization.
 
@@ -10740,7 +11251,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/runners/downloads
+    #
     def ActionsListRunnerApplicationsForOrg(self, org:str):
         """Lists binaries for the runner application that you can download and run.
 
@@ -10768,7 +11281,7 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/actions/runners/registration-token
+
     def ActionsCreateRegistrationTokenForOrg(self, org:str):
         """Returns a token that you can pass to the `config` script. The token expires after one hour.
 
@@ -10795,6 +11308,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/actions/runners/registration-token", 
                           json=data,
@@ -10807,7 +11321,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
             
 
         return UnexpectedResult(r.status_code)
-    # post /orgs/{org}/actions/runners/remove-token
+
     def ActionsCreateRemoveTokenForOrg(self, org:str):
         """Returns a token that you can pass to the `config` script to remove a self-hosted runner from an organization. The token expires after one hour.
 
@@ -10835,6 +11349,7 @@ endpoint.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/actions/runners/remove-token", 
                           json=data,
@@ -10847,7 +11362,9 @@ endpoint.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/actions/runners/{runner_id}
+    #
     def ActionsGetSelfHostedRunnerForOrg(self, org:str, runner_id:int):
         """Gets a specific self-hosted runner configured in an organization.
 
@@ -10876,7 +11393,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # delete /orgs/{org}/actions/runners/{runner_id}
+    #
     def ActionsDeleteSelfHostedRunnerFromOrg(self, org:str, runner_id:int):
         """Forces the removal of a self-hosted runner from an organization. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.
 
@@ -10905,7 +11424,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/secrets
+    #
     def ActionsListOrgSecrets(self, org:str,per_page=30, page=1):
         """Lists all secrets available in an organization without revealing their encrypted values. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -10937,7 +11458,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/secrets/public-key
+    #
     def ActionsGetOrgPublicKey(self, org:str):
         """Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -10963,7 +11486,9 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/secrets/{secret_name}
+    #
     def ActionsGetOrgSecret(self, org:str, secret_name:str):
         """Gets a single organization secret without revealing its encrypted value. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -10990,8 +11515,8 @@ You must authenticate using an access token with the `admin:org` scope to use th
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/secrets/{secret_name}
-    def ActionsCreateOrUpdateOrgSecret(self, org:str, secret_name:str,visibility:str, encrypted_value:str=None, key_id:str=None, selected_repository_ids:list=None):
+
+    def ActionsCreateOrUpdateOrgSecret(self, org:str, secret_name:str,visibility:str, encrypted_value:str=None, key_id:str=None, selected_repository_ids:list=[]):
         """Creates or updates an organization secret with an encrypted value. Encrypt your secret using
 [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
 token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to
@@ -11093,6 +11618,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/secrets/{secret_name}", 
                           json=data,
@@ -11108,7 +11634,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/secrets/{secret_name}
+    #
     def ActionsDeleteOrgSecret(self, org:str, secret_name:str):
         """Deletes a secret in an organization using the secret name. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -11135,7 +11663,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/actions/secrets/{secret_name}/repositories
+    #
     def ActionsListSelectedReposForOrgSecret(self, org:str, secret_name:str,page=1, per_page=30):
         """Lists all repositories that have been selected when the `visibility` for repository access to a secret is set to `selected`. You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -11168,7 +11698,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/actions/secrets/{secret_name}/repositories
+
     def ActionsSetSelectedReposForOrgSecret(self, org:str, secret_name:str,selected_repository_ids:list):
         """Replaces all repositories for an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.3/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -11188,6 +11718,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/secrets/{secret_name}/repositories", 
                           json=data,
@@ -11200,7 +11731,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
-    # put /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
+
     def ActionsAddSelectedRepoToOrgSecret(self, org:str, secret_name:str, repository_id:int):
         """Adds a repository to an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.3/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -11219,6 +11750,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}", 
                           json=data,
@@ -11234,7 +11766,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
+    #
     def ActionsRemoveSelectedRepoFromOrgSecret(self, org:str, secret_name:str, repository_id:int):
         """Removes a repository from an organization secret when the `visibility` for repository access is set to `selected`. The visibility is set when you [Create or update an organization secret](https://docs.github.com/enterprise-server@3.3/rest/reference/actions#create-or-update-an-organization-secret). You must authenticate using an access token with the `admin:org` scope to use this endpoint. GitHub Apps must have the `secrets` organization permission to use this endpoint.
         
@@ -11265,7 +11799,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/artifacts
+    #
     def ActionsListArtifactsForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """Lists all artifacts for a repository. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11298,7 +11834,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+    #
     def ActionsGetArtifact(self, owner:str, repo:str, artifact_id:int):
         """Gets a specific artifact for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11326,7 +11864,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+    #
     def ActionsDeleteArtifact(self, owner:str, repo:str, artifact_id:int):
         """Deletes an artifact for a workflow run. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
         
@@ -11354,7 +11894,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+    #
     def ActionsDownloadArtifact(self, owner:str, repo:str, artifact_id:int, archive_format:str):
         """Gets a redirect URL to download an archive for a repository. This URL expires after 1 minute. Look for `Location:` in
 the response header to find the URL for the download. The `:archive_format` must be `zip`. Anyone with read access to
@@ -11386,7 +11928,9 @@ GitHub Apps must have the `actions:read` permission to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/jobs/{job_id}
+    #
     def ActionsGetJobForWorkflowRun(self, owner:str, repo:str, job_id:int):
         """Gets a specific job in a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11414,7 +11958,9 @@ GitHub Apps must have the `actions:read` permission to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
+    #
     def ActionsDownloadJobLogsForWorkflowRun(self, owner:str, repo:str, job_id:int):
         """Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look
 for `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can
@@ -11445,7 +11991,9 @@ have the `actions:read` permission to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/permissions
+    #
     def ActionsGetGithubActionsPermissionsRepository(self, owner:str, repo:str):
         """Gets the GitHub Actions permissions policy for a repository, including whether GitHub Actions is enabled and the actions allowed to run in the repository.
 
@@ -11475,7 +12023,7 @@ endpoint. GitHub Apps must have the `administration` repository permission to us
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/actions/permissions
+
     def ActionsSetGithubActionsPermissionsRepository(self, owner:str, repo:str,enabled:bool, allowed_actions:str=None):
         """Sets the GitHub Actions permissions policy for enabling GitHub Actions and allowed actions in the repository.
 
@@ -11501,6 +12049,7 @@ You must authenticate using an access token with the `repo` scope to use this en
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/actions/permissions", 
                           json=data,
@@ -11513,7 +12062,9 @@ You must authenticate using an access token with the `repo` scope to use this en
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/permissions/selected-actions
+    #
     def ActionsGetAllowedActionsRepository(self, owner:str, repo:str):
         """Gets the settings for selected actions that are allowed in a repository. To use this endpoint, the repository policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for a repository](#set-github-actions-permissions-for-a-repository)."
 
@@ -11542,7 +12093,7 @@ You must authenticate using an access token with the `repo` scope to use this en
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/actions/permissions/selected-actions
+
     def ActionsSetAllowedActionsRepository(self, owner:str, repo:str,patterns_allowed:list, github_owned_allowed:bool):
         """Sets the actions that are allowed in a repository. To use this endpoint, the repository permission policy for `allowed_actions` must be configured to `selected`. For more information, see "[Set GitHub Actions permissions for a repository](#set-github-actions-permissions-for-a-repository)."
 
@@ -11570,6 +12121,7 @@ You must authenticate using an access token with the `repo` scope to use this en
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/actions/permissions/selected-actions", 
                           json=data,
@@ -11582,7 +12134,9 @@ You must authenticate using an access token with the `repo` scope to use this en
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/runners
+    #
     def ActionsListSelfHostedRunnersForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """Lists all self-hosted runners configured in a repository. You must authenticate using an access token with the `repo` scope to use this endpoint.
         
@@ -11615,7 +12169,9 @@ You must authenticate using an access token with the `repo` scope to use this en
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runners/downloads
+    #
     def ActionsListRunnerApplicationsForRepo(self, owner:str, repo:str):
         """Lists binaries for the runner application that you can download and run.
 
@@ -11644,7 +12200,7 @@ You must authenticate using an access token with the `repo` scope to use this en
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/actions/runners/registration-token
+
     def ActionsCreateRegistrationTokenForRepo(self, owner:str, repo:str):
         """Returns a token that you can pass to the `config` script. The token expires after one hour. You must authenticate
 using an access token with the `repo` scope to use this endpoint.
@@ -11671,6 +12227,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/runners/registration-token", 
                           json=data,
@@ -11683,7 +12240,7 @@ Configure your self-hosted runner, replacing `TOKEN` with the registration token
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/actions/runners/remove-token
+
     def ActionsCreateRemoveTokenForRepo(self, owner:str, repo:str):
         """Returns a token that you can pass to remove a self-hosted runner from a repository. The token expires after one hour.
 You must authenticate using an access token with the `repo` scope to use this endpoint.
@@ -11710,6 +12267,7 @@ To remove your self-hosted runner from a repository, replace TOKEN with the remo
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/runners/remove-token", 
                           json=data,
@@ -11722,7 +12280,9 @@ To remove your self-hosted runner from a repository, replace TOKEN with the remo
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/runners/{runner_id}
+    #
     def ActionsGetSelfHostedRunnerForRepo(self, owner:str, repo:str, runner_id:int):
         """Gets a specific self-hosted runner configured in a repository.
 
@@ -11753,7 +12313,9 @@ endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/actions/runners/{runner_id}
+    #
     def ActionsDeleteSelfHostedRunnerFromRepo(self, owner:str, repo:str, runner_id:int):
         """Forces the removal of a self-hosted runner from a repository. You can use this endpoint to completely remove the runner when the machine you were using no longer exists.
 
@@ -11784,7 +12346,9 @@ scope to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs
+    #
     def ActionsListWorkflowRunsForRepo(self, owner:str, repo:str,actor:str=None, branch:str=None, event:str=None, status=None, per_page=30, page=1, created:datetime=None, exclude_pull_requests:bool=None):
         """Lists all workflow runs for a repository. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#parameters).
 
@@ -11837,7 +12401,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}
+    #
     def ActionsGetWorkflowRun(self, owner:str, repo:str, run_id:int,exclude_pull_requests:bool=None):
         """Gets a specific workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11868,7 +12434,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/actions/runs/{run_id}
+    #
     def ActionsDeleteWorkflowRun(self, owner:str, repo:str, run_id:int):
         """Delete a specific workflow run. Anyone with write access to the repository can use this endpoint. If the repository is
 private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:write` permission to use
@@ -11898,7 +12466,9 @@ this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/approvals
+    #
     def ActionsGetReviewsForRun(self, owner:str, repo:str, run_id:int):
         """Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11922,11 +12492,13 @@ this endpoint.
     
         
         if r.status_code == 200:
-            return [ entry and EnvironmentApproval(**entry) for entry in r.json() ]
+            return [ entry and EnvironmentApprovals(**entry) for entry in r.json() ]
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts
+    #
     def ActionsListWorkflowRunArtifacts(self, owner:str, repo:str, run_id:int,per_page=30, page=1):
         """Lists artifacts for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -11960,7 +12532,9 @@ this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}
+    #
     def ActionsGetWorkflowRunAttempt(self, owner:str, repo:str, run_id:int, attempt_number:int,exclude_pull_requests:bool=None):
         """Gets a specific workflow run attempt. Anyone with read access to the repository
 can use this endpoint. If the repository is private you must use an access token
@@ -11995,7 +12569,9 @@ use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs
+    #
     def ActionsListJobsForWorkflowRunAttempt(self, owner:str, repo:str, run_id:int, attempt_number:int,per_page=30, page=1):
         """Lists jobs for a specific workflow run attempt. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#parameters).
         
@@ -12033,7 +12609,7 @@ use this endpoint.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/actions/runs/{run_id}/cancel
+
     def ActionsCancelWorkflowRun(self, owner:str, repo:str, run_id:int):
         """Cancels a workflow run using its `id`. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
         
@@ -12052,6 +12628,7 @@ use this endpoint.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/runs/{run_id}/cancel", 
                           json=data,
@@ -12064,7 +12641,9 @@ use this endpoint.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/jobs
+    #
     def ActionsListJobsForWorkflowRun(self, owner:str, repo:str, run_id:int,filter='latest', per_page=30, page=1):
         """Lists jobs for a workflow run. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#parameters).
         
@@ -12103,7 +12682,9 @@ use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+    #
     def ActionsDownloadWorkflowRunLogs(self, owner:str, repo:str, run_id:int):
         """Gets a redirect URL to download an archive of log files for a workflow run. This link expires after 1 minute. Look for
 `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can use
@@ -12134,7 +12715,9 @@ the `actions:read` permission to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+    #
     def ActionsDeleteWorkflowRunLogs(self, owner:str, repo:str, run_id:int):
         """Deletes all logs for a workflow run. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
         
@@ -12162,7 +12745,9 @@ the `actions:read` permission to use this endpoint.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+    #
     def ActionsGetPendingDeploymentsForRun(self, owner:str, repo:str, run_id:int):
         """Get all deployment environments for a workflow run that are waiting for protection rules to pass.
 
@@ -12192,7 +12777,7 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+
     def ActionsReviewPendingDeploymentsForRun(self, owner:str, repo:str, run_id:int,comment:str, state:str, environment_ids:list):
         """Approve or reject pending deployments that are waiting on approval by a required reviewer.
 
@@ -12219,6 +12804,7 @@ Anyone with read access to the repository contents and deployments can use this 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments", 
                           json=data,
@@ -12231,7 +12817,7 @@ Anyone with read access to the repository contents and deployments can use this 
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
+
     def ActionsReRunWorkflow(self, owner:str, repo:str, run_id:int):
         """Re-runs your workflow run using its `id`. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `actions:write` permission to use this endpoint.
         
@@ -12250,6 +12836,7 @@ Anyone with read access to the repository contents and deployments can use this 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/runs/{run_id}/rerun", 
                           json=data,
@@ -12262,7 +12849,9 @@ Anyone with read access to the repository contents and deployments can use this 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/secrets
+    #
     def ActionsListRepoSecrets(self, owner:str, repo:str,per_page=30, page=1):
         """Lists all secrets available in a repository without revealing their encrypted values. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12295,7 +12884,9 @@ Anyone with read access to the repository contents and deployments can use this 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/secrets/public-key
+    #
     def ActionsGetRepoPublicKey(self, owner:str, repo:str):
         """Gets your public key, which you need to encrypt secrets. You need to encrypt a secret before you can create or update secrets. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12322,7 +12913,9 @@ Anyone with read access to the repository contents and deployments can use this 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/secrets/{secret_name}
+    #
     def ActionsGetRepoSecret(self, owner:str, repo:str, secret_name:str):
         """Gets a single repository secret without revealing its encrypted value. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12350,7 +12943,7 @@ Anyone with read access to the repository contents and deployments can use this 
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/actions/secrets/{secret_name}
+
     def ActionsCreateOrUpdateRepoSecret(self, owner:str, repo:str, secret_name:str,encrypted_value:str=None, key_id:str=None):
         """Creates or updates a repository secret with an encrypted value. Encrypt your secret using
 [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
@@ -12447,6 +13040,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/actions/secrets/{secret_name}", 
                           json=data,
@@ -12462,7 +13056,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/actions/secrets/{secret_name}
+    #
     def ActionsDeleteRepoSecret(self, owner:str, repo:str, secret_name:str):
         """Deletes a secret in a repository using the secret name. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12490,7 +13086,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/workflows
+    #
     def ActionsListRepoWorkflows(self, owner:str, repo:str,per_page=30, page=1):
         """Lists the workflows in a repository. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -12523,7 +13121,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/actions/workflows/{workflow_id}
+    #
     def ActionsGetWorkflow(self, owner:str, repo:str, workflow_id:('integer', 'string')):
         """Gets a specific workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -12551,7 +13151,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable
+
     def ActionsDisableWorkflow(self, owner:str, repo:str, workflow_id:('integer', 'string')):
         """Disables a workflow and sets the `state` of the workflow to `disabled_manually`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
 
@@ -12572,6 +13172,7 @@ You must authenticate using an access token with the `repo` scope to use this en
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable", 
                           json=data,
@@ -12584,7 +13185,7 @@ You must authenticate using an access token with the `repo` scope to use this en
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
+
     def ActionsCreateWorkflowDispatch(self, owner:str, repo:str, workflow_id:('integer', 'string'),ref:str, inputs:object=None):
         """You can use this endpoint to manually trigger a GitHub Actions workflow run. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
 
@@ -12611,6 +13212,7 @@ You must authenticate using an access token with the `repo` scope to use this en
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches", 
                           json=data,
@@ -12623,7 +13225,7 @@ You must authenticate using an access token with the `repo` scope to use this en
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable
+
     def ActionsEnableWorkflow(self, owner:str, repo:str, workflow_id:('integer', 'string')):
         """Enables a workflow and sets the `state` of the workflow to `active`. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`.
 
@@ -12644,6 +13246,7 @@ You must authenticate using an access token with the `repo` scope to use this en
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable", 
                           json=data,
@@ -12656,7 +13259,9 @@ You must authenticate using an access token with the `repo` scope to use this en
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs
+    #
     def ActionsListWorkflowRuns(self, owner:str, repo:str, workflow_id:('integer', 'string'),actor:str=None, branch:str=None, event:str=None, status=None, per_page=30, page=1, created:datetime=None, exclude_pull_requests:bool=None):
         """List all workflow runs for a workflow. You can replace `workflow_id` with the workflow file name. For example, you could use `main.yaml`. You can use parameters to narrow the list of results. For more information about using parameters, see [Parameters](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#parameters).
 
@@ -12710,7 +13315,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # get /repositories/{repository_id}/environments/{environment_name}/secrets
+    #
     def ActionsListEnvironmentSecrets(self, repository_id:int, environment_name:str,per_page=30, page=1):
         """Lists all secrets available in an environment without revealing their encrypted values. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12743,7 +13350,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # get /repositories/{repository_id}/environments/{environment_name}/secrets/public-key
+    #
     def ActionsGetEnvironmentPublicKey(self, repository_id:int, environment_name:str):
         """Get the public key for an environment, which you need to encrypt environment secrets. You need to encrypt a secret before you can create or update secrets. Anyone with read access to the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12770,7 +13379,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # get /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+    #
     def ActionsGetEnvironmentSecret(self, repository_id:int, environment_name:str, secret_name:str):
         """Gets a single environment secret without revealing its encrypted value. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12798,7 +13409,7 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
-    # put /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+
     def ActionsCreateOrUpdateEnvironmentSecret(self, repository_id:int, environment_name:str, secret_name:str,key_id:str, encrypted_value:str):
         """Creates or updates an environment secret with an encrypted value. Encrypt your secret using
 [LibSodium](https://libsodium.gitbook.io/doc/bindings_for_other_languages). You must authenticate using an access
@@ -12895,6 +13506,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}", 
                           json=data,
@@ -12910,7 +13522,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}
+    #
     def ActionsDeleteEnvironmentSecret(self, repository_id:int, environment_name:str, secret_name:str):
         """Deletes a secret in an environment using the secret name. You must authenticate using an access token with the `repo` scope to use this endpoint. GitHub Apps must have the `secrets` repository permission to use this endpoint.
         
@@ -12938,7 +13552,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/projects
+    #
     def ProjectsListForOrg(self, org:str,state='open', per_page=30, page=1):
         """Lists the projects in an organization. Returns a `404 Not Found` status if projects are disabled in the organization. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -12976,7 +13592,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/projects
+
     def ProjectsCreateForOrg(self, org:str,name:str, body:str=None):
         """Creates an organization project board. Returns a `404 Not Found` status if projects are disabled in the organization. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -12997,6 +13613,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/projects", 
                           json=data,
@@ -13024,7 +13641,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /projects/columns/cards/{card_id}
+    #
     def ProjectsGetCard(self, card_id:int):
         """
         
@@ -13062,7 +13681,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # patch /projects/columns/cards/{card_id}
+
     def ProjectsUpdateCard(self, card_id:int,note:str=None, archived:bool=None):
         """
         
@@ -13083,6 +13702,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/projects/columns/cards/{card_id}", 
                           json=data,
@@ -13110,7 +13730,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /projects/columns/cards/{card_id}
+    #
     def ProjectsDeleteCard(self, card_id:int):
         """
         
@@ -13148,7 +13770,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /projects/columns/cards/{card_id}/moves
+
     def ProjectsMoveCard(self, card_id:int,position:str, column_id:int=None):
         """
         
@@ -13169,6 +13791,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/projects/columns/cards/{card_id}/moves", 
                           json=data,
@@ -13196,7 +13819,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /projects/columns/{column_id}
+    #
     def ProjectsGetColumn(self, column_id:int):
         """
         
@@ -13234,7 +13859,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # patch /projects/columns/{column_id}
+
     def ProjectsUpdateColumn(self, column_id:int,name:str):
         """
         
@@ -13253,6 +13878,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/projects/columns/{column_id}", 
                           json=data,
@@ -13274,7 +13900,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /projects/columns/{column_id}
+    #
     def ProjectsDeleteColumn(self, column_id:int):
         """
         
@@ -13309,7 +13937,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /projects/columns/{column_id}/cards
+    #
     def ProjectsListCards(self, column_id:int,archived_state='not_archived', per_page=30, page=1):
         """
         
@@ -13353,7 +13983,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /projects/columns/{column_id}/cards
+
     def ProjectsCreateCard(self, column_id:int,object:object):
         """
         
@@ -13372,6 +14002,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/projects/columns/{column_id}/cards", 
                           json=data,
@@ -13399,7 +14030,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
-    # post /projects/columns/{column_id}/moves
+
     def ProjectsMoveColumn(self, column_id:int,position:str):
         """
         
@@ -13418,6 +14049,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/projects/columns/{column_id}/moves", 
                           json=data,
@@ -13442,7 +14074,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /projects/{project_id}
+    #
     def ProjectsGet(self, project_id:int):
         """Gets a project by its `id`. Returns a `404 Not Found` status if projects are disabled. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -13477,7 +14111,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # patch /projects/{project_id}
+
     def ProjectsUpdate(self, project_id:int,name:str=None, body:str=None, state:str=None, organization_permission:str=None, private:bool=None):
         """Updates a project board's information. Returns a `404 Not Found` status if projects are disabled. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -13504,6 +14138,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/projects/{project_id}", 
                           json=data,
@@ -13534,7 +14169,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /projects/{project_id}
+    #
     def ProjectsDelete(self, project_id:int):
         """Deletes a project board. Returns a `404 Not Found` status if projects are disabled.
         
@@ -13575,7 +14212,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /projects/{project_id}/collaborators
+    #
     def ProjectsListCollaborators(self, project_id:int,affiliation='all', per_page=30, page=1):
         """Lists the collaborators for an organization project. For a project, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners. You must be an organization owner or a project `admin` to list collaborators.
         
@@ -13628,7 +14267,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # put /projects/{project_id}/collaborators/{username}
+
     def ProjectsAddCollaborator(self, project_id:int, username:str,permission:str='write'):
         """Adds a collaborator to an organization project and sets their permission level. You must be an organization owner or a project `admin` to add a collaborator.
         
@@ -13648,6 +14287,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.put(f"{self._url}/projects/{project_id}/collaborators/{username}", 
                           json=data,
@@ -13675,7 +14315,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /projects/{project_id}/collaborators/{username}
+    #
     def ProjectsRemoveCollaborator(self, project_id:int, username:str):
         """Removes a collaborator from an organization project. You must be an organization owner or a project `admin` to remove a collaborator.
         
@@ -13717,7 +14359,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /projects/{project_id}/collaborators/{username}/permission
+    #
     def ProjectsGetPermissionForUser(self, project_id:int, username:str):
         """Returns the collaborator's permission level for an organization project. Possible values for the `permission` key: `admin`, `write`, `read`, `none`. You must be an organization owner or a project `admin` to review a user's permission level.
         
@@ -13759,7 +14403,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /projects/{project_id}/columns
+    #
     def ProjectsListColumns(self, project_id:int,per_page=30, page=1):
         """
         
@@ -13800,7 +14446,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /projects/{project_id}/columns
+
     def ProjectsCreateColumn(self, project_id:int,name:str):
         """
         
@@ -13819,6 +14465,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/projects/{project_id}/columns", 
                           json=data,
@@ -13843,7 +14490,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/projects
+    #
     def ProjectsListForRepo(self, owner:str, repo:str,state='open', per_page=30, page=1):
         """Lists the projects in a repository. Returns a `404 Not Found` status if projects are disabled in the repository. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -13894,7 +14543,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/projects
+
     def ProjectsCreateForRepo(self, owner:str, repo:str,name:str, body:str=None):
         """Creates a repository project board. Returns a `404 Not Found` status if projects are disabled in the repository. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
         
@@ -13916,6 +14565,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/projects", 
                           json=data,
@@ -13943,7 +14593,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
-    # post /user/projects
+
     def ProjectsCreateForAuthenticatedUser(self, name:str, body:str=None):
         """
         
@@ -13963,6 +14613,7 @@ puts Base64.strict_encode64(encrypted_secret)
         
         }
         
+
         
         r = self._session.post(f"{self._url}/user/projects", 
                           json=data,
@@ -13990,7 +14641,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /users/{username}/projects
+    #
     def ProjectsListForUser(self, username:str,state='open', per_page=30, page=1):
         """
         
@@ -14028,7 +14681,9 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/repos
+    #
     def ReposListForOrg(self, org:str,type=None, sort='created', direction='desc', per_page=30, page=1):
         """Lists repositories for the specified organization.
         
@@ -14069,7 +14724,7 @@ puts Base64.strict_encode64(encrypted_secret)
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/repos
+
     def ReposCreateInOrg(self, org:str,name:str, description:str=None, homepage:str=None, private:bool=False, visibility:str=None, has_issues:bool=True, has_projects:bool=True, has_wiki:bool=True, is_template:bool=False, team_id:int=None, auto_init:bool=False, gitignore_template:str=None, license_template:str=None, allow_squash_merge:bool=True, allow_merge_commit:bool=True, allow_rebase_merge:bool=True, allow_auto_merge:bool=False, delete_branch_on_merge:bool=False):
         """Creates a new repository in the specified organization. The authenticated user must be a member of the organization.
 
@@ -14129,6 +14784,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/repos", 
                           json=data,
@@ -14147,7 +14803,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}
+    #
     def ReposGet(self, owner:str, repo:str):
         """The `parent` and `source` objects are present when the repository is a fork. `parent` is the repository this repository was forked from, `source` is the ultimate source for the network.
         
@@ -14183,7 +14841,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}
+
     def ReposUpdate(self, owner:str, repo:str,name:str=None, description:str=None, homepage:str=None, private:bool=False, visibility:str=None, security_and_analysis:dict=None, has_issues:bool=True, has_projects:bool=True, has_wiki:bool=True, is_template:bool=False, default_branch:str=None, allow_squash_merge:bool=True, allow_merge_commit:bool=True, allow_rebase_merge:bool=True, allow_auto_merge:bool=False, delete_branch_on_merge:bool=False, archived:bool=False, allow_forking:bool=False):
         """**Note**: To edit a repository's topics, use the [Replace all repository topics](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#replace-all-repository-topics) endpoint.
         
@@ -14238,6 +14896,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}", 
                           json=data,
@@ -14262,7 +14921,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}
+    #
     def ReposDelete(self, owner:str, repo:str):
         """Deleting a repository requires admin access. If OAuth is used, the `delete_repo` scope is required.
 
@@ -14301,7 +14962,9 @@ repositories, you will get a `403 Forbidden` response.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/autolinks
+    #
     def ReposListAutolinks(self, owner:str, repo:str,page=1):
         """This returns a list of autolinks configured for the given repository.
 
@@ -14333,7 +14996,7 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/autolinks
+
     def ReposCreateAutolink(self, owner:str, repo:str,url_template:str, key_prefix:str):
         """Users with admin access to the repository can create an autolink.
         
@@ -14355,6 +15018,7 @@ Information about autolinks are only available to repository administrators.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/autolinks", 
                           json=data,
@@ -14370,7 +15034,9 @@ Information about autolinks are only available to repository administrators.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/autolinks/{autolink_id}
+    #
     def ReposGetAutolink(self, owner:str, repo:str, autolink_id:int):
         """This returns a single autolink reference by ID that was configured for the given repository.
 
@@ -14403,7 +15069,9 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/autolinks/{autolink_id}
+    #
     def ReposDeleteAutolink(self, owner:str, repo:str, autolink_id:int):
         """This deletes a single autolink reference by ID that was configured for the given repository.
 
@@ -14436,7 +15104,9 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches
+    #
     def ReposListBranches(self, owner:str, repo:str,protected:bool=None, per_page=30, page=1):
         """
         
@@ -14475,7 +15145,9 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}
+    #
     def ReposGetBranch(self, owner:str, repo:str, branch:str):
         """
         
@@ -14512,7 +15184,9 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection
+    #
     def ReposGetBranchProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14543,8 +15217,8 @@ Information about autolinks are only available to repository administrators.
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/branches/{branch}/protection
-    def ReposUpdateBranchProtection(self, owner:str, repo:str, branch:str,restrictions:dict, required_pull_request_reviews:dict, enforce_admins:bool, required_status_checks:dict, required_linear_history:bool=None, allow_force_pushes:bool=None, allow_deletions:bool=None, required_conversation_resolution:bool=None, contexts:list=None):
+
+    def ReposUpdateBranchProtection(self, owner:str, repo:str, branch:str,restrictions:dict, required_pull_request_reviews:dict, enforce_admins:bool, required_status_checks:dict, required_linear_history:bool=None, allow_force_pushes:bool=None, allow_deletions:bool=None, required_conversation_resolution:bool=None, contexts:list=[]):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
 Protecting a branch requires admin or owner permissions to the repository.
@@ -14586,6 +15260,7 @@ Protecting a branch requires admin or owner permissions to the repository.
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection", 
                           json=data,
@@ -14607,7 +15282,9 @@ Protecting a branch requires admin or owner permissions to the repository.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection
+    #
     def ReposDeleteBranchProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14638,7 +15315,9 @@ Protecting a branch requires admin or owner permissions to the repository.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+    #
     def ReposGetAdminBranchProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14666,7 +15345,7 @@ Protecting a branch requires admin or owner permissions to the repository.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+
     def ReposSetAdminBranchProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14687,6 +15366,7 @@ Adding admin enforcement requires admin or owner permissions to the repository a
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins", 
                           json=data,
@@ -14699,7 +15379,9 @@ Adding admin enforcement requires admin or owner permissions to the repository a
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+    #
     def ReposDeleteAdminBranchProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14732,7 +15414,9 @@ Removing admin enforcement requires admin or owner permissions to the repository
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+    #
     def ReposGetPullRequestReviewProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14760,7 +15444,7 @@ Removing admin enforcement requires admin or owner permissions to the repository
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+
     def ReposUpdatePullRequestReviewProtection(self, owner:str, repo:str, branch:str,dismissal_restrictions:dict=None, dismiss_stale_reviews:bool=None, require_code_owner_reviews:bool=None, required_approving_review_count:int=None):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14791,6 +15475,7 @@ Updating pull request review enforcement requires admin or owner permissions to 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews", 
                           json=data,
@@ -14806,7 +15491,9 @@ Updating pull request review enforcement requires admin or owner permissions to 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+    #
     def ReposDeletePullRequestReviewProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14837,7 +15524,9 @@ Updating pull request review enforcement requires admin or owner permissions to 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+    #
     def ReposGetCommitSignatureProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14872,7 +15561,7 @@ When authenticated with admin or owner permissions to the repository, you can us
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+
     def ReposCreateCommitSignatureProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14893,6 +15582,7 @@ When authenticated with admin or owner permissions to the repository, you can us
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", 
                           json=data,
@@ -14908,7 +15598,9 @@ When authenticated with admin or owner permissions to the repository, you can us
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+    #
     def ReposDeleteCommitSignatureProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14941,7 +15633,9 @@ When authenticated with admin or owner permissions to the repository, you can us
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+    #
     def ReposGetStatusChecksProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -14972,7 +15666,7 @@ When authenticated with admin or owner permissions to the repository, you can us
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+
     def ReposUpdateStatusCheckProtection(self, owner:str, repo:str, branch:str,strict:bool=None, contexts=None):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -14997,6 +15691,7 @@ Updating required status checks requires admin or owner permissions to the repos
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks", 
                           json=data,
@@ -15015,7 +15710,9 @@ Updating required status checks requires admin or owner permissions to the repos
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+    #
     def ReposRemoveStatusCheckProtection(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -15043,7 +15740,9 @@ Updating required status checks requires admin or owner permissions to the repos
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+    #
     def ReposGetAllStatusCheckContexts(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -15074,7 +15773,7 @@ Updating required status checks requires admin or owner permissions to the repos
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+
     def ReposAddStatusCheckContexts(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -15095,6 +15794,7 @@ Updating required status checks requires admin or owner permissions to the repos
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", 
                           json=data,
@@ -15116,7 +15816,7 @@ Updating required status checks requires admin or owner permissions to the repos
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+
     def ReposSetStatusCheckContexts(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -15137,6 +15837,7 @@ Updating required status checks requires admin or owner permissions to the repos
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", 
                           json=data,
@@ -15155,7 +15856,9 @@ Updating required status checks requires admin or owner permissions to the repos
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+    #
     def ReposRemoveStatusCheckContexts(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -15189,7 +15892,9 @@ Updating required status checks requires admin or owner permissions to the repos
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+    #
     def ReposGetAccessRestrictions(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15224,7 +15929,9 @@ Lists who has access to this protected branch.
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+    #
     def ReposDeleteAccessRestrictions(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15254,7 +15961,9 @@ Disables the ability to restrict who can push to this branch.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+    #
     def ReposGetAppsWithAccessToProtectedBranch(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15280,14 +15989,14 @@ Lists the GitHub Apps that have push access to this branch. Only installed GitHu
     
         
         if r.status_code == 200:
-            return [ entry and GithubApp(**entry) for entry in r.json() ]
+            return [ entry and Integration(**entry) for entry in r.json() ]
             
         if r.status_code == 404:
             return BasicError(**r.json())
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+
     def ReposAddAppAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15314,6 +16023,7 @@ Grants the specified apps push access for this branch. Only installed GitHub App
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", 
                           json=data,
@@ -15322,14 +16032,14 @@ Grants the specified apps push access for this branch. Only installed GitHub App
                           
         
         if r.status_code == 200:
-            return [ entry and GithubApp(**entry) for entry in r.json() ]
+            return [ entry and Integration(**entry) for entry in r.json() ]
             
         if r.status_code == 422:
             return ValidationError(**r.json())
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+
     def ReposSetAppAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15356,6 +16066,7 @@ Replaces the list of apps that have push access to this branch. This removes all
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", 
                           json=data,
@@ -15364,14 +16075,16 @@ Replaces the list of apps that have push access to this branch. This removes all
                           
         
         if r.status_code == 200:
-            return [ entry and GithubApp(**entry) for entry in r.json() ]
+            return [ entry and Integration(**entry) for entry in r.json() ]
             
         if r.status_code == 422:
             return ValidationError(**r.json())
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+    #
     def ReposRemoveAppAccessRestrictions(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15401,14 +16114,16 @@ Removes the ability of an app to push to this branch. Only installed GitHub Apps
     
         
         if r.status_code == 200:
-            return [ entry and GithubApp(**entry) for entry in r.json() ]
+            return [ entry and Integration(**entry) for entry in r.json() ]
             
         if r.status_code == 422:
             return ValidationError(**r.json())
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+    #
     def ReposGetTeamsWithAccessToProtectedBranch(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15441,7 +16156,7 @@ Lists the teams who have push access to this branch. The list includes child tea
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+
     def ReposAddTeamAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15468,6 +16183,7 @@ Grants the specified teams push access for this branch. You can also give push a
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", 
                           json=data,
@@ -15483,7 +16199,7 @@ Grants the specified teams push access for this branch. You can also give push a
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+
     def ReposSetTeamAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15510,6 +16226,7 @@ Replaces the list of teams that have push access to this branch. This removes al
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", 
                           json=data,
@@ -15525,7 +16242,9 @@ Replaces the list of teams that have push access to this branch. This removes al
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+    #
     def ReposRemoveTeamAccessRestrictions(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15562,7 +16281,9 @@ Removes the ability of a team to push to this branch. You can also remove push a
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+    #
     def ReposGetUsersWithAccessToProtectedBranch(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15595,7 +16316,7 @@ Lists the people who have push access to this branch.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+
     def ReposAddUserAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15622,6 +16343,7 @@ Grants the specified people push access for this branch.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", 
                           json=data,
@@ -15637,7 +16359,7 @@ Grants the specified people push access for this branch.
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+
     def ReposSetUserAccessRestrictions(self, owner:str, repo:str, branch:str,object:object):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15664,6 +16386,7 @@ Replaces the list of people that have push access to this branch. This removes a
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", 
                           json=data,
@@ -15679,7 +16402,9 @@ Replaces the list of people that have push access to this branch. This removes a
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+    #
     def ReposRemoveUserAccessRestrictions(self, owner:str, repo:str, branch:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -15716,7 +16441,7 @@ Removes the ability of a user to push to this branch.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/branches/{branch}/rename
+
     def ReposRenameBranch(self, owner:str, repo:str, branch:str,new_name:str):
         """Renames a branch in a repository.
 
@@ -15751,6 +16476,7 @@ To rename the default branch:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/branches/{branch}/rename", 
                           json=data,
@@ -15772,7 +16498,9 @@ To rename the default branch:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/collaborators
+    #
     def ReposListCollaborators(self, owner:str, repo:str,affiliation='all', per_page=30, page=1):
         """For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.
 
@@ -15818,7 +16546,9 @@ You must have push access to the repository in order to list collaborators.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/collaborators/{username}
+    #
     def ReposCheckCollaborator(self, owner:str, repo:str, username:str):
         """For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.
 
@@ -15851,7 +16581,7 @@ Team members will include the members of child teams.
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/collaborators/{username}
+
     def ReposAddCollaborator(self, owner:str, repo:str, username:str,permission:str='push', permissions:str=None):
         """This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 
@@ -15893,6 +16623,7 @@ You are limited to sending 50 invitations to a repository per 24 hour period. No
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/collaborators/{username}", 
                           json=data,
@@ -15914,7 +16645,9 @@ You are limited to sending 50 invitations to a repository per 24 hour period. No
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/collaborators/{username}
+    #
     def ReposRemoveCollaborator(self, owner:str, repo:str, username:str):
         """
         
@@ -15942,7 +16675,9 @@ You are limited to sending 50 invitations to a repository per 24 hour period. No
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/collaborators/{username}/permission
+    #
     def ReposGetCollaboratorPermissionLevel(self, owner:str, repo:str, username:str):
         """Checks the repository permission of a collaborator. The possible repository permissions are `admin`, `write`, `read`, and `none`.
         
@@ -15973,7 +16708,9 @@ You are limited to sending 50 invitations to a repository per 24 hour period. No
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/comments
+    #
     def ReposListCommitCommentsForRepo(self, owner:str, repo:str,per_page=30, page=1):
         """Commit Comments use [these custom media types](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#custom-media-types). You can read more about the use of media types in the API [here](https://docs.github.com/enterprise-server@3.3/rest/overview/media-types/).
 
@@ -16008,7 +16745,9 @@ Comments are ordered by ascending ID.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/comments/{comment_id}
+    #
     def ReposGetCommitComment(self, owner:str, repo:str, comment_id:int):
         """
         
@@ -16039,7 +16778,7 @@ Comments are ordered by ascending ID.
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/comments/{comment_id}
+
     def ReposUpdateCommitComment(self, owner:str, repo:str, comment_id:int,body:str):
         """
         
@@ -16060,6 +16799,7 @@ Comments are ordered by ascending ID.
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/comments/{comment_id}", 
                           json=data,
@@ -16075,7 +16815,9 @@ Comments are ordered by ascending ID.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/comments/{comment_id}
+    #
     def ReposDeleteCommitComment(self, owner:str, repo:str, comment_id:int):
         """
         
@@ -16106,7 +16848,9 @@ Comments are ordered by ascending ID.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits
+    #
     def ReposListCommits(self, owner:str, repo:str,sha:str=None, path:str=None, author:str=None, since:datetime=None, until:datetime=None, per_page=30, page=1):
         """**Signature verification object**
 
@@ -16193,7 +16937,9 @@ These are the possible values for `reason` in the `verification` object:
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head
+    #
     def ReposListBranchesForHeadCommit(self, owner:str, repo:str, commit_sha:str):
         """Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -16226,7 +16972,9 @@ Returns all branches where the given commit SHA is the HEAD, or latest commit fo
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{commit_sha}/comments
+    #
     def ReposListCommentsForCommit(self, owner:str, repo:str, commit_sha:str,per_page=30, page=1):
         """Use the `:commit_sha` to specify the commit that will have its comments listed.
         
@@ -16260,7 +17008,7 @@ Returns all branches where the given commit SHA is the HEAD, or latest commit fo
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/commits/{commit_sha}/comments
+
     def ReposCreateCommitComment(self, owner:str, repo:str, commit_sha:str,body:str, path:str=None, position:int=None, line:int=None):
         """Create a comment for a commit using its `:commit_sha`.
 
@@ -16289,6 +17037,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/commits/{commit_sha}/comments", 
                           json=data,
@@ -16307,7 +17056,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/commits/{commit_sha}/pulls
+    #
     def ReposListPullRequestsAssociatedWithCommit(self, owner:str, repo:str, commit_sha:str,per_page=30, page=1):
         """Lists the merged pull request that introduced the commit to the repository. If the commit is not present in the default branch, additionally returns open pull requests associated with the commit. The results may include open and closed pull requests. Additional preview headers may be required to see certain details for associated pull requests, such as whether a pull request is in a draft state. For more information about previews that might affect this endpoint, see the [List pull requests](https://docs.github.com/enterprise-server@3.3/rest/reference/pulls#list-pull-requests) endpoint.
         
@@ -16341,7 +17092,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{ref}
+    #
     def ReposGetCommit(self, owner:str, repo:str, ref:str,page=1, per_page=30):
         """Returns the contents of a single commit reference. You must have `read` access for the repository to use this endpoint.
 
@@ -16419,7 +17172,9 @@ These are the possible values for `reason` in the `verification` object:
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{ref}/status
+    #
     def ReposGetCombinedStatusForRef(self, owner:str, repo:str, ref:str,per_page=30, page=1):
         """Users with pull access in a repository can access a combined view of commit statuses for a given ref. The ref can be a SHA, a branch name, or a tag name.
 
@@ -16463,7 +17218,9 @@ Additionally, a combined `state` is returned. The `state` is one of:
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{ref}/statuses
+    #
     def ReposListCommitStatusesForRef(self, owner:str, repo:str, ref:str,per_page=30, page=1):
         """Users with pull access in a repository can view commit statuses for a given ref. The ref can be a SHA, a branch name, or a tag name. Statuses are returned in reverse chronological order. The first status in the list will be the latest one.
 
@@ -16502,7 +17259,9 @@ This resource is also available via a legacy route: `GET /repos/:owner/:repo/sta
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/compare/{basehead}
+    #
     def ReposCompareCommits(self, owner:str, repo:str, basehead:str,page=1, per_page=30):
         """The `basehead` param is comprised of two parts: `base` and `head`. Both must be branch names in `repo`. To compare branches across other repositories in the same network as `repo`, use the format `<USERNAME>:branch`.
 
@@ -16581,7 +17340,9 @@ These are the possible values for `reason` in the `verification` object:
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/contents/{path}
+    #
     def ReposGetContent(self, owner:str, repo:str, path:str,ref:str=None):
         """Gets the contents of a file or directory in a repository. Specify the file path or directory in `:path`. If you omit
 `:path`, you will receive the contents of the repository's root directory. See the description below regarding what the API response includes for directories. 
@@ -16652,7 +17413,7 @@ github.com URLs (`html_url` and `_links["html"]`) will have null values.
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/contents/{path}
+
     def ReposCreateOrUpdateFileContents(self, owner:str, repo:str, path:str,content:str, message:str, sha:str=None, branch:str=None, committer:dict=None, author:dict=None):
         """Creates a new file or replaces an existing file in a repository.
         
@@ -16683,6 +17444,7 @@ github.com URLs (`html_url` and `_links["html"]`) will have null values.
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/contents/{path}", 
                           json=data,
@@ -16707,7 +17469,9 @@ github.com URLs (`html_url` and `_links["html"]`) will have null values.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/contents/{path}
+    #
     def ReposDeleteFile(self, owner:str, repo:str, path:str):
         """Deletes a file in a repository.
 
@@ -16753,7 +17517,9 @@ You must provide values for both `name` and `email`, whether you choose to use `
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/contributors
+    #
     def ReposListContributors(self, owner:str, repo:str,anon:str=None, per_page=30, page=1):
         """Lists contributors to the specified repository and sorts them by the number of commits per contributor in descending order. This endpoint may return information that is a few hours old because the GitHub REST API v3 caches contributor data to improve performance.
 
@@ -16800,7 +17566,9 @@ GitHub identifies contributors by author email address. This endpoint groups con
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/deployments
+    #
     def ReposListDeployments(self, owner:str, repo:str,sha:str=None, ref:str=None, task:str=None, environment:str=None, per_page=30, page=1):
         """Simple filtering of deployments is available via query parameters:
         
@@ -16845,8 +17613,8 @@ GitHub identifies contributors by author email address. This endpoint groups con
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/deployments
-    def ReposCreateDeployment(self, owner:str, repo:str,ref:str, task:str='deploy', auto_merge:bool=True, required_contexts:list=None, payload=None, environment:str='production', description:str='""', transient_environment:bool=False, production_environment:bool=None):
+
+    def ReposCreateDeployment(self, owner:str, repo:str,ref:str, task:str='deploy', auto_merge:bool=True, required_contexts:list=[], payload=None, environment:str='production', description:str='""', transient_environment:bool=False, production_environment:bool=None):
         """Deployments offer a few configurable parameters with certain defaults.
 
 The `ref` parameter can be any named branch, tag, or SHA. At GitHub Enterprise Server we often deploy branches and verify them
@@ -16925,6 +17693,7 @@ status for the commit to be deployed, but one or more of the required contexts d
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/deployments", 
                           json=data,
@@ -16946,7 +17715,9 @@ status for the commit to be deployed, but one or more of the required contexts d
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/deployments/{deployment_id}
+    #
     def ReposGetDeployment(self, owner:str, repo:str, deployment_id:int):
         """
         
@@ -16977,7 +17748,9 @@ status for the commit to be deployed, but one or more of the required contexts d
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/deployments/{deployment_id}
+    #
     def ReposDeleteDeployment(self, owner:str, repo:str, deployment_id:int):
         """To ensure there can always be an active deployment, you can only delete an _inactive_ deployment. Anyone with `repo` or `repo_deployment` scopes can delete an inactive deployment.
 
@@ -17018,7 +17791,9 @@ For more information, see "[Create a deployment](https://docs.github.com/enterpr
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+    #
     def ReposListDeploymentStatuses(self, owner:str, repo:str, deployment_id:int,per_page=30, page=1):
         """Users with pull access can view deployment statuses for a deployment:
         
@@ -17055,7 +17830,7 @@ For more information, see "[Create a deployment](https://docs.github.com/enterpr
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+
     def ReposCreateDeploymentStatus(self, owner:str, repo:str, deployment_id:int,state:str, target_url:str='""', log_url:str='""', description:str='""', environment:str=None, environment_url:str='""', auto_inactive:bool=None):
         """Users with `push` access can create deployment statuses for a given deployment.
 
@@ -17090,6 +17865,7 @@ GitHub Apps require `read & write` access to "Deployments" and `read-only` acces
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/deployments/{deployment_id}/statuses", 
                           json=data,
@@ -17105,7 +17881,9 @@ GitHub Apps require `read & write` access to "Deployments" and `read-only` acces
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}
+    #
     def ReposGetDeploymentStatus(self, owner:str, repo:str, deployment_id:int, status_id:int):
         """Users with pull access can view a deployment status for a deployment:
         
@@ -17137,7 +17915,7 @@ GitHub Apps require `read & write` access to "Deployments" and `read-only` acces
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/dispatches
+
     def ReposCreateDispatchEvent(self, owner:str, repo:str,event_type:str, client_payload:object=None):
         """You can use this endpoint to trigger a webhook event called `repository_dispatch` when you want activity that happens outside of GitHub Enterprise Server to trigger a GitHub Actions workflow or GitHub App webhook. You must configure your GitHub Actions workflow or GitHub App to run when the `repository_dispatch` event occurs. For an example `repository_dispatch` webhook payload, see "[RepositoryDispatchEvent](https://docs.github.com/enterprise-server@3.3/webhooks/event-payloads/#repository_dispatch)."
 
@@ -17168,6 +17946,7 @@ This input example shows how you can use the `client_payload` as a test to debug
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/dispatches", 
                           json=data,
@@ -17183,7 +17962,9 @@ This input example shows how you can use the `client_payload` as a test to debug
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/environments
+    #
     def ReposGetAllEnvironments(self, owner:str, repo:str):
         """Get all environments for a repository.
 
@@ -17212,7 +17993,9 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/environments/{environment_name}
+    #
     def ReposGetEnvironment(self, owner:str, repo:str, environment_name:str):
         """Anyone with read access to the repository can use this endpoint. If the repository is private, you must use an access token with the `repo` scope. GitHub Apps must have the `actions:read` permission to use this endpoint.
         
@@ -17240,8 +18023,8 @@ Anyone with read access to the repository can use this endpoint. If the reposito
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/environments/{environment_name}
-    def ReposCreateOrUpdateEnvironment(self, owner:str, repo:str, environment_name:str,wait_timer:int=None, reviewers:list=None, deployment_branch_policy:dict=None):
+
+    def ReposCreateOrUpdateEnvironment(self, owner:str, repo:str, environment_name:str,wait_timer:int=None, reviewers:list=[], deployment_branch_policy:dict=None):
         """Create or update an environment with protection rules, such as required reviewers. For more information about environment protection rules, see "[Environments](/actions/reference/environments#environment-protection-rules)."
 
 **Note:** Although you can use this operation to specify that only branches that match specified name patterns can deploy to this environment, you must use the UI to set the name patterns. For more information, see "[Environments](/actions/reference/environments#deployment-branches)."
@@ -17271,6 +18054,7 @@ You must authenticate using an access token with the repo scope to use this endp
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/environments/{environment_name}", 
                           json=data,
@@ -17286,7 +18070,9 @@ You must authenticate using an access token with the repo scope to use this endp
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/environments/{environment_name}
+    #
     def ReposDeleteAnEnvironment(self, owner:str, repo:str, environment_name:str):
         """You must authenticate using an access token with the repo scope to use this endpoint.
         
@@ -17314,7 +18100,9 @@ You must authenticate using an access token with the repo scope to use this endp
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/forks
+    #
     def ReposListForks(self, owner:str, repo:str,sort='newest', per_page=30, page=1):
         """
         
@@ -17353,7 +18141,7 @@ You must authenticate using an access token with the repo scope to use this endp
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/forks
+
     def ReposCreateFork(self, owner:str, repo:str,organization:str=None):
         """Create a fork for the authenticated user.
 
@@ -17375,6 +18163,7 @@ You must authenticate using an access token with the repo scope to use this endp
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/forks", 
                           json=data,
@@ -17399,7 +18188,9 @@ You must authenticate using an access token with the repo scope to use this endp
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/hooks
+    #
     def ReposListWebhooks(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -17435,7 +18226,7 @@ You must authenticate using an access token with the repo scope to use this endp
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/hooks
+
     def ReposCreateWebhook(self, owner:str, repo:str,name:str=None, config:dict=None, events:list=['push'], active:bool=True):
         """Repositories can have multiple webhooks installed. Each webhook should have a unique `config`. Multiple webhooks can
 share the same `config` as long as those webhooks do not have any `events` that overlap.
@@ -17462,6 +18253,7 @@ share the same `config` as long as those webhooks do not have any `events` that 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/hooks", 
                           json=data,
@@ -17483,7 +18275,9 @@ share the same `config` as long as those webhooks do not have any `events` that 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/hooks/{hook_id}
+    #
     def ReposGetWebhook(self, owner:str, repo:str, hook_id:int):
         """Returns a webhook configured in a repository. To get only the webhook `config` properties, see "[Get a webhook configuration for a repository](/rest/reference/repos#get-a-webhook-configuration-for-a-repository)."
         
@@ -17514,8 +18308,8 @@ share the same `config` as long as those webhooks do not have any `events` that 
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/hooks/{hook_id}
-    def ReposUpdateWebhook(self, owner:str, repo:str, hook_id:int,config:dict=None, events:list=['push'], add_events:list=None, remove_events:list=None, active:bool=True):
+
+    def ReposUpdateWebhook(self, owner:str, repo:str, hook_id:int,config:dict=None, events:list=['push'], add_events:list=[], remove_events:list=[], active:bool=True):
         """Updates a webhook configured in a repository. If you previously had a `secret` set, you must provide the same `secret` or set a new `secret` or the secret will be removed. If you are only updating individual webhook `config` properties, use "[Update a webhook configuration for a repository](/rest/reference/repos#update-a-webhook-configuration-for-a-repository)."
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/repos#update-a-repository-webhook
@@ -17543,6 +18337,7 @@ share the same `config` as long as those webhooks do not have any `events` that 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/hooks/{hook_id}", 
                           json=data,
@@ -17561,7 +18356,9 @@ share the same `config` as long as those webhooks do not have any `events` that 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/hooks/{hook_id}
+    #
     def ReposDeleteWebhook(self, owner:str, repo:str, hook_id:int):
         """
         
@@ -17592,7 +18389,9 @@ share the same `config` as long as those webhooks do not have any `events` that 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/hooks/{hook_id}/config
+    #
     def ReposGetWebhookConfigForRepo(self, owner:str, repo:str, hook_id:int):
         """Returns the webhook configuration for a repository. To get more information about the webhook, including the `active` state and `events`, use "[Get a repository webhook](/rest/reference/orgs#get-a-repository-webhook)."
 
@@ -17622,7 +18421,7 @@ Access tokens must have the `read:repo_hook` or `repo` scope, and GitHub Apps mu
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/hooks/{hook_id}/config
+
     def ReposUpdateWebhookConfigForRepo(self, owner:str, repo:str, hook_id:int,url:str=None, content_type:str=None, secret:str=None, insecure_ssl=None):
         """Updates the webhook configuration for a repository. To update more information about the webhook, including the `active` state and `events`, use "[Update a repository webhook](/rest/reference/orgs#update-a-repository-webhook)."
 
@@ -17651,6 +18450,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/hooks/{hook_id}/config", 
                           json=data,
@@ -17663,7 +18463,9 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
+    #
     def ReposListWebhookDeliveries(self, owner:str, repo:str, hook_id:int,per_page=30, cursor:str=None):
         """Returns a list of webhook deliveries for a webhook configured in a repository.
         
@@ -17703,7 +18505,9 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}
+    #
     def ReposGetWebhookDelivery(self, owner:str, repo:str, hook_id:int, delivery_id:int):
         """Returns a delivery for a webhook configured in a repository.
         
@@ -17738,7 +18542,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+
     def ReposRedeliverWebhookDelivery(self, owner:str, repo:str, hook_id:int, delivery_id:int):
         """Redeliver a webhook delivery for a webhook configured in a repository.
         
@@ -17758,6 +18562,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts", 
                           json=data,
@@ -17776,7 +18581,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/hooks/{hook_id}/pings
+
     def ReposPingWebhook(self, owner:str, repo:str, hook_id:int):
         """This will trigger a [ping event](https://docs.github.com/enterprise-server@3.3/webhooks/#ping-event) to be sent to the hook.
         
@@ -17795,6 +18600,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/hooks/{hook_id}/pings", 
                           json=data,
@@ -17810,7 +18616,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/hooks/{hook_id}/tests
+
     def ReposTestPushWebhook(self, owner:str, repo:str, hook_id:int):
         """This will trigger the hook with the latest push to the current repository if the hook is subscribed to `push` events. If the hook is not subscribed to `push` events, the server will respond with 204 but no test POST will be generated.
 
@@ -17831,6 +18637,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/hooks/{hook_id}/tests", 
                           json=data,
@@ -17846,7 +18653,9 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/invitations
+    #
     def ReposListInvitations(self, owner:str, repo:str,per_page=30, page=1):
         """When authenticating as a user with admin rights to a repository, this endpoint will list all currently open repository invitations.
         
@@ -17879,7 +18688,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/invitations/{invitation_id}
+
     def ReposUpdateInvitation(self, owner:str, repo:str, invitation_id:int,permissions:str=None):
         """
         
@@ -17900,6 +18709,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/invitations/{invitation_id}", 
                           json=data,
@@ -17912,7 +18722,9 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/invitations/{invitation_id}
+    #
     def ReposDeleteInvitation(self, owner:str, repo:str, invitation_id:int):
         """
         
@@ -17940,7 +18752,9 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/keys
+    #
     def ReposListDeployKeys(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -17973,7 +18787,7 @@ Access tokens must have the `write:repo_hook` or `repo` scope, and GitHub Apps m
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/keys
+
     def ReposCreateDeployKey(self, owner:str, repo:str,key:str, title:str=None, read_only:bool=None):
         """You can create a read-only deploy key.
         
@@ -17999,6 +18813,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/keys", 
                           json=data,
@@ -18014,7 +18829,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/keys/{key_id}
+    #
     def ReposGetDeployKey(self, owner:str, repo:str, key_id:int):
         """
         
@@ -18045,7 +18862,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/keys/{key_id}
+    #
     def ReposDeleteDeployKey(self, owner:str, repo:str, key_id:int):
         """Deploy keys are immutable. If you need to update a key, remove the key and create a new one instead.
         
@@ -18073,7 +18892,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/languages
+    #
     def ReposListLanguages(self, owner:str, repo:str):
         """Lists languages for the specified repository. The value shown for each language is the number of bytes of code written in that language.
         
@@ -18100,7 +18921,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/lfs
+
     def ReposEnableLfsForRepo(self, owner:str, repo:str):
         """
         
@@ -18118,6 +18939,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/lfs", 
                           json=data,
@@ -18133,7 +18955,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/lfs
+    #
     def ReposDisableLfsForRepo(self, owner:str, repo:str):
         """
         
@@ -18160,7 +18984,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/merge-upstream
+
     def ReposMergeUpstream(self, owner:str, repo:str,branch:str):
         """Sync a branch of a forked repository to keep it up-to-date with the upstream repository.
         
@@ -18180,6 +19004,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/merge-upstream", 
                           json=data,
@@ -18198,7 +19023,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/merges
+
     def ReposMerge(self, owner:str, repo:str,head:str, base:str, commit_message:str=None):
         """
         
@@ -18222,6 +19047,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/merges", 
                           json=data,
@@ -18249,7 +19075,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pages
+    #
     def ReposGetPages(self, owner:str, repo:str):
         """
         
@@ -18279,7 +19107,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pages
+
     def ReposCreatePagesSite(self, owner:str, repo:str,source:dict):
         """Configures a GitHub Enterprise Server Pages site. For more information, see "[About GitHub Pages](/github/working-with-github-pages/about-github-pages)."
         
@@ -18299,6 +19127,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pages", 
                           json=data,
@@ -18317,7 +19146,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/pages
+
     def ReposUpdateInformationAboutPagesSite(self, owner:str, repo:str,cname:str=None, https_enforced:bool=None, public:bool=None, source=None):
         """Updates information for a GitHub Enterprise Server Pages site. For more information, see "[About GitHub Pages](/github/working-with-github-pages/about-github-pages).
         
@@ -18343,6 +19172,7 @@ Deploy keys with write access can perform the same actions as an organization me
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/pages", 
                           json=data,
@@ -18361,7 +19191,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pages
+    #
     def ReposDeletePagesSite(self, owner:str, repo:str):
         """
         
@@ -18394,7 +19226,9 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pages/builds
+    #
     def ReposListPagesBuilds(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -18427,7 +19261,7 @@ Deploy keys with write access can perform the same actions as an organization me
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pages/builds
+
     def ReposRequestPagesBuild(self, owner:str, repo:str):
         """You can request that your site be built from the latest revision on the default branch. This has the same effect as pushing a commit to your default branch, but does not require an additional commit. Manually triggering page builds can be helpful when diagnosing build warnings and failures.
 
@@ -18447,6 +19281,7 @@ Build requests are limited to one concurrent build per repository and one concur
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pages/builds", 
                           json=data,
@@ -18459,7 +19294,9 @@ Build requests are limited to one concurrent build per repository and one concur
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pages/builds/latest
+    #
     def ReposGetLatestPagesBuild(self, owner:str, repo:str):
         """
         
@@ -18486,7 +19323,9 @@ Build requests are limited to one concurrent build per repository and one concur
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pages/builds/{build_id}
+    #
     def ReposGetPagesBuild(self, owner:str, repo:str, build_id:int):
         """
         
@@ -18514,7 +19353,9 @@ Build requests are limited to one concurrent build per repository and one concur
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/readme
+    #
     def ReposGetReadme(self, owner:str, repo:str,ref:str=None):
         """Gets the preferred README for a repository.
 
@@ -18552,7 +19393,9 @@ READMEs support [custom media types](https://docs.github.com/enterprise-server@3
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/readme/{dir}
+    #
     def ReposGetReadmeInDirectory(self, owner:str, repo:str, dir:str,ref:str=None):
         """Gets the README from a repository directory.
 
@@ -18591,7 +19434,9 @@ READMEs support [custom media types](https://docs.github.com/enterprise-server@3
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/releases
+    #
     def ReposListReleases(self, owner:str, repo:str,per_page=30, page=1):
         """This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To get a list of Git tags, use the [Repository Tags API](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#list-repository-tags).
 
@@ -18629,7 +19474,7 @@ Information about published releases are available to everyone. Only users with 
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/releases
+
     def ReposCreateRelease(self, owner:str, repo:str,tag_name:str, target_commitish:str=None, name:str=None, body:str=None, draft:bool=False, prerelease:bool=False, generate_release_notes:bool=False):
         """Users with push access to the repository can create a release.
 
@@ -18663,6 +19508,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/releases", 
                           json=data,
@@ -18678,7 +19524,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/releases/assets/{asset_id}
+    #
     def ReposGetReleaseAsset(self, owner:str, repo:str, asset_id:int):
         """To download the asset's binary content, set the `Accept` header of the request to [`application/octet-stream`](https://docs.github.com/enterprise-server@3.3/rest/overview/media-types). The API will either redirect the client to the location, or stream it directly if possible. API clients should handle both a `200` or `302` response.
         
@@ -18715,7 +19563,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/releases/assets/{asset_id}
+
     def ReposUpdateReleaseAsset(self, owner:str, repo:str, asset_id:int,name:str=None, label:str=None, state:str=None):
         """Users with push access to the repository can edit a release asset.
         
@@ -18740,6 +19588,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/releases/assets/{asset_id}", 
                           json=data,
@@ -18752,7 +19601,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/releases/assets/{asset_id}
+    #
     def ReposDeleteReleaseAsset(self, owner:str, repo:str, asset_id:int):
         """
         
@@ -18780,7 +19631,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/releases/generate-notes
+
     def ReposGenerateReleaseNotes(self, owner:str, repo:str,tag_name:str, target_commitish:str=None, previous_tag_name:str=None, configuration_file_path:str=None):
         """Generate a name and body describing a [release](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#releases). The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release.
         
@@ -18806,6 +19657,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/releases/generate-notes", 
                           json=data,
@@ -18821,7 +19673,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/releases/latest
+    #
     def ReposGetLatestRelease(self, owner:str, repo:str):
         """View the latest published full release for the repository.
 
@@ -18850,7 +19704,9 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/releases/tags/{tag}
+    #
     def ReposGetReleaseByTag(self, owner:str, repo:str, tag:str):
         """Get a published release with the specified tag.
         
@@ -18881,7 +19737,9 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/releases/{release_id}
+    #
     def ReposGetRelease(self, owner:str, repo:str, release_id:int):
         """**Note:** This returns an `upload_url` key corresponding to the endpoint for uploading release assets. This key is a [hypermedia resource](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#hypermedia).
         
@@ -18912,7 +19770,7 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/releases/{release_id}
+
     def ReposUpdateRelease(self, owner:str, repo:str, release_id:int,tag_name:str=None, target_commitish:str=None, name:str=None, body:str=None, draft:bool=None, prerelease:bool=None):
         """Users with push access to the repository can edit a release.
         
@@ -18943,6 +19801,7 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/releases/{release_id}", 
                           json=data,
@@ -18955,7 +19814,9 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/releases/{release_id}
+    #
     def ReposDeleteRelease(self, owner:str, repo:str, release_id:int):
         """Users with push access to the repository can delete a release.
         
@@ -18983,7 +19844,9 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/releases/{release_id}/assets
+    #
     def ReposListReleaseAssets(self, owner:str, repo:str, release_id:int,per_page=30, page=1):
         """
         
@@ -19017,7 +19880,7 @@ The latest release is the most recent non-prerelease, non-draft release, sorted 
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/releases/{release_id}/assets
+
     def ReposUploadReleaseAsset(self, owner:str, repo:str, release_id:int,data:bytes):
         """This endpoint makes use of [a Hypermedia relation](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#hypermedia) to determine which URL to access. The endpoint you call to upload release assets is specific to your release. Use the `upload_url` returned in
 the response of the [Create a release endpoint](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#create-a-release) to upload a release asset.
@@ -19053,6 +19916,7 @@ endpoint lists the renamed filenames. For more information and help, contact [Gi
         """
     
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/releases/{release_id}/assets", 
                           data=data,
@@ -19068,7 +19932,9 @@ endpoint lists the renamed filenames. For more information and help, contact [Gi
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/stats/code_frequency
+    #
     def ReposGetCodeFrequencyStats(self, owner:str, repo:str):
         """Returns a weekly aggregate of the number of additions and deletions pushed to a repository.
         
@@ -19101,7 +19967,9 @@ endpoint lists the renamed filenames. For more information and help, contact [Gi
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/stats/commit_activity
+    #
     def ReposGetCommitActivityStats(self, owner:str, repo:str):
         """Returns the last year of commit activity grouped by week. The `days` array is a group of commits per day, starting on `Sunday`.
         
@@ -19134,7 +20002,9 @@ endpoint lists the renamed filenames. For more information and help, contact [Gi
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/stats/contributors
+    #
     def ReposGetContributorsStats(self, owner:str, repo:str):
         """
 Returns the `total` number of commits authored by the contributor. In addition, the response includes a Weekly Hash (`weeks` array) with the following information:
@@ -19173,7 +20043,9 @@ Returns the `total` number of commits authored by the contributor. In addition, 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/stats/participation
+    #
     def ReposGetParticipationStats(self, owner:str, repo:str):
         """Returns the total commit counts for the `owner` and total commit counts in `all`. `all` is everyone combined, including the `owner` in the last 52 weeks. If you'd like to get the commit counts for non-owners, you can subtract `owner` from `all`.
 
@@ -19205,7 +20077,9 @@ The array order is oldest week (index 0) to most recent week.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/stats/punch_card
+    #
     def ReposGetPunchCardStats(self, owner:str, repo:str):
         """Each array contains the day number, hour number, and number of commits:
 
@@ -19241,7 +20115,7 @@ For example, `[2, 14, 25]` indicates that there were 25 total commits, during th
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/statuses/{sha}
+
     def ReposCreateCommitStatus(self, owner:str, repo:str, sha:str,state:str, target_url:str=None, description:str=None, context:str='default'):
         """Users with push access in a repository can create commit statuses for a given SHA.
 
@@ -19272,6 +20146,7 @@ For example, if your continuous integration system is posting build status, you 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/statuses/{sha}", 
                           json=data,
@@ -19284,7 +20159,9 @@ For example, if your continuous integration system is posting build status, you 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/tags
+    #
     def ReposListTags(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -19317,7 +20194,9 @@ For example, if your continuous integration system is posting build status, you 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/tarball/{ref}
+    #
     def ReposDownloadTarballArchive(self, owner:str, repo:str, ref:str):
         """Gets a redirect URL to download a tar archive for a repository. If you omit `:ref`, the repository’s default branch (usually
 `master`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
@@ -19348,7 +20227,9 @@ the `Location` header to make a second `GET` request.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/teams
+    #
     def ReposListTeams(self, owner:str, repo:str,per_page=30, page=1):
         """
         
@@ -19381,7 +20262,9 @@ the `Location` header to make a second `GET` request.
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/topics
+    #
     def ReposGetAllTopics(self, owner:str, repo:str,page=1, per_page=30):
         """
         
@@ -19417,7 +20300,7 @@ the `Location` header to make a second `GET` request.
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/topics
+
     def ReposReplaceAllTopics(self, owner:str, repo:str,names:list):
         """
         
@@ -19437,6 +20320,7 @@ the `Location` header to make a second `GET` request.
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/topics", 
                           json=data,
@@ -19455,8 +20339,8 @@ the `Location` header to make a second `GET` request.
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/transfer
-    def ReposTransfer(self, owner:str, repo:str,new_owner:str, team_ids:list=None):
+
+    def ReposTransfer(self, owner:str, repo:str,new_owner:str, team_ids:list=[]):
         """A transfer request will need to be accepted by the new owner when transferring a personal repository to another user. The response will contain the original `owner`, and the transfer will continue asynchronously. For more details on the requirements to transfer personal and organization-owned repositories, see [about repository transfers](https://help.github.com/articles/about-repository-transfers/).
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/repos#transfer-a-repository
@@ -19477,6 +20361,7 @@ the `Location` header to make a second `GET` request.
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/transfer", 
                           json=data,
@@ -19489,7 +20374,9 @@ the `Location` header to make a second `GET` request.
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/zipball/{ref}
+    #
     def ReposDownloadZipballArchive(self, owner:str, repo:str, ref:str):
         """Gets a redirect URL to download a zip archive for a repository. If you omit `:ref`, the repository’s default branch (usually
 `master`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
@@ -19520,7 +20407,7 @@ the `Location` header to make a second `GET` request.
             
         
         return UnexpectedResult(r)
-    # post /repos/{template_owner}/{template_repo}/generate
+
     def ReposCreateUsingTemplate(self, template_owner:str, template_repo:str,name:str, owner:str=None, description:str=None, include_all_branches:bool=False, private:bool=False):
         """Creates a new repository using a repository template. Use the `template_owner` and `template_repo` route parameters to specify the repository to use as the template. The authenticated user must own or be a member of an organization that owns the repository. To check if a repository is available to use as a template, get the repository's information using the [Get a repository](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#get-a-repository) endpoint and check that the `is_template` key is `true`.
 
@@ -19555,6 +20442,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{template_owner}/{template_repo}/generate", 
                           json=data,
@@ -19567,7 +20455,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repositories
+    #
     def ReposListPublic(self, since:int=None, visibility='public'):
         """Lists all public repositories in the order that they were created.
 
@@ -19608,7 +20498,9 @@ Note:
             
         
         return UnexpectedResult(r)
+    #
     # get /user/repos
+    #
     def ReposListForAuthenticatedUser(self, visibility='all', affiliation:str=None, type=None, sort='created', direction='desc', per_page=30, page=1, since:datetime=None, before:datetime=None):
         """Lists repositories that the authenticated user has explicit permission (`:read`, `:write`, or `:admin`) to access.
 
@@ -19679,7 +20571,7 @@ Will cause a `422` error if used in the same request as **visibility** or **affi
             
         
         return UnexpectedResult(r)
-    # post /user/repos
+
     def ReposCreateForAuthenticatedUser(self, name:str, description:str=None, homepage:str=None, private:bool=False, has_issues:bool=True, has_projects:bool=True, has_wiki:bool=True, team_id:int=None, auto_init:bool=False, gitignore_template:str=None, license_template:str=None, allow_squash_merge:bool=True, allow_merge_commit:bool=True, allow_rebase_merge:bool=True, allow_auto_merge:bool=False, delete_branch_on_merge:bool=False, has_downloads:bool=True, is_template:bool=False):
         """Creates a new repository for the authenticated user.
 
@@ -19738,6 +20630,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
         
         }
         
+
         
         r = self._session.post(f"{self._url}/user/repos", 
                           json=data,
@@ -19768,7 +20661,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /user/repository_invitations
+    #
     def ReposListInvitationsForAuthenticatedUser(self, per_page=30, page=1):
         """When authenticating as a user, this endpoint will list all currently open repository invitations for that user.
         
@@ -19811,7 +20706,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
         
         return UnexpectedResult(r)
-    # patch /user/repository_invitations/{invitation_id}
+
     def ReposAcceptInvitationForAuthenticatedUser(self, invitation_id:int):
         """
         
@@ -19828,6 +20723,7 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/user/repository_invitations/{invitation_id}", 
                           json=data,
@@ -19852,7 +20748,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /user/repository_invitations/{invitation_id}
+    #
     def ReposDeclineInvitationForAuthenticatedUser(self, invitation_id:int):
         """
         
@@ -19890,7 +20788,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/repos
+    #
     def ReposListForUser(self, username:str,type='owner', sort='created', direction='desc', per_page=30, page=1):
         """Lists public repositories for the specified user. Note: For GitHub AE, this endpoint will list internal repositories for the specified user.
         
@@ -19931,7 +20831,9 @@ When using [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-o
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/secret-scanning/alerts
+    #
     def SecretScanningListAlertsForOrg(self, org:str,state=None, secret_type:str=None, resolution:str=None, page=1, per_page=30):
         """Lists secret scanning alerts for eligible repositories in an organization, from newest to oldest.
 To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
@@ -19983,7 +20885,9 @@ for a complete list of secret types (API slug).
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/secret-scanning/alerts
+    #
     def SecretScanningListAlertsForRepo(self, owner:str, repo:str,state=None, secret_type:str=None, resolution:str=None, page=1, per_page=30):
         """Lists secret scanning alerts for a private repository, from newest to oldest. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
 
@@ -20035,7 +20939,9 @@ for a complete list of secret types (API slug).
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+    #
     def SecretScanningGetAlert(self, owner:str, repo:str, alert_number:None):
         """Gets a single secret scanning alert detected in a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
 
@@ -20074,7 +20980,7 @@ GitHub Apps must have the `secret_scanning_alerts` read permission to use this e
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+
     def SecretScanningUpdateAlert(self, owner:str, repo:str, alert_number:None,state:str, resolution:str=None):
         """Updates the status of a secret scanning alert in a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
 
@@ -20099,6 +21005,7 @@ GitHub Apps must have the `secret_scanning_alerts` write permission to use this 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}", 
                           json=data,
@@ -20120,7 +21027,9 @@ GitHub Apps must have the `secret_scanning_alerts` write permission to use this 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations
+    #
     def SecretScanningListLocationsForAlert(self, owner:str, repo:str, alert_number:None,page=1, per_page=30):
         """Lists all locations for a given secret scanning alert for a private repository. To use this endpoint, you must be an administrator for the repository or organization, and you must use an access token with the `repo` scope or `security_events` scope.
 
@@ -20162,7 +21071,9 @@ GitHub Apps must have the `secret_scanning_alerts` read permission to use this e
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams
+    #
     def TeamsList(self, org:str,per_page=30, page=1):
         """Lists all teams in an organization that are visible to the authenticated user.
         
@@ -20197,8 +21108,8 @@ GitHub Apps must have the `secret_scanning_alerts` read permission to use this e
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/teams
-    def TeamsCreate(self, org:str,name:str, description:str=None, maintainers:list=None, repo_names:list=None, privacy:str=None, permission:str='pull', parent_team_id:int=None):
+
+    def TeamsCreate(self, org:str,name:str, description:str=None, maintainers:list=[], repo_names:list=[], privacy:str=None, permission:str='pull', parent_team_id:int=None):
         """To create a team, the authenticated user must be a member or owner of `{org}`. By default, organization members can create teams. Organization owners can limit team creation to organization owners. For more information, see "[Setting team creation permissions](https://help.github.com/en/articles/setting-team-creation-permissions-in-your-organization)."
 
 When you create a new team, you automatically become a team maintainer without explicitly adding yourself to the optional array of `maintainers`. For more information, see "[About teams](https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/about-teams)".
@@ -20240,6 +21151,7 @@ Default for child team: `closed`
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/teams", 
                           json=data,
@@ -20258,7 +21170,9 @@ Default for child team: `closed`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/teams/{team_slug}
+    #
     def TeamsGetByName(self, org:str, team_slug:str):
         """Gets a team using the team's `slug`. GitHub Enterprise Server generates the `slug` from the team `name`.
 
@@ -20290,7 +21204,7 @@ Default for child team: `closed`
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/teams/{team_slug}
+
     def TeamsUpdateInOrg(self, org:str, team_slug:str,name:str=None, description:str=None, privacy:str=None, permission:str='pull', parent_team_id:int=None):
         """To edit a team, the authenticated user must either be an organization owner or a team maintainer.
 
@@ -20328,6 +21242,7 @@ Default for child team: `closed`
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/teams/{team_slug}", 
                           json=data,
@@ -20340,7 +21255,9 @@ Default for child team: `closed`
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}
+    #
     def TeamsDeleteInOrg(self, org:str, team_slug:str):
         """To delete a team, the authenticated user must be an organization owner or team maintainer.
 
@@ -20371,7 +21288,9 @@ If you are an organization owner, deleting a parent team will delete all of its 
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions
+    #
     def TeamsListDiscussionsInOrg(self, org:str, team_slug:str,direction='desc', per_page=30, page=1, pinned:str=None):
         """List all discussions on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20412,7 +21331,7 @@ If you are an organization owner, deleting a parent team will delete all of its 
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/teams/{team_slug}/discussions
+
     def TeamsCreateDiscussionInOrg(self, org:str, team_slug:str,body:str, title:str, private:bool=False):
         """Creates a new discussion post on a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20440,6 +21359,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions", 
                           json=data,
@@ -20452,7 +21372,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+    #
     def TeamsGetDiscussionInOrg(self, org:str, team_slug:str, discussion_number:int):
         """Get a specific discussion on a team's page. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20482,7 +21404,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+
     def TeamsUpdateDiscussionInOrg(self, org:str, team_slug:str, discussion_number:int,title:str=None, body:str=None):
         """Edits the title and body text of a discussion post. Only the parameters you provide are updated. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20507,6 +21429,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}", 
                           json=data,
@@ -20519,7 +21442,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+    #
     def TeamsDeleteDiscussionInOrg(self, org:str, team_slug:str, discussion_number:int):
         """Delete a discussion from a team's page. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20549,7 +21474,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments
+    #
     def TeamsListDiscussionCommentsInOrg(self, org:str, team_slug:str, discussion_number:int,direction='desc', per_page=30, page=1):
         """List all comments on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20588,7 +21515,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments
+
     def TeamsCreateDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int,body:str):
         """Creates a new comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20613,6 +21540,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", 
                           json=data,
@@ -20625,7 +21553,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}
+    #
     def TeamsGetDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int, comment_number:int):
         """Get a specific comment on a team discussion. OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20656,7 +21586,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # patch /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}
+
     def TeamsUpdateDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int, comment_number:int,body:str):
         """Edits the body text of a discussion comment. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20680,6 +21610,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}", 
                           json=data,
@@ -20692,7 +21623,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}
+    #
     def TeamsDeleteDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int, comment_number:int):
         """Deletes a comment on a team discussion. OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -20723,7 +21656,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/members
+    #
     def TeamsListMembersInOrg(self, org:str, team_slug:str,role='all', per_page=30, page=1):
         """Team members will include the members of child teams.
 
@@ -20764,7 +21699,9 @@ To list members in a team, the team must be visible to the authenticated user.
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/memberships/{username}
+    #
     def TeamsGetMembershipForUserInOrg(self, org:str, team_slug:str, username:str):
         """Team members will include the members of child teams.
 
@@ -20804,7 +21741,7 @@ The `role` for organization owners is set to `maintainer`. For more information 
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/teams/{team_slug}/memberships/{username}
+
     def TeamsAddOrUpdateMembershipForUserInOrg(self, org:str, team_slug:str, username:str,role:str='member'):
         """Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -20837,6 +21774,7 @@ If the user is already a member of the team, this endpoint will update the role 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/teams/{team_slug}/memberships/{username}", 
                           json=data,
@@ -20855,7 +21793,9 @@ If the user is already a member of the team, this endpoint will update the role 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/memberships/{username}
+    #
     def TeamsRemoveMembershipForUserInOrg(self, org:str, team_slug:str, username:str):
         """Team synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -20892,7 +21832,9 @@ To remove a membership between a user and a team, the authenticated user must ha
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/projects
+    #
     def TeamsListProjectsInOrg(self, org:str, team_slug:str,per_page=30, page=1):
         """Lists the organization projects for a team.
 
@@ -20927,7 +21869,9 @@ To remove a membership between a user and a team, the authenticated user must ha
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/projects/{project_id}
+    #
     def TeamsCheckPermissionsForProjectInOrg(self, org:str, team_slug:str, project_id:int):
         """Checks whether a team has `read`, `write`, or `admin` permissions for an organization project. The response includes projects inherited from a parent team.
 
@@ -20960,7 +21904,7 @@ To remove a membership between a user and a team, the authenticated user must ha
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/teams/{team_slug}/projects/{project_id}
+
     def TeamsAddOrUpdateProjectPermissionsInOrg(self, org:str, team_slug:str, project_id:int,permission:str=None):
         """Adds an organization project to a team. To add a project to a team or update the team's permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.
 
@@ -20987,6 +21931,7 @@ Default: the team's `permission` attribute will be used to determine what permis
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/teams/{team_slug}/projects/{project_id}", 
                           json=data,
@@ -21002,7 +21947,9 @@ Default: the team's `permission` attribute will be used to determine what permis
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/projects/{project_id}
+    #
     def TeamsRemoveProjectInOrg(self, org:str, team_slug:str, project_id:int):
         """Removes an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user must have `read` access to both the team and project, or `admin` access to the team or project. This endpoint removes the project from the team, but does not delete the project.
 
@@ -21032,7 +21979,9 @@ Default: the team's `permission` attribute will be used to determine what permis
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/repos
+    #
     def TeamsListReposInOrg(self, org:str, team_slug:str,per_page=30, page=1):
         """Lists a team's repositories visible to the authenticated user.
 
@@ -21067,7 +22016,9 @@ Default: the team's `permission` attribute will be used to determine what permis
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+    #
     def TeamsCheckPermissionsForRepoInOrg(self, org:str, team_slug:str, owner:str, repo:str):
         """Checks whether a team has `admin`, `push`, `maintain`, `triage`, or `pull` permission for a repository. Repositories inherited through a parent team will also be checked.
 
@@ -21108,7 +22059,7 @@ If a team doesn't have permission for the repository, you will receive a `404 No
             
         
         return UnexpectedResult(r)
-    # put /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+
     def TeamsAddOrUpdateRepoPermissionsInOrg(self, org:str, team_slug:str, owner:str, repo:str,permission:str='push'):
         """To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a `422 Unprocessable Entity` status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-verbs)."
 
@@ -21141,6 +22092,7 @@ If no permission is specified, the team's `permission` attribute will be used to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}", 
                           json=data,
@@ -21153,7 +22105,9 @@ If no permission is specified, the team's `permission` attribute will be used to
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+    #
     def TeamsRemoveRepoInOrg(self, org:str, team_slug:str, owner:str, repo:str):
         """If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.
 
@@ -21184,7 +22138,9 @@ If no permission is specified, the team's `permission` attribute will be used to
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/teams
+    #
     def TeamsListChildInOrg(self, org:str, team_slug:str,per_page=30, page=1):
         """Lists the child teams of the team specified by `{team_slug}`.
 
@@ -21219,7 +22175,9 @@ If no permission is specified, the team's `permission` attribute will be used to
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}
+    #
     def TeamsGetLegacy(self, team_id:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the [Get a team by name](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#get-a-team-by-name) endpoint.
         
@@ -21248,7 +22206,7 @@ If no permission is specified, the team's `permission` attribute will be used to
             
         
         return UnexpectedResult(r)
-    # patch /teams/{team_id}
+
     def TeamsUpdateLegacy(self, team_id:int,name:str, description:str=None, privacy:str=None, permission:str='pull', parent_team_id:int=None):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a team](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#update-a-team) endpoint.
 
@@ -21287,6 +22245,7 @@ To edit a team, the authenticated user must either be an organization owner or a
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/teams/{team_id}", 
                           json=data,
@@ -21311,7 +22270,9 @@ To edit a team, the authenticated user must either be an organization owner or a
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}
+    #
     def TeamsDeleteLegacy(self, team_id:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a team](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#delete-a-team) endpoint.
 
@@ -21347,7 +22308,9 @@ If you are an organization owner, deleting a parent team will delete all of its 
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/discussions
+    #
     def TeamsListDiscussionsLegacy(self, team_id:int,direction='desc', per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List discussions`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-discussions) endpoint.
 
@@ -21384,7 +22347,7 @@ List all discussions on a team's page. OAuth access tokens require the `read:dis
             
         
         return UnexpectedResult(r)
-    # post /teams/{team_id}/discussions
+
     def TeamsCreateDiscussionLegacy(self, team_id:int,body:str, title:str, private:bool=False):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create a discussion`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#create-a-discussion) endpoint.
 
@@ -21411,6 +22374,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/teams/{team_id}/discussions", 
                           json=data,
@@ -21423,7 +22387,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /teams/{team_id}/discussions/{discussion_number}
+    #
     def TeamsGetDiscussionLegacy(self, team_id:int, discussion_number:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#get-a-discussion) endpoint.
 
@@ -21452,7 +22418,7 @@ Get a specific discussion on a team's page. OAuth access tokens require the `rea
             
         
         return UnexpectedResult(r)
-    # patch /teams/{team_id}/discussions/{discussion_number}
+
     def TeamsUpdateDiscussionLegacy(self, team_id:int, discussion_number:int,title:str=None, body:str=None):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#update-a-discussion) endpoint.
 
@@ -21476,6 +22442,7 @@ Edits the title and body text of a discussion post. Only the parameters you prov
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/teams/{team_id}/discussions/{discussion_number}", 
                           json=data,
@@ -21488,7 +22455,9 @@ Edits the title and body text of a discussion post. Only the parameters you prov
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/discussions/{discussion_number}
+    #
     def TeamsDeleteDiscussionLegacy(self, team_id:int, discussion_number:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Delete a discussion`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#delete-a-discussion) endpoint.
 
@@ -21517,7 +22486,9 @@ Delete a discussion from a team's page. OAuth access tokens require the `write:d
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/discussions/{discussion_number}/comments
+    #
     def TeamsListDiscussionCommentsLegacy(self, team_id:int, discussion_number:int,direction='desc', per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List discussion comments](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-discussion-comments) endpoint.
 
@@ -21555,7 +22526,7 @@ List all comments on a team discussion. OAuth access tokens require the `read:di
             
         
         return UnexpectedResult(r)
-    # post /teams/{team_id}/discussions/{discussion_number}/comments
+
     def TeamsCreateDiscussionCommentLegacy(self, team_id:int, discussion_number:int,body:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Create a discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#create-a-discussion-comment) endpoint.
 
@@ -21579,6 +22550,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/teams/{team_id}/discussions/{discussion_number}/comments", 
                           json=data,
@@ -21591,7 +22563,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
+    #
     def TeamsGetDiscussionCommentLegacy(self, team_id:int, discussion_number:int, comment_number:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#get-a-discussion-comment) endpoint.
 
@@ -21621,7 +22595,7 @@ Get a specific comment on a team discussion. OAuth access tokens require the `re
             
         
         return UnexpectedResult(r)
-    # patch /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
+
     def TeamsUpdateDiscussionCommentLegacy(self, team_id:int, discussion_number:int, comment_number:int,body:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#update-a-discussion-comment) endpoint.
 
@@ -21644,6 +22618,7 @@ Edits the body text of a discussion comment. OAuth access tokens require the `wr
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}", 
                           json=data,
@@ -21656,7 +22631,9 @@ Edits the body text of a discussion comment. OAuth access tokens require the `wr
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
+    #
     def TeamsDeleteDiscussionCommentLegacy(self, team_id:int, discussion_number:int, comment_number:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#delete-a-discussion-comment) endpoint.
 
@@ -21686,7 +22663,9 @@ Deletes a comment on a team discussion. OAuth access tokens require the `write:d
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/members
+    #
     def TeamsListMembersLegacy(self, team_id:int,role='all', per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team members`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-team-members) endpoint.
 
@@ -21729,7 +22708,9 @@ Team members will include the members of child teams.
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/members/{username}
+    #
     def TeamsGetMemberLegacy(self, team_id:int, username:str):
         """The "Get team member" endpoint (described below) is deprecated.
 
@@ -21763,7 +22744,7 @@ To list members in a team, the team must be visible to the authenticated user.
             
         
         return UnexpectedResult(r)
-    # put /teams/{team_id}/members/{username}
+
     def TeamsAddMemberLegacy(self, team_id:int, username:str):
         """The "Add team member" endpoint (described below) is deprecated.
 
@@ -21791,6 +22772,7 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
         
         }
         
+
         
         r = self._session.put(f"{self._url}/teams/{team_id}/members/{username}", 
                           json=data,
@@ -21812,7 +22794,9 @@ Note that you'll need to set `Content-Length` to zero when calling out to this e
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/members/{username}
+    #
     def TeamsRemoveMemberLegacy(self, team_id:int, username:str):
         """The "Remove team member" endpoint (described below) is deprecated.
 
@@ -21850,7 +22834,9 @@ To remove a team member, the authenticated user must have 'admin' permissions to
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/memberships/{username}
+    #
     def TeamsGetMembershipForUserLegacy(self, team_id:int, username:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get team membership for a user](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#get-team-membership-for-a-user) endpoint.
 
@@ -21889,7 +22875,7 @@ The `role` for organization owners is set to `maintainer`. For more information 
             
         
         return UnexpectedResult(r)
-    # put /teams/{team_id}/memberships/{username}
+
     def TeamsAddOrUpdateMembershipForUserLegacy(self, team_id:int, username:str,role:str='member'):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#add-or-update-team-membership-for-a-user) endpoint.
 
@@ -21921,6 +22907,7 @@ If the user is already a member of the team, this endpoint will update the role 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/teams/{team_id}/memberships/{username}", 
                           json=data,
@@ -21942,7 +22929,9 @@ If the user is already a member of the team, this endpoint will update the role 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/memberships/{username}
+    #
     def TeamsRemoveMembershipForUserLegacy(self, team_id:int, username:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove team membership for a user](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#remove-team-membership-for-a-user) endpoint.
 
@@ -21978,7 +22967,9 @@ To remove a membership between a user and a team, the authenticated user must ha
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/projects
+    #
     def TeamsListProjectsLegacy(self, team_id:int,per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List team projects`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-team-projects) endpoint.
 
@@ -22015,7 +23006,9 @@ Lists the organization projects for a team.
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/projects/{project_id}
+    #
     def TeamsCheckPermissionsForProjectLegacy(self, team_id:int, project_id:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Check team permissions for a project](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#check-team-permissions-for-a-project) endpoint.
 
@@ -22047,7 +23040,7 @@ Checks whether a team has `read`, `write`, or `admin` permissions for an organiz
             
         
         return UnexpectedResult(r)
-    # put /teams/{team_id}/projects/{project_id}
+
     def TeamsAddOrUpdateProjectPermissionsLegacy(self, team_id:int, project_id:int,permission:str=None):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team project permissions](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#add-or-update-team-project-permissions) endpoint.
 
@@ -22073,6 +23066,7 @@ Default: the team's `permission` attribute will be used to determine what permis
         
         }
         
+
         
         r = self._session.put(f"{self._url}/teams/{team_id}/projects/{project_id}", 
                           json=data,
@@ -22094,7 +23088,9 @@ Default: the team's `permission` attribute will be used to determine what permis
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/projects/{project_id}
+    #
     def TeamsRemoveProjectLegacy(self, team_id:int, project_id:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a project from a team](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#remove-a-project-from-a-team) endpoint.
 
@@ -22132,7 +23128,9 @@ Removes an organization project from a team. An organization owner or a team mai
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/repos
+    #
     def TeamsListReposLegacy(self, team_id:int,per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List team repositories](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-team-repositories) endpoint.
         
@@ -22167,7 +23165,9 @@ Removes an organization project from a team. An organization owner or a team mai
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/repos/{owner}/{repo}
+    #
     def TeamsCheckPermissionsForRepoLegacy(self, team_id:int, owner:str, repo:str):
         """**Note**: Repositories inherited through a parent team will also be checked.
 
@@ -22205,7 +23205,7 @@ You can also get information about the specified repository, including what perm
             
         
         return UnexpectedResult(r)
-    # put /teams/{team_id}/repos/{owner}/{repo}
+
     def TeamsAddOrUpdateRepoPermissionsLegacy(self, team_id:int, owner:str, repo:str,permission:str=None):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Add or update team repository permissions](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#add-or-update-team-repository-permissions)" endpoint.
 
@@ -22235,6 +23235,7 @@ If no permission is specified, the team's `permission` attribute will be used to
         
         }
         
+
         
         r = self._session.put(f"{self._url}/teams/{team_id}/repos/{owner}/{repo}", 
                           json=data,
@@ -22253,7 +23254,9 @@ If no permission is specified, the team's `permission` attribute will be used to
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /teams/{team_id}/repos/{owner}/{repo}
+    #
     def TeamsRemoveRepoLegacy(self, team_id:int, owner:str, repo:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a repository from a team](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#remove-a-repository-from-a-team) endpoint.
 
@@ -22283,7 +23286,9 @@ If the authenticated user is an organization owner or a team maintainer, they ca
             
         
         return UnexpectedResult(r)
+    #
     # get /teams/{team_id}/teams
+    #
     def TeamsListChildLegacy(self, team_id:int,per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List child teams`](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#list-child-teams) endpoint.
         
@@ -22324,7 +23329,9 @@ If the authenticated user is an organization owner or a team maintainer, they ca
             
         
         return UnexpectedResult(r)
+    #
     # get /user/teams
+    #
     def TeamsListForAuthenticatedUser(self, per_page=30, page=1):
         """List all of the teams across all of the organizations to which the authenticated user belongs. This method requires `user`, `repo`, or `read:org` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/) when authenticating via [OAuth](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/).
         
@@ -22364,7 +23371,9 @@ If the authenticated user is an organization owner or a team maintainer, they ca
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions
+    #
     def ReactionsListForTeamDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int, comment_number:int,content=None, per_page=30, page=1):
         """List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#discussion-comments/). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -22404,7 +23413,7 @@ If the authenticated user is an organization owner or a team maintainer, they ca
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions
+
     def ReactionsCreateForTeamDiscussionCommentInOrg(self, org:str, team_slug:str, discussion_number:int, comment_number:int,content:str):
         """Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#discussion-comments). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
 
@@ -22428,6 +23437,7 @@ If the authenticated user is an organization owner or a team maintainer, they ca
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", 
                           json=data,
@@ -22443,7 +23453,9 @@ If the authenticated user is an organization owner or a team maintainer, they ca
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForTeamDiscussionComment(self, org:str, team_slug:str, discussion_number:int, comment_number:int, reaction_id:int):
         """**Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions/:reaction_id`.
 
@@ -22475,7 +23487,9 @@ Delete a reaction to a [team discussion comment](https://docs.github.com/enterpr
             
         
         return UnexpectedResult(r)
+    #
     # get /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions
+    #
     def ReactionsListForTeamDiscussionInOrg(self, org:str, team_slug:str, discussion_number:int,content=None, per_page=30, page=1):
         """List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#discussions). OAuth access tokens require the `read:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
 
@@ -22514,7 +23528,7 @@ Delete a reaction to a [team discussion comment](https://docs.github.com/enterpr
             
         
         return UnexpectedResult(r)
-    # post /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions
+
     def ReactionsCreateForTeamDiscussionInOrg(self, org:str, team_slug:str, discussion_number:int,content:str):
         """Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.3/rest/reference/teams#discussions). OAuth access tokens require the `write:discussion` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/). A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
 
@@ -22537,6 +23551,7 @@ Delete a reaction to a [team discussion comment](https://docs.github.com/enterpr
         
         }
         
+
         
         r = self._session.post(f"{self._url}/orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", 
                           json=data,
@@ -22552,7 +23567,9 @@ Delete a reaction to a [team discussion comment](https://docs.github.com/enterpr
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForTeamDiscussion(self, org:str, team_slug:str, discussion_number:int, reaction_id:int):
         """**Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions/:reaction_id`.
 
@@ -22583,7 +23600,9 @@ Delete a reaction to a [team discussion](https://docs.github.com/enterprise-serv
             
         
         return UnexpectedResult(r)
+    #
     # delete /reactions/{reaction_id}
+    #
     def ReactionsDeleteLegacy(self, reaction_id:int):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Reactions API. We recommend migrating your existing code to use the new delete reactions endpoints. For more information, see this [blog post](https://developer.github.com/changes/2020-02-26-new-delete-reactions-endpoints/).
 
@@ -22623,7 +23642,9 @@ OAuth access tokens require the `write:discussion` [scope](https://docs.github.c
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/comments/{comment_id}/reactions
+    #
     def ReactionsListForCommitComment(self, owner:str, repo:str, comment_id:int,content=None, per_page=30, page=1):
         """List the reactions to a [commit comment](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#comments).
         
@@ -22663,7 +23684,7 @@ OAuth access tokens require the `write:discussion` [scope](https://docs.github.c
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/comments/{comment_id}/reactions
+
     def ReactionsCreateForCommitComment(self, owner:str, repo:str, comment_id:int,content:str):
         """Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#comments). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
         
@@ -22684,6 +23705,7 @@ OAuth access tokens require the `write:discussion` [scope](https://docs.github.c
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/comments/{comment_id}/reactions", 
                           json=data,
@@ -22705,7 +23727,9 @@ OAuth access tokens require the `write:discussion` [scope](https://docs.github.c
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForCommitComment(self, owner:str, repo:str, comment_id:int, reaction_id:int):
         """**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/comments/:comment_id/reactions/:reaction_id`.
 
@@ -22736,7 +23760,9 @@ Delete a reaction to a [commit comment](https://docs.github.com/enterprise-serve
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+    #
     def ReactionsListForIssueComment(self, owner:str, repo:str, comment_id:int,content=None, per_page=30, page=1):
         """List the reactions to an [issue comment](https://docs.github.com/enterprise-server@3.3/rest/reference/issues#comments).
         
@@ -22776,7 +23802,7 @@ Delete a reaction to a [commit comment](https://docs.github.com/enterprise-serve
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+
     def ReactionsCreateForIssueComment(self, owner:str, repo:str, comment_id:int,content:str):
         """Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.3/rest/reference/issues#comments). A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
         
@@ -22797,6 +23823,7 @@ Delete a reaction to a [commit comment](https://docs.github.com/enterprise-serve
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", 
                           json=data,
@@ -22815,7 +23842,9 @@ Delete a reaction to a [commit comment](https://docs.github.com/enterprise-serve
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForIssueComment(self, owner:str, repo:str, comment_id:int, reaction_id:int):
         """**Note:** You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/issues/comments/:comment_id/reactions/:reaction_id`.
 
@@ -22846,7 +23875,9 @@ Delete a reaction to an [issue comment](https://docs.github.com/enterprise-serve
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/issues/{issue_number}/reactions
+    #
     def ReactionsListForIssue(self, owner:str, repo:str, issue_number:int,content=None, per_page=30, page=1):
         """List the reactions to an [issue](https://docs.github.com/enterprise-server@3.3/rest/reference/issues).
         
@@ -22889,7 +23920,7 @@ Delete a reaction to an [issue comment](https://docs.github.com/enterprise-serve
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/issues/{issue_number}/reactions
+
     def ReactionsCreateForIssue(self, owner:str, repo:str, issue_number:int,content:str):
         """Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.3/rest/reference/issues/). A response with an HTTP `200` status means that you already added the reaction type to this issue.
         
@@ -22910,6 +23941,7 @@ Delete a reaction to an [issue comment](https://docs.github.com/enterprise-serve
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/issues/{issue_number}/reactions", 
                           json=data,
@@ -22928,7 +23960,9 @@ Delete a reaction to an [issue comment](https://docs.github.com/enterprise-serve
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForIssue(self, owner:str, repo:str, issue_number:int, reaction_id:int):
         """**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/issues/:issue_number/reactions/:reaction_id`.
 
@@ -22959,7 +23993,9 @@ Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.3/re
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions
+    #
     def ReactionsListForPullRequestReviewComment(self, owner:str, repo:str, comment_id:int,content=None, per_page=30, page=1):
         """List the reactions to a [pull request review comment](https://docs.github.com/enterprise-server@3.3/rest/reference/pulls#review-comments).
         
@@ -22999,7 +24035,7 @@ Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.3/re
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions
+
     def ReactionsCreateForPullRequestReviewComment(self, owner:str, repo:str, comment_id:int,content:str):
         """Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.3/rest/reference/pulls#comments). A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
         
@@ -23020,6 +24056,7 @@ Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.3/re
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", 
                           json=data,
@@ -23038,7 +24075,9 @@ Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.3/re
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}
+    #
     def ReactionsDeleteForPullRequestComment(self, owner:str, repo:str, comment_id:int, reaction_id:int):
         """**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/pulls/comments/:comment_id/reactions/:reaction_id.`
 
@@ -23069,7 +24108,7 @@ Delete a reaction to a [pull request review comment](https://docs.github.com/ent
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/releases/{release_id}/reactions
+
     def ReactionsCreateForRelease(self, owner:str, repo:str, release_id:int,content:str):
         """Create a reaction to a [release](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#releases). A response with a `Status: 200 OK` means that you already added the reaction type to this release.
         
@@ -23090,6 +24129,7 @@ Delete a reaction to a [pull request review comment](https://docs.github.com/ent
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/releases/{release_id}/reactions", 
                           json=data,
@@ -23108,7 +24148,9 @@ Delete a reaction to a [pull request review comment](https://docs.github.com/ent
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
+    #
     def ReactionsListForTeamDiscussionCommentLegacy(self, team_id:int, discussion_number:int, comment_number:int,content=None, per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/enterprise-server@3.3/rest/reference/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
 
@@ -23147,7 +24189,7 @@ List the reactions to a [team discussion comment](https://docs.github.com/enterp
             
         
         return UnexpectedResult(r)
-    # post /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions
+
     def ReactionsCreateForTeamDiscussionCommentLegacy(self, team_id:int, discussion_number:int, comment_number:int,content:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.3/rest/reference/reactions#create-reaction-for-a-team-discussion-comment)" endpoint.
 
@@ -23170,6 +24212,7 @@ Create a reaction to a [team discussion comment](https://docs.github.com/enterpr
         
         }
         
+
         
         r = self._session.post(f"{self._url}/teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", 
                           json=data,
@@ -23182,7 +24225,9 @@ Create a reaction to a [team discussion comment](https://docs.github.com/enterpr
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /teams/{team_id}/discussions/{discussion_number}/reactions
+    #
     def ReactionsListForTeamDiscussionLegacy(self, team_id:int, discussion_number:int,content=None, per_page=30, page=1):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion`](https://docs.github.com/enterprise-server@3.3/rest/reference/reactions#list-reactions-for-a-team-discussion) endpoint.
 
@@ -23220,7 +24265,7 @@ List the reactions to a [team discussion](https://docs.github.com/enterprise-ser
             
         
         return UnexpectedResult(r)
-    # post /teams/{team_id}/discussions/{discussion_number}/reactions
+
     def ReactionsCreateForTeamDiscussionLegacy(self, team_id:int, discussion_number:int,content:str):
         """**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create reaction for a team discussion`](https://docs.github.com/enterprise-server@3.3/rest/reference/reactions#create-reaction-for-a-team-discussion) endpoint.
 
@@ -23242,6 +24287,7 @@ Create a reaction to a [team discussion](https://docs.github.com/enterprise-serv
         
         }
         
+
         
         r = self._session.post(f"{self._url}/teams/{team_id}/discussions/{discussion_number}/reactions", 
                           json=data,
@@ -23254,7 +24300,9 @@ Create a reaction to a [team discussion](https://docs.github.com/enterprise-serv
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /rate_limit
+    #
     def RateLimitGet(self, ):
         """**Note:** Accessing this endpoint does not count against your REST API rate limit.
 
@@ -23287,8 +24335,8 @@ Create a reaction to a [team discussion](https://docs.github.com/enterprise-serv
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/check-runs
-    def ChecksCreate(self, owner:str, repo:str,head_sha:str, name:str, details_url:str=None, external_id:str=None, status:str='queued', started_at:datetime=None, conclusion:str=None, completed_at:datetime=None, output:dict=None, actions:list=None):
+
+    def ChecksCreate(self, owner:str, repo:str,head_sha:str, name:str, details_url:str=None, external_id:str=None, status:str='queued', started_at:datetime=None, conclusion:str=None, completed_at:datetime=None, output:dict=None, actions:list=[]):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
 
 Creates a new check run for a specific commit in a repository. Your GitHub App must have the `checks:write` permission to create check runs.
@@ -23330,6 +24378,7 @@ In a check suite, GitHub limits the number of check runs with the same name to 1
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/check-runs", 
                           json=data,
@@ -23342,7 +24391,9 @@ In a check suite, GitHub limits the number of check runs with the same name to 1
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/check-runs/{check_run_id}
+    #
     def ChecksGet(self, owner:str, repo:str, check_run_id:int):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
 
@@ -23372,8 +24423,8 @@ Gets a single check run using its `id`. GitHub Apps must have the `checks:read` 
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/check-runs/{check_run_id}
-    def ChecksUpdate(self, owner:str, repo:str, check_run_id:int,name:str=None, details_url:str=None, external_id:str=None, started_at:datetime=None, status:str=None, conclusion:str=None, completed_at:datetime=None, output:dict=None, actions:list=None):
+
+    def ChecksUpdate(self, owner:str, repo:str, check_run_id:int,name:str=None, details_url:str=None, external_id:str=None, started_at:datetime=None, status:str=None, conclusion:str=None, completed_at:datetime=None, output:dict=None, actions:list=[]):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
 
 Updates a check run for a specific commit in a repository. Your GitHub App must have the `checks:write` permission to edit check runs.
@@ -23412,6 +24463,7 @@ Updates a check run for a specific commit in a repository. Your GitHub App must 
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/check-runs/{check_run_id}", 
                           json=data,
@@ -23424,7 +24476,9 @@ Updates a check run for a specific commit in a repository. Your GitHub App must 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
+    #
     def ChecksListAnnotations(self, owner:str, repo:str, check_run_id:int,per_page=30, page=1):
         """Lists annotations for a check run using the annotation `id`. GitHub Apps must have the `checks:read` permission on a private repository or pull access to a public repository to get annotations for a check run. OAuth Apps and authenticated users must have the `repo` scope to get annotations for a check run in a private repository.
         
@@ -23458,7 +24512,7 @@ Updates a check run for a specific commit in a repository. Your GitHub App must 
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
+
     def ChecksRerequestRun(self, owner:str, repo:str, check_run_id:int):
         """Triggers GitHub to rerequest an existing check run, without pushing new code to a repository. This endpoint will trigger the [`check_run` webhook](https://docs.github.com/enterprise-server@3.3/webhooks/event-payloads/#check_run) event with the action `rerequested`. When a check run is `rerequested`, its `status` is reset to `queued` and the `conclusion` is cleared.
 
@@ -23479,6 +24533,7 @@ To rerequest a check run, your GitHub App must have the `checks:read` permission
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest", 
                           json=data,
@@ -23500,7 +24555,7 @@ To rerequest a check run, your GitHub App must have the `checks:read` permission
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/check-suites
+
     def ChecksCreateSuite(self, owner:str, repo:str,head_sha:str):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array and a `null` value for `head_branch`.
 
@@ -23522,6 +24577,7 @@ By default, check suites are automatically created when you create a [check run]
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/check-suites", 
                           json=data,
@@ -23537,8 +24593,8 @@ By default, check suites are automatically created when you create a [check run]
             
 
         return UnexpectedResult(r.status_code)
-    # patch /repos/{owner}/{repo}/check-suites/preferences
-    def ChecksSetSuitesPreferences(self, owner:str, repo:str,auto_trigger_checks:list=None):
+
+    def ChecksSetSuitesPreferences(self, owner:str, repo:str,auto_trigger_checks:list=[]):
         """Changes the default automatic flow when creating check suites. By default, a check suite is automatically created each time code is pushed to a repository. When you disable the automatic creation of check suites, you can manually [Create a check suite](https://docs.github.com/enterprise-server@3.3/rest/reference/checks#create-a-check-suite). You must have admin permissions in the repository to set preferences for check suites.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/checks#update-repository-preferences-for-check-suites
@@ -23557,6 +24613,7 @@ By default, check suites are automatically created when you create a [check run]
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/check-suites/preferences", 
                           json=data,
@@ -23569,7 +24626,9 @@ By default, check suites are automatically created when you create a [check run]
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/check-suites/{check_suite_id}
+    #
     def ChecksGetSuite(self, owner:str, repo:str, check_suite_id:int):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array and a `null` value for `head_branch`.
 
@@ -23599,7 +24658,9 @@ Gets a single check suite using its `id`. GitHub Apps must have the `checks:read
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
+    #
     def ChecksListForSuite(self, owner:str, repo:str, check_suite_id:int,check_name:str=None, status=None, filter='latest', per_page=30, page=1):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
 
@@ -23646,7 +24707,7 @@ Lists check runs for a check suite using its `id`. GitHub Apps must have the `ch
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
+
     def ChecksRerequestSuite(self, owner:str, repo:str, check_suite_id:int):
         """Triggers GitHub to rerequest an existing check suite, without pushing new code to a repository. This endpoint will trigger the [`check_suite` webhook](https://docs.github.com/enterprise-server@3.3/webhooks/event-payloads/#check_suite) event with the action `rerequested`. When a check suite is `rerequested`, its `status` is reset to `queued` and the `conclusion` is cleared.
 
@@ -23667,6 +24728,7 @@ To rerequest a check suite, your GitHub App must have the `checks:read` permissi
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest", 
                           json=data,
@@ -23679,7 +24741,9 @@ To rerequest a check suite, your GitHub App must have the `checks:read` permissi
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/commits/{ref}/check-runs
+    #
     def ChecksListForRef(self, owner:str, repo:str, ref:str,check_name:str=None, status=None, filter='latest', per_page=30, page=1, app_id:int=None):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.
 
@@ -23729,7 +24793,9 @@ Lists check runs for a commit ref. The `ref` can be a SHA, branch name, or a tag
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/commits/{ref}/check-suites
+    #
     def ChecksListSuitesForRef(self, owner:str, repo:str, ref:str,app_id:int=None, check_name:str=None, per_page=30, page=1):
         """**Note:** The Checks API only looks for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array and a `null` value for `head_branch`.
 
@@ -23771,7 +24837,9 @@ Lists check suites for a commit `ref`. The `ref` can be a SHA, branch name, or a
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/code-scanning/alerts
+    #
     def CodeScanningListAlertsForRepo(self, owner:str, repo:str,tool_name:None=None, tool_guid:None=None, page=1, per_page=30, ref:None=None, state:None=None):
         """Lists all open code scanning alerts for the default branch (usually `main`
 or `master`). You must use an access token with the `security_events` scope to use
@@ -23833,7 +24901,9 @@ for the default branch or for the specified Git reference
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+    #
     def CodeScanningGetAlert(self, owner:str, repo:str, alert_number:None):
         """Gets a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
 
@@ -23873,7 +24943,7 @@ The instances field is deprecated and will, in future, not be included in the re
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+
     def CodeScanningUpdateAlert(self, owner:str, repo:str, alert_number:None,state:str, dismissed_reason:str=None):
         """Updates the status of a single code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
         
@@ -23896,6 +24966,7 @@ The instances field is deprecated and will, in future, not be included in the re
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", 
                           json=data,
@@ -23917,7 +24988,9 @@ The instances field is deprecated and will, in future, not be included in the re
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances
+    #
     def CodeScanningListAlertInstances(self, owner:str, repo:str, alert_number:None,page=1, per_page=30, ref:None=None):
         """Lists all instances of the specified code scanning alert. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
         
@@ -23963,7 +25036,9 @@ The instances field is deprecated and will, in future, not be included in the re
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/code-scanning/analyses
+    #
     def CodeScanningListRecentAnalyses(self, owner:str, repo:str,tool_name:None=None, tool_guid:None=None, page=1, per_page=30, ref:None=None, sarif_id:None=None):
         """Lists the details of all code scanning analyses for a repository,
 starting with the most recent.
@@ -24032,7 +25107,9 @@ The `tool_name` field is deprecated and will, in future, not be included in the 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+    #
     def CodeScanningGetAnalysis(self, owner:str, repo:str, analysis_id:int):
         """Gets a specified code scanning analysis for a repository.
 You must use an access token with the `security_events` scope to use this endpoint.
@@ -24086,7 +25163,9 @@ This is formatted as
             
         
         return UnexpectedResult(r)
+    #
     # delete /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+    #
     def CodeScanningDeleteAnalysis(self, owner:str, repo:str, analysis_id:int,confirm_delete:str=None):
         """Deletes a specified code scanning analysis from a repository. For
 private repositories, you must use an access token with the `repo` scope. For public repositories,
@@ -24183,7 +25262,7 @@ The above process assumes that you want to remove all trace of the tool's analys
     
         
         if r.status_code == 200:
-            return AnalysisDeletion(**r.json())
+            return CodeScanningAnalysisDeletion(**r.json())
             
         if r.status_code == 400:
             return BasicError(**r.json())
@@ -24199,7 +25278,7 @@ The above process assumes that you want to remove all trace of the tool's analys
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/code-scanning/sarifs
+
     def CodeScanningUploadSarif(self, owner:str, repo:str,sarif:str, ref:str, commit_sha:str, checkout_uri:str=None, started_at:datetime=None, tool_name:str=None):
         """Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` write permission to use this endpoint.
 
@@ -24246,6 +25325,7 @@ This property is used to convert file paths from absolute to relative, so that a
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/code-scanning/sarifs", 
                           json=data,
@@ -24273,7 +25353,9 @@ This property is used to convert file paths from absolute to relative, so that a
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
+    #
     def CodeScanningGetSarif(self, owner:str, repo:str, sarif_id:str):
         """Gets information about a SARIF upload, including the status and the URL of the analysis that was uploaded so that you can retrieve details of the analysis. For more information, see "[Get a code scanning analysis for a repository](/rest/reference/code-scanning#get-a-code-scanning-analysis-for-a-repository)." You must use an access token with the `security_events` scope to use this endpoint. GitHub Apps must have the `security_events` read permission to use this endpoint.
         
@@ -24310,7 +25392,7 @@ This property is used to convert file paths from absolute to relative, so that a
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/git/blobs
+
     def GitCreateBlob(self, owner:str, repo:str,content:str, encoding:str='utf-8'):
         """
         
@@ -24332,6 +25414,7 @@ This property is used to convert file paths from absolute to relative, so that a
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/git/blobs", 
                           json=data,
@@ -24356,7 +25439,9 @@ This property is used to convert file paths from absolute to relative, so that a
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/git/blobs/{file_sha}
+    #
     def GitGetBlob(self, owner:str, repo:str, file_sha:str):
         """The `content` in the response will always be Base64 encoded.
 
@@ -24395,8 +25480,8 @@ _Note_: This API supports blobs up to 100 megabytes in size.
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/git/commits
-    def GitCreateCommit(self, owner:str, repo:str,tree:str, message:str, parents:list=None, author:dict=None, committer:dict=None, signature:str=None):
+
+    def GitCreateCommit(self, owner:str, repo:str,tree:str, message:str, parents:list=[], author:dict=None, committer:dict=None, signature:str=None):
         """Creates a new Git [commit object](https://git-scm.com/book/en/v1/Git-Internals-Git-Objects#Commit-Objects).
 
 **Signature verification object**
@@ -24454,6 +25539,7 @@ These are the possible values for `reason` in the `verification` object:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/git/commits", 
                           json=data,
@@ -24472,7 +25558,9 @@ These are the possible values for `reason` in the `verification` object:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/git/commits/{commit_sha}
+    #
     def GitGetCommit(self, owner:str, repo:str, commit_sha:str):
         """Gets a Git [commit object](https://git-scm.com/book/en/v1/Git-Internals-Git-Objects#Commit-Objects).
 
@@ -24532,7 +25620,9 @@ These are the possible values for `reason` in the `verification` object:
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/git/matching-refs/{ref}
+    #
     def GitListMatchingRefs(self, owner:str, repo:str, ref:str,per_page=30, page=1):
         """Returns an array of references from your Git database that match the supplied name. The `:ref` in the URL must be formatted as `heads/<branch name>` for branches and `tags/<tag name>` for tags. If the `:ref` doesn't exist in the repository, but existing refs start with `:ref`, they will be returned as an array.
 
@@ -24572,7 +25662,9 @@ If you request matching references for a branch named `feature` but the branch `
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/git/ref/{ref}
+    #
     def GitGetRef(self, owner:str, repo:str, ref:str):
         """Returns a single reference from your Git database. The `:ref` in the URL must be formatted as `heads/<branch name>` for branches and `tags/<tag name>` for tags. If the `:ref` doesn't match an existing ref, a `404` is returned.
 
@@ -24605,7 +25697,7 @@ If you request matching references for a branch named `feature` but the branch `
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/git/refs
+
     def GitCreateRef(self, owner:str, repo:str,sha:str, ref:str, key:str=None):
         """Creates a reference for your repository. You are unable to create new references for empty repositories, even if the commit SHA-1 hash used exists. Empty repositories are repositories without branches.
         
@@ -24629,6 +25721,7 @@ If you request matching references for a branch named `feature` but the branch `
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/git/refs", 
                           json=data,
@@ -24644,7 +25737,7 @@ If you request matching references for a branch named `feature` but the branch `
             
 
         return UnexpectedResult(r.status_code)
-    # patch /repos/{owner}/{repo}/git/refs/{ref}
+
     def GitUpdateRef(self, owner:str, repo:str, ref:str,sha:str, force:bool=False):
         """
         
@@ -24667,6 +25760,7 @@ If you request matching references for a branch named `feature` but the branch `
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/git/refs/{ref}", 
                           json=data,
@@ -24682,7 +25776,9 @@ If you request matching references for a branch named `feature` but the branch `
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/git/refs/{ref}
+    #
     def GitDeleteRef(self, owner:str, repo:str, ref:str):
         """
         
@@ -24713,7 +25809,7 @@ If you request matching references for a branch named `feature` but the branch `
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/git/tags
+
     def GitCreateTag(self, owner:str, repo:str,type:str, object:str, message:str, tag:str, tagger:dict=None):
         """Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then [create](https://docs.github.com/enterprise-server@3.3/rest/reference/git#create-a-reference) the `refs/tags/[tag]` reference. If you want to create a lightweight tag, you only have to [create](https://docs.github.com/enterprise-server@3.3/rest/reference/git#create-a-reference) the tag reference - this call would be unnecessary.
 
@@ -24770,6 +25866,7 @@ These are the possible values for `reason` in the `verification` object:
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/git/tags", 
                           json=data,
@@ -24785,7 +25882,9 @@ These are the possible values for `reason` in the `verification` object:
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/git/tags/{tag_sha}
+    #
     def GitGetTag(self, owner:str, repo:str, tag_sha:str):
         """**Signature verification object**
 
@@ -24843,7 +25942,7 @@ These are the possible values for `reason` in the `verification` object:
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/git/trees
+
     def GitCreateTree(self, owner:str, repo:str,tree:list, base_tree:str=None):
         """The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint will overwrite the contents of the tree with the new path contents, and create a new tree structure.
 
@@ -24869,6 +25968,7 @@ If not provided, GitHub will create a new Git tree object from only the entries 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/git/trees", 
                           json=data,
@@ -24890,7 +25990,9 @@ If not provided, GitHub will create a new Git tree object from only the entries 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/git/trees/{tree_sha}
+    #
     def GitGetTree(self, owner:str, repo:str, tree_sha:str,recursive:str=None):
         """Returns a single tree using the SHA1 value for that tree.
 
@@ -24929,7 +26031,9 @@ If `truncated` is `true` in the response then the number of items in the `tree` 
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls
+    #
     def PullsList(self, owner:str, repo:str,state='open', head:str=None, base:str=None, sort='created', direction='desc', per_page=30, page=1):
         """Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
         
@@ -24983,7 +26087,7 @@ If `truncated` is `true` in the response then the number of items in the `tree` 
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pulls
+
     def PullsCreate(self, owner:str, repo:str,base:str, head:str, title:str=None, body:str=None, maintainer_can_modify:bool=None, draft:bool=None, issue:int=None):
         """Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -25021,6 +26125,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls", 
                           json=data,
@@ -25039,7 +26144,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pulls/comments
+    #
     def PullsListReviewCommentsForRepo(self, owner:str, repo:str,sort=None, direction='desc', since:datetime=None, per_page=30, page=1):
         """Lists review comments for all pull requests in a repository. By default, review comments are in ascending order by ID.
         
@@ -25081,7 +26188,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/comments/{comment_id}
+    #
     def PullsGetReviewComment(self, owner:str, repo:str, comment_id:int):
         """Provides details for a review comment.
         
@@ -25112,7 +26221,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/pulls/comments/{comment_id}
+
     def PullsUpdateReviewComment(self, owner:str, repo:str, comment_id:int,body:str):
         """Enables you to edit a review comment.
         
@@ -25133,6 +26242,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/pulls/comments/{comment_id}", 
                           json=data,
@@ -25145,7 +26255,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pulls/comments/{comment_id}
+    #
     def PullsDeleteReviewComment(self, owner:str, repo:str, comment_id:int):
         """Deletes a review comment.
         
@@ -25176,7 +26288,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}
+    #
     def PullsGet(self, owner:str, repo:str, pull_number:int):
         """Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -25227,7 +26341,7 @@ Pass the appropriate [media type](https://docs.github.com/enterprise-server@3.3/
             
         
         return UnexpectedResult(r)
-    # patch /repos/{owner}/{repo}/pulls/{pull_number}
+
     def PullsUpdate(self, owner:str, repo:str, pull_number:int,title:str=None, body:str=None, state:str=None, base:str=None, maintainer_can_modify:bool=None):
         """Draft pull requests are available in public repositories with GitHub Free and GitHub Free for organizations, GitHub Pro, and legacy per-repository billing plans, and in public and private repositories with GitHub Team and GitHub Enterprise Cloud. For more information, see [GitHub's products](https://help.github.com/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
@@ -25258,6 +26372,7 @@ To open or update a pull request in a public repository, you must have write acc
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}", 
                           json=data,
@@ -25276,7 +26391,9 @@ To open or update a pull request in a public repository, you must have write acc
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/comments
+    #
     def PullsListReviewComments(self, owner:str, repo:str, pull_number:int,sort='created', direction='desc', since:datetime=None, per_page=30, page=1):
         """Lists all review comments for a pull request. By default, review comments are in ascending order by ID.
         
@@ -25319,7 +26436,7 @@ To open or update a pull request in a public repository, you must have write acc
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pulls/{pull_number}/comments
+
     def PullsCreateReviewComment(self, owner:str, repo:str, pull_number:int,body:str, commit_id:str=None, path:str=None, position:int=None, side:str=None, line:int=None, start_line:int=None, start_side:str=None, in_reply_to:int=None):
         """
 Creates a review comment in the pull request diff. To add a regular comment to a pull request timeline, see "[Create an issue comment](https://docs.github.com/enterprise-server@3.3/rest/reference/issues#create-an-issue-comment)." We recommend creating a review comment using `line`, `side`, and optionally `start_line` and `start_side` if your comment applies to more than one line in the pull request diff.
@@ -25363,6 +26480,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/comments", 
                           json=data,
@@ -25381,7 +26499,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
+
     def PullsCreateReplyForReviewComment(self, owner:str, repo:str, pull_number:int, comment_id:int,body:str):
         """Creates a reply to a review comment for a pull request. For the `comment_id`, provide the ID of the review comment you are replying to. This must be the ID of a _top-level review comment_, not a reply to that comment. Replies to replies are not supported.
 
@@ -25405,6 +26523,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies", 
                           json=data,
@@ -25420,7 +26539,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/commits
+    #
     def PullsListCommits(self, owner:str, repo:str, pull_number:int,per_page=30, page=1):
         """Lists a maximum of 250 commits for a pull request. To receive a complete commit list for pull requests with more than 250 commits, use the [List commits](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#list-commits) endpoint.
         
@@ -25454,7 +26575,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/files
+    #
     def PullsListFiles(self, owner:str, repo:str, pull_number:int,per_page=30, page=1):
         """**Note:** Responses include a maximum of 3000 files. The paginated response returns 30 files per page by default.
         
@@ -25494,7 +26617,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/merge
+    #
     def PullsCheckIfMerged(self, owner:str, repo:str, pull_number:int):
         """
         
@@ -25525,7 +26650,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/pulls/{pull_number}/merge
+
     def PullsMerge(self, owner:str, repo:str, pull_number:int,commit_title:str=None, commit_message:str=None, sha:str=None, merge_method:str=None):
         """This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.3/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
         
@@ -25552,6 +26677,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/merge", 
                           json=data,
@@ -25579,7 +26705,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+    #
     def PullsListRequestedReviewers(self, owner:str, repo:str, pull_number:int,per_page=30, page=1):
         """
         
@@ -25613,8 +26741,8 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
-    def PullsRequestReviewers(self, owner:str, repo:str, pull_number:int,reviewers:list=None, team_reviewers:list=None):
+
+    def PullsRequestReviewers(self, owner:str, repo:str, pull_number:int,reviewers:list=[], team_reviewers:list=[]):
         """This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.3/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
         
         https://docs.github.com/enterprise-server@3.3/rest/reference/pulls#request-reviewers-for-a-pull-request
@@ -25636,6 +26764,7 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", 
                           json=data,
@@ -25654,7 +26783,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+    #
     def PullsRemoveRequestedReviewers(self, owner:str, repo:str, pull_number:int):
         """
         
@@ -25685,7 +26816,9 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+    #
     def PullsListReviews(self, owner:str, repo:str, pull_number:int,per_page=30, page=1):
         """The list of reviews returns in chronological order.
         
@@ -25719,8 +26852,8 @@ This endpoint triggers [notifications](https://docs.github.com/en/github/managin
             
         
         return UnexpectedResult(r)
-    # post /repos/{owner}/{repo}/pulls/{pull_number}/reviews
-    def PullsCreateReview(self, owner:str, repo:str, pull_number:int,commit_id:str=None, body:str=None, event:str=None, comments:list=None):
+
+    def PullsCreateReview(self, owner:str, repo:str, pull_number:int,commit_id:str=None, body:str=None, event:str=None, comments:list=[]):
         """This endpoint triggers [notifications](https://docs.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. See "[Secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#secondary-rate-limits)" and "[Dealing with secondary rate limits](https://docs.github.com/enterprise-server@3.3/rest/guides/best-practices-for-integrators#dealing-with-secondary-rate-limits)" for details.
 
 Pull request reviews created in the `PENDING` state do not include the `submitted_at` property in the response.
@@ -25752,6 +26885,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/reviews", 
                           json=data,
@@ -25770,7 +26904,9 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+    #
     def PullsGetReview(self, owner:str, repo:str, pull_number:int, review_id:int):
         """
         
@@ -25802,7 +26938,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+
     def PullsUpdateReview(self, owner:str, repo:str, pull_number:int, review_id:int,body:str):
         """Update the review summary comment with new text.
         
@@ -25824,6 +26960,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}", 
                           json=data,
@@ -25839,7 +26976,9 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+    #
     def PullsDeletePendingReview(self, owner:str, repo:str, pull_number:int, review_id:int):
         """
         
@@ -25874,7 +27013,9 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
         
         return UnexpectedResult(r)
+    #
     # get /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
+    #
     def PullsListCommentsForReview(self, owner:str, repo:str, pull_number:int, review_id:int,per_page=30, page=1):
         """List comments for a specific pull request review.
         
@@ -25912,7 +27053,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
         
         return UnexpectedResult(r)
-    # put /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
+
     def PullsDismissReview(self, owner:str, repo:str, pull_number:int, review_id:int,message:str, event:str=None):
         """**Note:** To dismiss a pull request review on a [protected branch](https://docs.github.com/enterprise-server@3.3/rest/reference/repos#branches), you must be a repository administrator or be included in the list of people or teams who can dismiss pull request reviews.
         
@@ -25936,6 +27077,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals", 
                           json=data,
@@ -25954,7 +27096,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
 
         return UnexpectedResult(r.status_code)
-    # post /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events
+
     def PullsSubmitReview(self, owner:str, repo:str, pull_number:int, review_id:int,event:str, body:str=None):
         """
         
@@ -25978,6 +27120,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
         
         }
         
+
         
         r = self._session.post(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events", 
                           json=data,
@@ -25999,7 +27142,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
 
         return UnexpectedResult(r.status_code)
-    # put /repos/{owner}/{repo}/pulls/{pull_number}/update-branch
+
     def PullsUpdateBranch(self, owner:str, repo:str, pull_number:int,expected_head_sha:str=None):
         """Updates the pull request branch with the latest upstream changes by merging HEAD from the base branch into the pull request branch.
         
@@ -26020,6 +27163,7 @@ The `position` value equals the number of lines down from the first "@@" hunk he
         
         }
         
+
         
         r = self._session.put(f"{self._url}/repos/{owner}/{repo}/pulls/{pull_number}/update-branch", 
                           json=data,
@@ -26038,7 +27182,9 @@ The `position` value equals the number of lines down from the first "@@" hunk he
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /search/code
+    #
     def SearchCode(self, q:str, sort=None, direction='desc', per_page=30, page=1):
         """Searches for query terms inside of a file. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26107,7 +27253,9 @@ language:go`](https://github.com/search?utf8=%E2%9C%93&q=amazing+language%3Ago&t
             
         
         return UnexpectedResult(r)
+    #
     # get /search/commits
+    #
     def SearchCommits(self, q:str, sort=None, direction='desc', per_page=30, page=1):
         """Find commits via various criteria on the default branch (usually `master`). This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26157,7 +27305,9 @@ For example, if you want to find commits related to CSS in the [octocat/Spoon-Kn
             
         
         return UnexpectedResult(r)
+    #
     # get /search/issues
+    #
     def SearchIssuesAndPullRequests(self, q:str, sort=None, direction='desc', per_page=30, page=1):
         """Find issues by state and keyword. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26220,7 +27370,9 @@ This query searches for the keyword `windows`, within any open issue that is lab
             
         
         return UnexpectedResult(r)
+    #
     # get /search/labels
+    #
     def SearchLabels(self, repository_id:int, q:str, sort='created', direction='desc', per_page=30, page=1):
         """Find labels in a repository with names or descriptions that match search keywords. Returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26283,7 +27435,9 @@ The labels that best match the query appear first in the search results.
             
         
         return UnexpectedResult(r)
+    #
     # get /search/repositories
+    #
     def SearchRepos(self, q:str, sort=None, direction='desc', per_page=30, page=1):
         """Find repositories via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26340,7 +27494,9 @@ This query searches for repositories with the word `tetris` in the name, the des
             
         
         return UnexpectedResult(r)
+    #
     # get /search/topics
+    #
     def SearchTopics(self, q:str, per_page=30, page=1):
         """Find topics via various criteria. Results are sorted by best match. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination). See "[Searching topics](https://help.github.com/articles/searching-topics/)" for a detailed list of qualifiers.
 
@@ -26385,7 +27541,9 @@ This query searches for topics with the keyword `ruby` and limits the results to
             
         
         return UnexpectedResult(r)
+    #
     # get /search/users
+    #
     def SearchUsers(self, q:str, sort=None, direction='desc', per_page=30, page=1):
         """Find users via various criteria. This method returns up to 100 results [per page](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#pagination).
 
@@ -26442,7 +27600,9 @@ This query searches for users with the name `tom`. The results are restricted to
             
         
         return UnexpectedResult(r)
+    #
     # get /user
+    #
     def UsersGetAuthenticated(self, ):
         """If the authenticated user is authenticated through basic authentication or OAuth with the `user` scope, then the response lists public and private profile information.
 
@@ -26478,7 +27638,7 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
-    # patch /user
+
     def UsersUpdateAuthenticated(self, name:str=None, email:str=None, blog:str=None, twitter_username:str=None, company:str=None, location:str=None, hireable:bool=None, bio:str=None):
         """**Note:** If your email is set to private and you send an `email` parameter as part of this request to update your profile, your privacy settings are still enforced: the email address will not be displayed on your public profile or via the API.
         
@@ -26510,6 +27670,7 @@ If the authenticated user is authenticated through OAuth without the `user` scop
         
         }
         
+
         
         r = self._session.patch(f"{self._url}/user", 
                           json=data,
@@ -26537,7 +27698,9 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /user/emails
+    #
     def UsersListEmailsForAuthenticatedUser(self, per_page=30, page=1):
         """Lists all of your email addresses, and specifies which one is visible to the public. This endpoint is accessible with the `user:email` scope.
         
@@ -26580,7 +27743,7 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
-    # post /user/emails
+
     def UsersAddEmailForAuthenticatedUser(self, object:object):
         """This endpoint is accessible with the `user` scope.
         
@@ -26598,6 +27761,7 @@ If the authenticated user is authenticated through OAuth without the `user` scop
         
         }
         
+
         
         r = self._session.post(f"{self._url}/user/emails", 
                           json=data,
@@ -26625,7 +27789,9 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /user/emails
+    #
     def UsersDeleteEmailForAuthenticatedUser(self, ):
         """This endpoint is accessible with the `user` scope.
         
@@ -26665,7 +27831,9 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
+    #
     # get /user/followers
+    #
     def UsersListFollowersForAuthenticatedUser(self, per_page=30, page=1):
         """Lists the people following the authenticated user.
         
@@ -26705,7 +27873,9 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
+    #
     # get /user/following
+    #
     def UsersListFollowedByAuthenticatedUser(self, per_page=30, page=1):
         """Lists the people who the authenticated user follows.
         
@@ -26745,7 +27915,9 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
+    #
     # get /user/following/{username}
+    #
     def UsersCheckPersonIsFollowedByAuthenticated(self, username:str):
         """
         
@@ -26783,7 +27955,7 @@ If the authenticated user is authenticated through OAuth without the `user` scop
             
         
         return UnexpectedResult(r)
-    # put /user/following/{username}
+
     def UsersFollow(self, username:str):
         """Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP verbs](https://docs.github.com/enterprise-server@3.3/rest/overview/resources-in-the-rest-api#http-verbs)."
 
@@ -26802,6 +27974,7 @@ Following a user requires the user to be logged in and authenticated with basic 
         
         }
         
+
         
         r = self._session.put(f"{self._url}/user/following/{username}", 
                           json=data,
@@ -26826,7 +27999,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # delete /user/following/{username}
+    #
     def UsersUnfollow(self, username:str):
         """Unfollowing a user requires the user to be logged in and authenticated with basic auth or OAuth with the `user:follow` scope.
         
@@ -26864,7 +28039,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/gpg_keys
+    #
     def UsersListGpgKeysForAuthenticatedUser(self, per_page=30, page=1):
         """Lists the current user's GPG keys. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -26907,7 +28084,7 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
-    # post /user/gpg_keys
+
     def UsersCreateGpgKeyForAuthenticatedUser(self, armored_public_key:str):
         """Adds a GPG key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:gpg_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -26925,6 +28102,7 @@ Following a user requires the user to be logged in and authenticated with basic 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/user/gpg_keys", 
                           json=data,
@@ -26952,7 +28130,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /user/gpg_keys/{gpg_key_id}
+    #
     def UsersGetGpgKeyForAuthenticatedUser(self, gpg_key_id:int):
         """View extended details for a single GPG key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:gpg_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -26990,7 +28170,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # delete /user/gpg_keys/{gpg_key_id}
+    #
     def UsersDeleteGpgKeyForAuthenticatedUser(self, gpg_key_id:int):
         """Removes a GPG key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:gpg_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -27031,7 +28213,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/keys
+    #
     def UsersListPublicSshKeysForAuthenticatedUser(self, per_page=30, page=1):
         """Lists the public SSH keys for the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -27074,7 +28258,7 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
-    # post /user/keys
+
     def UsersCreatePublicSshKeyForAuthenticatedUser(self, key:str, title:str=None):
         """Adds a public SSH key to the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth, or OAuth with at least `write:public_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -27094,6 +28278,7 @@ Following a user requires the user to be logged in and authenticated with basic 
         
         }
         
+
         
         r = self._session.post(f"{self._url}/user/keys", 
                           json=data,
@@ -27121,7 +28306,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
 
         return UnexpectedResult(r.status_code)
+    #
     # get /user/keys/{key_id}
+    #
     def UsersGetPublicSshKeyForAuthenticatedUser(self, key_id:int):
         """View extended details for a single public SSH key. Requires that you are authenticated via Basic Auth or via OAuth with at least `read:public_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -27159,7 +28346,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # delete /user/keys/{key_id}
+    #
     def UsersDeletePublicSshKeyForAuthenticatedUser(self, key_id:int):
         """Removes a public SSH key from the authenticated user's GitHub account. Requires that you are authenticated via Basic Auth or via OAuth with at least `admin:public_key` [scope](https://docs.github.com/enterprise-server@3.3/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/).
         
@@ -27197,7 +28386,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # get /user/public_emails
+    #
     def UsersListPublicEmailsForAuthenticatedUser(self, per_page=30, page=1):
         """Lists your publicly visible email address, which you can set with the [Set primary email visibility for the authenticated user](https://docs.github.com/enterprise-server@3.3/rest/reference/users#set-primary-email-visibility-for-the-authenticated-user) endpoint. This endpoint is accessible with the `user:email` scope.
         
@@ -27240,7 +28431,9 @@ Following a user requires the user to be logged in and authenticated with basic 
             
         
         return UnexpectedResult(r)
+    #
     # get /users
+    #
     def UsersList(self, since:int=None, per_page=30):
         """Lists all users, in the order that they signed up on GitHub Enterprise Server. This list includes personal user accounts and organization accounts.
 
@@ -27276,7 +28469,9 @@ Note: Pagination is powered exclusively by the `since` parameter. Use the [Link 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}
+    #
     def UsersGetByUsername(self, username:str):
         """Provides publicly available information about someone with a GitHub account.
 
@@ -27311,7 +28506,9 @@ The Emails API enables you to list all of your email addresses, and toggle a pri
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/followers
+    #
     def UsersListFollowersForUser(self, username:str,per_page=30, page=1):
         """Lists the people following the specified user.
         
@@ -27343,7 +28540,9 @@ The Emails API enables you to list all of your email addresses, and toggle a pri
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/following
+    #
     def UsersListFollowingForUser(self, username:str,per_page=30, page=1):
         """Lists the people who the specified user follows.
         
@@ -27375,7 +28574,9 @@ The Emails API enables you to list all of your email addresses, and toggle a pri
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/following/{target_user}
+    #
     def UsersCheckFollowingForUser(self, username:str, target_user:str):
         """
         
@@ -27405,7 +28606,9 @@ The Emails API enables you to list all of your email addresses, and toggle a pri
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/gpg_keys
+    #
     def UsersListGpgKeysForUser(self, username:str,per_page=30, page=1):
         """Lists the GPG keys for a user. This information is accessible by anyone.
         
@@ -27437,7 +28640,9 @@ The Emails API enables you to list all of your email addresses, and toggle a pri
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/hovercard
+    #
     def UsersGetContextForUser(self, username:str,subject_type=None, subject_id:str=None):
         """Provides hovercard information when authenticated through basic auth or OAuth with the `repo` scope. You can find out more about someone in relation to their pull requests, issues, repositories, and organizations.
 
@@ -27482,7 +28687,9 @@ The `subject_type` and `subject_id` parameters provide context for the person's 
             
         
         return UnexpectedResult(r)
+    #
     # get /users/{username}/keys
+    #
     def UsersListPublicKeysForUser(self, username:str,per_page=30, page=1):
         """Lists the _verified_ public SSH keys for a user. This is accessible by anyone.
         

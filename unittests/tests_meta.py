@@ -2,6 +2,7 @@
 import os
 import random
 import unittest
+import datetime
 from githubpy import *
 
 class MetaTests(unittest.TestCase):
@@ -46,6 +47,15 @@ class MetaTests(unittest.TestCase):
         
         return
     
+    def test_emojis(self):
+        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        
+        resp = ghc.EmojisGet()
+        
+        self.assertIsInstance(resp, dict)
+        
+        return
+    
     def test_ratelimits(self):
         
         ##
@@ -59,7 +69,7 @@ class MetaTests(unittest.TestCase):
         rl = ghc.RateLimitGet()
         
         self.assertLessEqual(ghc.rateLimitRemaining, rl.rate.remaining)
-        self.assertEqual(datetime.fromtimestamp(rl.rate.reset), ghc.rateLimitReset)
+        self.assertEqual(datetime.datetime.fromtimestamp(rl.rate.reset), ghc.rateLimitReset)
         
         ghc.MetaGetOctocat("foo")
         

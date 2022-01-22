@@ -2,7 +2,8 @@
 |File   | Purpose|
 | ----- | ------ |
 |octocat.py| Renders the github mascot as ascii art with a custom message|
-|artifactcleaner.py|PyQt5 GUI tool that scans your repos for artifacts and deletes them.   Handy for keeping your storage costs down|
+|artifactcleaner.py|PyQt5 GUI tool that scans your repos for artifacts and lists them for possible deletion.<BR><BR>Handy for keeping your storage costs down|
+|workflow_list.py | simple list of workflows|
 
 
 # Artifact Cleaner

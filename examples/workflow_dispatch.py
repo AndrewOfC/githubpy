@@ -1,5 +1,5 @@
 
-
+import sys
 from githubpy import *
 
 
@@ -12,7 +12,8 @@ def main():
     parser.add_argument("-o", "--owner")
     parser.add_argument("-r", "--repo")
     parser.add_argument("-w", "--workflow", action='append', default=[])
-    parser.add_argument("-b", "--branch", help="Branch or tag")
+    parser.add_argument("-b", "--branch", default='master', help="Branch or tag")
+    parser.add_argument("-v", "--verbose", action='store_true')
     
     options = parser.parse_args()
     
@@ -23,9 +24,11 @@ def main():
                                                options.workflow[0], 
                                                options.branch, inputs={})
     if not isinstance(result, HttpResponse) and result.status_code != 204:
-        print("ERROR: {result.message}")
+        print(f"ERROR: {result.message}")
+        sys.exit(2)
         
-    
+    if options.verbose:
+        print(f"# workflow {options.workflow[0]} on {options.branch} launched successfully")
     
     
     return

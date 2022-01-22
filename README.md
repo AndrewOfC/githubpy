@@ -63,6 +63,10 @@ print(f"rate-limit remaining={ghc.rateLimitRemaining}")
 rate-limit remaining=4998
 ```
 
+# GitHubClient Methods
+
+[GitHubClient Methods](docs/githubclient_methods.md)
+
 # Pagination
 
 Many of github's api calls return a collection of results as a list. For example:
