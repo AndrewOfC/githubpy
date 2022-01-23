@@ -63,7 +63,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUBPYTEST_ACCT_TOKEN }}
         run: python -m unittest -v
 
-  Ubuntu_py3-10:
+  Ubuntu_py3-9:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -71,13 +71,15 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: "3.9"
       - uses: syphar/restore-virtualenv@v1
       - name: Build
         run: |
+          which pip
+          which python
+          python --version
           pip install --upgrade pip
           pip install --use-feature=in-tree-build .
-          python --version
       - name: Test
         working-directory: unittests
         env:
@@ -114,7 +116,7 @@ jobs:
           python-version: "3.10"
       - uses: syphar/restore-virtualenv@v1
       - name: Build
-        run: |
+        run: |          
           pip install --upgrade pip
           pip install --use-feature=in-tree-build .
           python --version
@@ -130,7 +132,7 @@ jobs:
       - Ubuntu_py3-6
       - MacOSX_py3-6
       - Windows_py3-6
-      - Ubuntu_py3-10
+      - Ubuntu_py3-9
       - MacOSX_py3-10
       - Windows_py3-10
     steps:

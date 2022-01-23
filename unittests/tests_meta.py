@@ -1,15 +1,11 @@
 
 import os
-import random
 import unittest
 import datetime
+from testutils import randstring
 from githubpy import *
 
 class MetaTests(unittest.TestCase):
-    @staticmethod
-    def randstring(n=10, seed="abcdefghijklmnopqrtstuvwxyzABCDEFGHIJKLMNOPQRTSTUVWXYZ"):
-        "Generate a random string"
-        return ''.join(random.choices(seed, k=n))
     
     def test_metaRoot(self):
         ghc = GitHubClient()
@@ -28,11 +24,11 @@ class MetaTests(unittest.TestCase):
         self.assertIsNotNone(coc)
         
     
-    def test_octocat(self):
+    def octocat_test(self, token):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=token)
         
-        text = MetaTests.randstring()
+        text = randstring()
         
         ascii_art = ghc.MetaGetOctocat(text)
         
@@ -44,8 +40,14 @@ class MetaTests(unittest.TestCase):
         
         self.assertNotEqual(index, -1, "Could not find text that was to be rendered")
         
-        
         return
+    
+    def test_octocat(self):
+        self.octocat_test(os.environ['GITHUB_TOKEN'])
+    
+    def test_callableToken(self):
+        self.octocat_test(lambda: os.environ['GITHUB_TOKEN'])
+    
     
     def test_emojis(self):
         ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])

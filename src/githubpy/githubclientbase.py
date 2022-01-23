@@ -1,8 +1,6 @@
 
 
-import requests, sys
-from datetime import datetime, time
-
+import sys, requests, datetime
 class GitHubClientBase(object):
     
     
@@ -13,6 +11,7 @@ class GitHubClientBase(object):
         self._password = password
         self._token = token
         self._url = url
+        self._graphql_url = "https://api.github.com/graphql"
         self._rateLimitRemaining = None
         self._rateLimitReset = None
         
@@ -35,7 +34,7 @@ class GitHubClientBase(object):
         self._session = requests.session()
         
     def _requests_kwargs(self, additionHeaders=dict()):
-        r_kwargs = { 'headers': {} }
+        r_kwargs = { 'headers': { 'Accept': 'application/vnd.github.v3+json'  } }
         r_kwargs['headers'].update(additionHeaders)
         if( self._token ):
             if callable(self._token):
@@ -73,7 +72,7 @@ class GitHubClientBase(object):
     ##
     ##
     def _getrateLimitReset(self):
-        return datetime.fromtimestamp(int(self._rateLimitReset))
+        return datetime.datetime.fromtimestamp(int(self._rateLimitReset))
   
     rateLimitReset = property(_getrateLimitReset, doc="get local time when rate limit will reset")
     

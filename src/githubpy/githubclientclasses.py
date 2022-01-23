@@ -2149,6 +2149,9 @@ class BasicError(ResponseBase):
 
     ok = property(_ok, doc='not ok')
 
+    def __repr__(self):
+        return f"BasicError({self.status_code}, \"{self.message}\")"
+
 ##
 ##
 ##

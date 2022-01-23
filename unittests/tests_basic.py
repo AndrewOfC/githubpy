@@ -3,12 +3,14 @@ import sys, os
 import unittest
 import datetime
 
+from testutils import PlatformString
+
 from githubpy import *
 
 class BasicTests(unittest.TestCase):
     
     def test_create_delete_repo(self):
-        reponame = f'foobar-py{sys.version_info.major}.{sys.version_info.minor}-{sys.platform}'
+        reponame = f'foobar-py-{PlatformString()}'
         ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
         
         result = ghc.ReposDelete("GitHubPyTest", reponame)
