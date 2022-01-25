@@ -39,8 +39,11 @@ class IssueTests(unittest.TestCase):
     def test001_validatesetup(self):
         
         self.assertTrue(self._setupResp.ok)
-        self.assertIsInstance(self._setupResp, githubpy.Issue)        
+        self.assertIsInstance(self._setupResp, githubpy.Issue)  
         
+        print("##")
+        print(f"## Created issue #{self._setupResp.number} {self._setupResp.node_id}")
+        print("##")
         return  
     
     def test002_IssuesGet(self):
