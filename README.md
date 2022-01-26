@@ -130,7 +130,11 @@ for repo in GitHubClient.generate(ghc.ReposListForAuthenticatedUser, type=None):
     print(f"{repo.name}")
 ```
 
+# Quick Rate Limit Check:
 
+```bash
+python -c "import githubpy ;  print(githubpy.GitHubClient(token='_token_').RateLimitGet().rate.remaining)"
+```
 
 # Troubleshooting
 ## Intellisense not working in WingIDE
