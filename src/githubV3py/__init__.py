@@ -1,5 +1,5 @@
 
-__version__="0.0.1a4"
+__version__="0.0.0"
 
 from .githubclient import GitHubClient, GitHubClientBase
 from .githubclientclasses import *
