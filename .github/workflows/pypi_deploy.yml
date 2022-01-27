@@ -1,3 +1,24 @@
+##
+## Copyright (c) 2022 Andrew E Page
+## 
+## Permission is hereby granted, free of charge, to any person obtaining a copy
+## of this software and associated documentation files (the "Software"), to deal
+## in the Software without restriction, including without limitation the rights
+## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+## copies of the Software, and to permit persons to whom the Software is
+## furnished to do so, subject to the following conditions:
+## 
+## The above copyright notice and this permission notice shall be included in all
+## copies or substantial portions of the Software.
+## 
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+## EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+## MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+## IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+## DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+## OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+## OR OTHER DEALINGS IN THE SOFTWARE.
+##
 name: PyPi Deploy
 on:
   workflow_dispatch:
@@ -35,23 +56,23 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
-      - name: tagging
+      - name: versioning
         run: |
                 git config user.name github-actions
                 git config user.email github-actions@github.com
                 echo "Tagging version ${{ github.event.inputs.versionNumber }}"
                 mv src/githubV3py/__init__.py src/githubV3py/__init__.py.bak
                 cat src/githubV3py/__init__.py.bak | sed -e "s/__version__ *= *\"[^\"]*\"/__version__=\"${{ github.event.inputs.versionNumber }}\"/" > src/githubV3py/__init__.py
-                git commit -a -m "CI Build of ${{ github.event.inputs.versionNumber }}"
-                git push
-                git tag ${{ github.event.inputs.versionNumber }}
-                git push --tags
 
       - name: pip
         run: |
           pip install --upgrade build twine
       - name: build
         run: python3 -m build --wheel
+      - name: tagging
+        run: |
+          git tag ${{ github.event.inputs.versionNumber }}
+          git push --tags
       - name: upload
         uses: actions/upload-artifact@v2
         with:
@@ -59,6 +80,6 @@ jobs:
           path: |
             dist/githubV3py-*
           retention-days: 1
-      - name: test.pypi
+      - name: pypi
         run: |
           echo -e "__token__\n${{ secrets.PYPI_TOKEN }}" | python3 -m twine upload dist/*
