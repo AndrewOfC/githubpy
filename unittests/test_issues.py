@@ -3,7 +3,7 @@
 import sys, os
 import unittest
 import datetime
-import githubpy 
+import githubV3py 
 
 from operator import attrgetter
 
@@ -15,7 +15,7 @@ class IssueTests(unittest.TestCase):
     
     @classmethod
     def setUpClass(clazz):
-        ghc = clazz._ghc = githubpy.GitHubClient(token=os.environ['GITHUB_TOKEN'], usesession=True)
+        ghc = clazz._ghc = githubV3py.GitHubClient(token=os.environ['GITHUB_TOKEN'], usesession=True)
     
         
         t = datetime.datetime.now()
@@ -39,7 +39,7 @@ class IssueTests(unittest.TestCase):
     def test001_validatesetup(self):
         
         self.assertTrue(self._setupResp.ok)
-        self.assertIsInstance(self._setupResp, githubpy.Issue)        
+        self.assertIsInstance(self._setupResp, githubV3py.Issue)        
         
         return  
     
@@ -51,7 +51,7 @@ class IssueTests(unittest.TestCase):
         
         nissue = ghc.IssuesGet(self.owner, self.repo, issue.number)
         
-        self.assertIsInstance(nissue, githubpy.Issue)
+        self.assertIsInstance(nissue, githubV3py.Issue)
         
         self.assertEqual(issue.node_id, nissue.node_id) 
         
@@ -64,7 +64,7 @@ class IssueTests(unittest.TestCase):
         resp = ghc.IssuesCreateComment(self.owner, self.repo, issue.number, comment)
         
         self.assertTrue(resp.ok)
-        self.assertIsInstance(resp, githubpy.IssueComment)
+        self.assertIsInstance(resp, githubV3py.IssueComment)
         
         nresp = ghc.IssuesGetComment(self.owner, self.repo, resp.id)
         
@@ -91,7 +91,7 @@ class IssueTests(unittest.TestCase):
                 
         ghc = self._ghc
         resp = self._setupResp
-        isinstance(ghc, githubpy.GitHubClient)
+        isinstance(ghc, githubV3py.GitHubClient)
         nresp = ghc.IssuesAddAssignees('GitHubPyTest', 'actiontesting', resp.number, assignees)
         
         self.assertTrue(nresp.ok)

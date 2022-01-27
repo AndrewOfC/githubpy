@@ -14,31 +14,55 @@ on:
 
 jobs:
   BuildAndTest:
+    if: github.event.inputs.RunBuildAndTest == true
     uses: ./.github/workflows/build_and_test.yml
     secrets:
       GITHUBPYTEST_ACCT_TOKEN: ${{ secrets.GITHUBPYTEST_ACCT_TOKEN }}
+    if: github.event.inputs.RunBuildAndTest == false
+    steps:
+      run: echo "Build and Test skipped"
 
   Dist:
     needs: [ BuildAndTest ]
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Check out repository SHA
+        if: github.event.inputs.SHA != 'HEAD'
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.inputs.SHA }}
+          fetch-depth: 0
+      - name: Check out repository HEAD
+        if: github.event.inputs.SHA == 'HEAD'
         uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
+      - name: tagging
+        run: |
+                git config user.name github-actions
+                git config user.email github-actions@github.com
+                echo "Tagging version ${{ github.event.inputs.versionNumber }}"
+                mv src/githubV3py/__init__.py src/githubV3py/__init__.py.bak
+                cat src/githubV3py/__init__.py.bak | sed -e "s/__version__ *= *\"[^\"]*\"/__version__=\"${{ github.event.inputs.versionNumber }}\"/" > src/githubV3py/__init__.py
+                git commit -a -m "CI Build of ${{ github.event.inputs.versionNumber }}"
+                git push
+                git tag ${{ github.event.inputs.versionNumber }}
+                git push --tags
+
       - name: pip
         run: |
-          pip install --upgrade build
-          pip install --upgrade twine
+          pip install --upgrade build twine
       - name: build
-        run: python3 -m build
+        run: python3 -m build --wheel
       - name: upload
         uses: actions/upload-artifact@v2
         with:
           name: dist
           path: |
-            dist/githubpy-${{ github.event.inputs.versionNumber }}-py3-none-any.whl
-            dist/githubpy-${{ github.event.inputs.versionNumber }}.tar.gz
+            dist/githubV3py-*
           retention-days: 1
+      - name: test.pypi
+        run: |
+          echo -e "__token__\n${{ secrets.PYPI_TOKEN }}" | python3 -m twine upload dist/*

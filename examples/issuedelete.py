@@ -1,6 +1,6 @@
 
 
-import requests, githubpy, datetime, operator
+import requests, githubV3py, datetime, operator
 import jinja2
 
 
@@ -13,7 +13,7 @@ def main():
     
     options = parser.parse_args()
     
-    ghc = githubpy.GitHubClient(token=options.token)
+    ghc = githubV3py.GitHubClient(token=options.token)
     
     # r = ghc.MetaGetOctocat("foo")
     

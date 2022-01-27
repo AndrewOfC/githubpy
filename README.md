@@ -133,11 +133,11 @@ for repo in GitHubClient.generate(ghc.ReposListForAuthenticatedUser, type=None):
 # Quick Rate Limit Check:
 
 ```bash
-python -c "import githubpy ;  print(githubpy.GitHubClient(token='_token_').RateLimitGet().rate.remaining)"
+python -c "import githubV3py ;  print(githubV3py.GitHubClient(token='_token_').RateLimitGet().rate.remaining)"
 ```
 
 # Troubleshooting
 ## Intellisense not working in WingIDE
-In order for intellisense to work under WingIDE, the 'main entry point' must import the githubpy package or import another package/module that does.   
+In order for intellisense to work under WingIDE, the 'main entry point' must import the githubV3py package or import another package/module that does.   
 ### Corrective Action:
 right click the file you wish to execute in the 'Project' tab/tool and select "Set as Main Entry Point".

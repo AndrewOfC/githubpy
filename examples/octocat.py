@@ -2,7 +2,7 @@
 import sys
 import argparse
 
-from githubpy import *
+from githubV3py import *
 
 
 def main():

@@ -7,8 +7,8 @@ from PyQt5 import QtGui
 from datetime import datetime
 from operator import attrgetter
 
-import githubpy
-from githubpy import GitHubClient, Artifact
+import githubV3py
+from githubV3py import GitHubClient, Artifact
     
     
 def SizeStr(size):
@@ -266,7 +266,7 @@ class ArtifactWindow(object):
         ghc = GitHubClient(token=self._token, usesession=True)
         for reponame, artifact in toDelete:
             result = ghc.ActionsDeleteArtifact(self._owner, reponame, artifact.id)
-            assert(isinstance(result, githubpy.HttpResponse))
+            assert(isinstance(result, githubV3py.HttpResponse))
         
         
         

@@ -2,7 +2,7 @@
 import sys
 import csv
 
-from githubpy import GitHubClient, Issue 
+from githubV3py import GitHubClient, Issue 
 
 def main():
     import argparse

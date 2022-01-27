@@ -1,6 +1,6 @@
 
 import sys
-from githubpy import *
+from githubV3py import *
 
 
 def main():

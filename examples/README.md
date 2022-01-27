@@ -9,6 +9,12 @@
 
 # Artifact Cleaner
 
+Note:  you will needed to have PyQt5 installed:
+
+```bash
+pip install PyQt5
+```
+
 Usage:
 ```bash
 python3 --owner <owner> --token <GITHUB_TOKEN>

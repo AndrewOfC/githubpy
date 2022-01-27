@@ -3,7 +3,7 @@ import os
 import unittest
 import datetime
 from testutils import randstring
-from githubpy import *
+from githubV3py import *
 
 class MetaTests(unittest.TestCase):
     

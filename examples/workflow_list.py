@@ -1,7 +1,7 @@
 
 from operator import attrgetter
 
-from githubpy import GitHubClient
+from githubV3py import GitHubClient
 
 
 def main():

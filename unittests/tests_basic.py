@@ -5,7 +5,7 @@ import datetime
 
 from testutils import PlatformString
 
-from githubpy import *
+from githubV3py import *
 
 class BasicTests(unittest.TestCase):
     
