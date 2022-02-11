@@ -130,4 +130,18 @@ class BasicTests(unittest.TestCase):
         self.assertAlmostEqual(result.status_code, 204)
         
         
- 
+    def test_workflow_artifacts_pw(self):
+        
+        ghc = GitHubClient('GitHubPyTest', os.environ['GITHUBPYTEST_PASSWORD'])
+        
+        # launch a workflow
+        
+        result = ghc.ActionsCreateWorkflowDispatch('GitHubPyTest', 
+                                               'actiontesting', 
+                                               'simple_action.yml', 
+                                               'Dev', inputs={})
+        
+        self.assertIsInstance(result, HttpResponse)
+        self.assertEqual(result.status_code, 204)
+        
+        

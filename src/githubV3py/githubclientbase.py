@@ -42,7 +42,7 @@ class GitHubClientBase(object):
             else:
                 r_kwargs['headers']["Authorization"] = f"token {self._token}"
         elif self._username:
-            r_kwargs['auth'] = (self._username, self._password)
+            r_kwargs['auth'] = requests.auth.HTTPBasicAuth(self._username, self._password)
         
         
         return r_kwargs

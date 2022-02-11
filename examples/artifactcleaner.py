@@ -116,7 +116,7 @@ class AritfactThread(QThread):
         self._mutex.unlock()
 
 class ArtifactWindow(object):
-    def __init__(self, token, owner, geometry=(500, 100, 600, 600)):
+    def __init__(self, token, owner, username, password, geometry=(500, 100, 600, 600)):
         self._owner = owner
         self._token = token
         self._artifacts = []
@@ -143,7 +143,20 @@ class ArtifactWindow(object):
         
         self._deleteAction = tb.addAction(QtGui.QIcon("data/icon+x+icon-1320183702540076171_64.png"), "Delete Check Items")
         self._deleteAction.triggered.connect(self._delete_artifacts)
-    
+        
+        tb.addSeparator()
+        
+        tb.addWidget(QLabel("username:"))
+        self._usernameInput = QLineEdit(text=username)
+        tb.addWidget(self._usernameInput)
+        
+        tb.addWidget(QLabel("password:"))
+        self._passwordInput = QLineEdit(text=password, echoMode=QLineEdit.Password)
+        tb.addWidget(self._passwordInput)
+        
+        tb.addWidget(QLabel("token:"))
+        self._tokenInput = QLineEdit(text=token, echoMode=QLineEdit.Password)
+        tb.addWidget(self._tokenInput)        
     
         table = self._table = QTableWidget()
         table.setColumnCount(6)
@@ -250,6 +263,15 @@ class ArtifactWindow(object):
         return
         
     def _fetch_artifacts(self):
+        
+        username = self._usernameInput.text()
+        password = self._passwordInput.text()
+        token    = self._tokenInput.text()
+        
+        if not (token or (username and password)):
+            QMessageBox.information(self._usernameInput, "Credentials", "Need to specify token or username and password")
+            return
+        
         self._fetchAction.setEnabled(False)
         self._stopAction.setEnabled(True)
         self._artifacts.clear()
@@ -305,6 +327,8 @@ def main():
     
     parser.add_argument("-o", "--owner")
     parser.add_argument("-t", "--token")
+    parser.add_argument("-u", "--username")
+    parser.add_argument("-p", "--password")
     
     options = parser.parse_args()
     
@@ -320,7 +344,9 @@ def main():
                 w, h)
 
     
-    AW = ArtifactWindow(token=options.token, owner=options.owner, geometry=geometry)
+    AW = ArtifactWindow(token=options.token, owner=options.owner, 
+                        username=options.username, password=options.password,
+                        geometry=geometry)
     AW.show()
     sys.exit(app.exec_())
     
