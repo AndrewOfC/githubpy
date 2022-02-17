@@ -19,10 +19,6 @@ Usage:
 ```bash
 python3 --owner <owner> --token <GITHUB_TOKEN>
 ```
-Or:
-```bash
-python3 --owner <owner> --username --password
-```
 
 ![](images/artifactcleaner.png)
 
