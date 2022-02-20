@@ -7,3 +7,4 @@
 ./actiontesting
 /actiontesting
 /dist
+/src/githubV3py/__pycache__
