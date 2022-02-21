@@ -25,6 +25,7 @@ import sys, os
 import unittest
 import datetime
 import githubV3py 
+import time
 
 from operator import attrgetter
 
@@ -117,10 +118,25 @@ class IssueTests(unittest.TestCase):
         
         self.assertTrue(nresp.ok)
         
+        ##
+        ## we get occasional failures that typically pass when the
+        ## test is re-run.  It's possible that the upstream database
+        ## is adding the assignees in discreet inserts as opposed
+        ## to a 'batch'.   As such we may be querying too quickly.
+        ## we'll make two other attempts but if this doesn't resolve
+        ## the issue something else will have to be investigated
+        ##
+        for attempt in range(3):
+            nresp = ghc.IssuesGet('GitHubPyTest', 'actiontesting', resp.number)
+            s1 = set(assignees)
+            s2 = set(map(attrgetter('login'), nresp.assignees))
+            if s1 == s2:
+                break
+            time.sleep(1)
+            
         
-        nresp = ghc.IssuesGet('GitHubPyTest', 'actiontesting', resp.number)
-        
-        s1 = set(assignees)
-        s2 = set(map(attrgetter('login'), nresp.assignees))
         
         self.assertEqual(s1,s2)
+        if attempt > 0:
+            print("NOTE: test004_addAssignees passed after {attempt+1} attempts")
+        
