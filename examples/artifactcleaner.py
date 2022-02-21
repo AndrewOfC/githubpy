@@ -110,15 +110,15 @@ class AritfactThread(QThread):
         self._mutex.unlock()
         
     @pyqtSlot()
-    def fetchartifacts(self):        
+    def fetchartifacts(self, owner, token):   
+        self._owner = owner
+        self._token = token
         self._mutex.lock()
         self._cond.wakeAll()
         self._mutex.unlock()
 
 class ArtifactWindow(object):
     def __init__(self, token, owner, geometry=(500, 100, 600, 600)):
-        self._owner = owner
-        self._token = token
         self._artifacts = []
         self._thread = AritfactThread(owner, token)
         
@@ -146,6 +146,10 @@ class ArtifactWindow(object):
         
         tb.addSeparator()
         
+        tb.addWidget(QLabel("owner:"))
+        self._ownerInput = QLineEdit(text=owner)
+        tb.addWidget(self._ownerInput)        
+    
         tb.addWidget(QLabel("token:"))
         self._tokenInput = QLineEdit(text=token, echoMode=QLineEdit.Password)
         tb.addWidget(self._tokenInput)        
@@ -257,6 +261,7 @@ class ArtifactWindow(object):
     def _fetch_artifacts(self):
         
         token    = self._tokenInput.text()
+        owner    = self._ownerInput.text()
         
         if not token:
             QMessageBox.information(self._usernameInput, "Credentials", "Need to specify token")
@@ -273,10 +278,13 @@ class ArtifactWindow(object):
         self._tableIndex = 0
         self._totalSize = 0
         
-        self._thread.fetchartifacts()
+        self._thread.fetchartifacts(owner, token)
         
     
     def _delete_artifacts(self):
+        
+        owner = self._ownerInput.text()
+        token = self._tokenInput.text()
         
         col = 0
         n = 0
@@ -295,9 +303,9 @@ class ArtifactWindow(object):
         if result == QMessageBox.Cancel:
             return
         
-        ghc = GitHubClient(token=self._token, usesession=True)
+        ghc = GitHubClient(token=token, usesession=True)
         for reponame, artifact in toDelete:
-            result = ghc.ActionsDeleteArtifact(self._owner, reponame, artifact.id)
+            result = ghc.ActionsDeleteArtifact(owner, reponame, artifact.id)
             assert(isinstance(result, githubV3py.HttpResponse))
         
         

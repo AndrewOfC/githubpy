@@ -44,7 +44,7 @@ def main():
                                                options.repo, 
                                                options.workflow[0], 
                                                options.branch, inputs={})
-    if not isinstance(result, HttpResponse) and result.status_code != 204:
+    if not isinstance(result, HttpResponse) or result.status_code != 204:
         print(f"ERROR: {result.message}")
         sys.exit(2)
         
