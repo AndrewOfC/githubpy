@@ -71,7 +71,14 @@ class IssueTests(unittest.TestCase):
         ghc = self._ghc
         issue = self._setupResp
         
-        nissue = ghc.IssuesGet(self.owner, self.repo, issue.number)
+        for attempt in range(3):
+        
+            nissue = ghc.IssuesGet(self.owner, self.repo, issue.number)
+            if isinstance(nissue, githubV3py.Issue):
+                break
+            time.sleep(1)
+        
+        print("{attempt+1} attempts")
         
         self.assertIsInstance(nissue, githubV3py.Issue)
         
