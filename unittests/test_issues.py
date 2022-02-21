@@ -78,7 +78,8 @@ class IssueTests(unittest.TestCase):
                 break
             time.sleep(1)
         
-        print(f"test002_IssuesGet {attempt+1} attempts")
+        if attempt > 0:          
+            print(f"test002_IssuesGet {attempt+1} attempts")
         
         self.assertIsInstance(nissue, githubV3py.Issue)
         
