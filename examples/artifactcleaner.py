@@ -20,7 +20,7 @@
 ## OR OTHER DEALINGS IN THE SOFTWARE.
 ##
 
-import sys
+import sys, os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QThread, QMutex, QWaitCondition, pyqtSignal, pyqtSlot, Qt
 from PyQt5 import QtGui
@@ -130,18 +130,20 @@ class ArtifactWindow(object):
         self._mainw = mainW = QMainWindow()
         mainW.setWindowTitle("Artifact Cleaner")
             
+        baseDir = os.path.dirname(__file__)
+            
         menuBar = mainW.menuBar()
         
         tb = mainW.addToolBar("")
-        self._fetchAction = fetchAction = tb.addAction(QtGui.QIcon("data/refresh+icon-1320183705440102854_64.png"), "Fetch Artifacts")
+        self._fetchAction = fetchAction = tb.addAction(QtGui.QIcon(os.path.join(baseDir, "data/refresh+icon-1320183705440102854_64.png")), "Fetch Artifacts")
         fetchAction.triggered.connect(self._fetch_artifacts)
         
         
-        self._stopAction = tb.addAction(QtGui.QIcon("data/stop64x64.png"), "Stop Fetch")
+        self._stopAction = tb.addAction(QtGui.QIcon(os.path.join(baseDir, "data/stop64x64.png")), "Stop Fetch")
         self._stopAction.triggered.connect(self._stopFetch)
         self._stopAction.setEnabled(False)
         
-        self._deleteAction = tb.addAction(QtGui.QIcon("data/icon+x+icon-1320183702540076171_64.png"), "Delete Check Items")
+        self._deleteAction = tb.addAction(QtGui.QIcon(os.path.join(baseDir, "data/icon+x+icon-1320183702540076171_64.png")), "Delete Check Items")
         self._deleteAction.triggered.connect(self._delete_artifacts)
         
         tb.addSeparator()
@@ -264,7 +266,7 @@ class ArtifactWindow(object):
         owner    = self._ownerInput.text()
         
         if not token:
-            QMessageBox.information(self._usernameInput, "Credentials", "Need to specify token")
+            QMessageBox.information(self._tokenInput, "Credentials", "Need to specify token")
             return
         
         self._fetchAction.setEnabled(False)
