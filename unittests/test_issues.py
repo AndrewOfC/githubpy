@@ -78,7 +78,7 @@ class IssueTests(unittest.TestCase):
                 break
             time.sleep(1)
         
-        print("{attempt+1} attempts")
+        print(f"test002_IssuesGet {attempt+1} attempts")
         
         self.assertIsInstance(nissue, githubV3py.Issue)
         
@@ -145,5 +145,5 @@ class IssueTests(unittest.TestCase):
         
         self.assertEqual(s1,s2)
         if attempt > 0:
-            print("NOTE: test004_addAssignees passed after {attempt+1} attempts")
+            print(f"NOTE: test004_addAssignees passed after {attempt+1} attempts")
         
