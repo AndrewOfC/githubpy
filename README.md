@@ -128,6 +128,45 @@ for repo in GitHubClient.generate(ghc.ReposListForAuthenticatedUser, type=None):
     print(f"{repo.name}")
 ```
 
+# Downloads
+
+Several methods download data(Build Artifacts, Logs, tarballs).   The data can be downloaded in several ways:
+
+## Downloading all at once
+
+```python
+    data = ghc.ActionsDownloadArtifact(owner,
+                                       repository,
+                                       artifact_id, 'zip')
+    
+```
+
+## Downloading in chunks
+This is recommended for very large files.  Specify a 'chunk_size' to a size appropriate for your application.
+
+```python
+
+    out = open(fname, "wb")
+    for chunk in ghc.ActionsDownloadArtifact(owner,
+                                             repository,
+                                             artifact_id,
+                                             'zip', chunk_size=1024):
+      out.write(chunk)
+
+```
+
+## Download URL
+
+```python
+    url = ghc.ActionsDownloadArtifact(owner,
+                                      repsitory,
+                                      artifact_id,
+                                      'zip', fetch_url=True)
+        
+    url = urllib.parse.urlparse(url)
+
+```
+
 # Quick Rate Limit Check:
 
 ```bash
