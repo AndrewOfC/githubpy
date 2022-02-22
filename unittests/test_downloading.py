@@ -26,6 +26,7 @@ import datetime, time
 import io
 from zipfile import ZipFile
 import urllib
+from operator import attrgetter
 
 from testutils import PlatformString
 
@@ -37,30 +38,34 @@ class DownloadTests(unittest.TestCase):
   def setUpClass(clazz):
     ghc = clazz._ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'], usesession=True)
     # trigger a simple build    
-    
-    # -o AndrewOfC  -b bigbuild -w simple_action
-    
-    result = ghc.ActionsCreateWorkflowDispatch('AndrewOfC', 
-                                                 "github_simple_action", 
-                                                 'simple_action.yml', 
-                                                 'bigbuild', inputs={})
-    
-    
-    if not isinstance(result, HttpResponse) or result.status_code != 204:
-      raise RuntimeError("dispatch failed")
-    
+        
     now = datetime.datetime.now()
     timeout = now + datetime.timedelta(minutes=2)
     artifactReady = False
+    building = False
     
     while datetime.datetime.now() < timeout and not artifactReady:
       
       result = ghc.ActionsListArtifactsForRepo('AndrewOfC', 'github_simple_action')
       
-      if result.artifacts:
+      artifacts = list(filter(lambda e: not e.expired, result.artifacts))
+      
+      if artifacts:
         clazz.artifact_id = result.artifacts[0].id
         artifactReady = True
         break
+      elif not building:
+        building = True
+        result = ghc.ActionsCreateWorkflowDispatch('AndrewOfC', 
+                                                     "github_simple_action", 
+                                                     'simple_action.yml', 
+                                                     'master', inputs={})
+        
+        
+        if not isinstance(result, HttpResponse) or result.status_code != 204:
+          raise RuntimeError("dispatch failed")
+        
+      
       
       time.sleep(5)
     
