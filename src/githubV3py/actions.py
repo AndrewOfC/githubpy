@@ -1157,7 +1157,7 @@ GitHub Apps must have the `actions:read` permission to use this endpoint.
         self._updateStats(r.headers)
         
         if r.status_code // 100 == 3:
-            return r.Location
+            return r.headers['Location']
     
         if r.status_code != 200:
             return UnexpectedResult(r)
@@ -1204,7 +1204,7 @@ have the `actions:read` permission to use this endpoint.
         self._updateStats(r.headers)
         
         if r.status_code // 100 == 3:
-            return r.Location
+            return r.headers['Location']
     
         if r.status_code != 200:
             return UnexpectedResult(r)
@@ -1251,7 +1251,7 @@ the `actions:read` permission to use this endpoint.
         self._updateStats(r.headers)
         
         if r.status_code // 100 == 3:
-            return r.Location
+            return r.headers['Location']
     
         if r.status_code != 200:
             return UnexpectedResult(r)

@@ -2074,7 +2074,7 @@ the `Location` header to make a second `GET` request.
         self._updateStats(r.headers)
         
         if r.status_code // 100 == 3:
-            return r.Location
+            return r.headers['Location']
     
         if r.status_code != 200:
             return UnexpectedResult(r)
@@ -2121,7 +2121,7 @@ the `Location` header to make a second `GET` request.
         self._updateStats(r.headers)
         
         if r.status_code // 100 == 3:
-            return r.Location
+            return r.headers['Location']
     
         if r.status_code != 200:
             return UnexpectedResult(r)
