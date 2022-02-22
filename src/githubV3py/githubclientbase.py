@@ -149,3 +149,10 @@ class GitHubClientBase(object):
             
         return 
         
+    def _generatorForResult(self, r, chunk_size):
+        isinstance(r, requests.Response)
+        
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            if not chunk:
+                continue 
+            yield chunk

@@ -144,6 +144,8 @@ jobs:
         with:
           python-version: "3.10"
       - uses: syphar/restore-virtualenv@v1
+        with:
+          custom_cache_key_element: py310-windows
       - name: Build
         run: |          
           pip install --upgrade pip

@@ -1118,11 +1118,11 @@ You must authenticate using an access token with the `repo` scope to use this en
             return HttpResponse(r)
             
 
-        return UnexpectedResult(r)
+        return UnexpectedResult(r)    
     #
     # get /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
     #
-    def ActionsDownloadArtifact(self, owner:str, repo:str, artifact_id:int, archive_format:str):
+    def ActionsDownloadArtifact(self, owner:str, repo:str, artifact_id:int, archive_format:str, chunk_size=0, fetch_url=False):
         """Gets a redirect URL to download an archive for a repository. This URL expires after 1 minute. Look for `Location:` in
 the response header to find the URL for the download. The `:archive_format` must be `zip`. Anyone with read access to
 the repository can use this endpoint. If the repository is private you must use an access token with the `repo` scope.
@@ -1137,26 +1137,40 @@ GitHub Apps must have the `actions:read` permission to use this endpoint.
         artifact_id -- artifact_id parameter
         archive_format -- 
         
+        chunk_size - if 0 entire contents will try to be received.   For large files it is suggested
+                     to set chunk_size to a bufferable size, and a generator will be returned that
+                     will iterate over the content
+                     
+        fetch_url - return the url for the file
+        
+        
         """
         
         data = {}
         
         
+        stream = bool(chunk_size)
+        
         r = self._session.get(f"{self._url}/repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}", 
-                           params=data,
+                           params=data, stream=stream, allow_redirects=not fetch_url,
                            **self._requests_kwargs())
         self._updateStats(r.headers)
+        
+        if r.status_code // 100 == 3:
+            return r.Location
     
+        if r.status_code != 200:
+            return UnexpectedResult(r)
+
+        if not stream:
+            return r.content
         
-        if r.status_code == 302:
-            return HttpResponse(r)
+        return self._generatorForResult(r, chunk_size)
             
-        
-        return UnexpectedResult(r)
     #
     # get /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
     #
-    def ActionsDownloadJobLogsForWorkflowRun(self, owner:str, repo:str, job_id:int):
+    def ActionsDownloadJobLogsForWorkflowRun(self, owner:str, repo:str, job_id:int, chunk_size=0, fetch_url=False):
         """Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look
 for `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can
 use this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must
@@ -1170,26 +1184,40 @@ have the `actions:read` permission to use this endpoint.
         repo -- 
         job_id -- job_id parameter
         
+        chunk_size - if 0 entire contents will try to be received.   For large files it is suggested
+                     to set chunk_size to a bufferable size, and a generator will be returned that
+                     will iterate over the content
+                     
+        fetch_url - return the url for the file
+        
+        
         """
         
         data = {}
         
         
+        stream = bool(chunk_size)
+        
         r = self._session.get(f"{self._url}/repos/{owner}/{repo}/actions/jobs/{job_id}/logs", 
-                           params=data,
+                           params=data, stream=stream, allow_redirects=not fetch_url,
                            **self._requests_kwargs())
         self._updateStats(r.headers)
+        
+        if r.status_code // 100 == 3:
+            return r.Location
     
+        if r.status_code != 200:
+            return UnexpectedResult(r)
+
+        if not stream:
+            return r.content
         
-        if r.status_code == 302:
-            return HttpResponse(r)
+        return self._generatorForResult(r, chunk_size)
             
-        
-        return UnexpectedResult(r)
     #
     # get /repos/{owner}/{repo}/actions/runs/{run_id}/logs
     #
-    def ActionsDownloadWorkflowRunLogs(self, owner:str, repo:str, run_id:int):
+    def ActionsDownloadWorkflowRunLogs(self, owner:str, repo:str, run_id:int, chunk_size=0, fetch_url=False):
         """Gets a redirect URL to download an archive of log files for a workflow run. This link expires after 1 minute. Look for
 `Location:` in the response header to find the URL for the download. Anyone with read access to the repository can use
 this endpoint. If the repository is private you must use an access token with the `repo` scope. GitHub Apps must have
@@ -1203,22 +1231,36 @@ the `actions:read` permission to use this endpoint.
         repo -- 
         run_id -- The id of the workflow run.
         
+        chunk_size - if 0 entire contents will try to be received.   For large files it is suggested
+                     to set chunk_size to a bufferable size, and a generator will be returned that
+                     will iterate over the content
+                     
+        fetch_url - return the url for the file
+        
+        
         """
         
         data = {}
         
         
+        stream = bool(chunk_size)
+        
         r = self._session.get(f"{self._url}/repos/{owner}/{repo}/actions/runs/{run_id}/logs", 
-                           params=data,
+                           params=data, stream=stream, allow_redirects=not fetch_url,
                            **self._requests_kwargs())
         self._updateStats(r.headers)
+        
+        if r.status_code // 100 == 3:
+            return r.Location
     
+        if r.status_code != 200:
+            return UnexpectedResult(r)
+
+        if not stream:
+            return r.content
         
-        if r.status_code == 302:
-            return HttpResponse(r)
-            
+        return self._generatorForResult(r, chunk_size)
         
-        return UnexpectedResult(r)
     #
     # put /orgs/{org}/actions/permissions/repositories/{repository_id}
     #

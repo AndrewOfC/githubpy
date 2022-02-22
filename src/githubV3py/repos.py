@@ -2036,11 +2036,11 @@ You must provide values for both `name` and `email`, whether you choose to use `
             return HttpResponse(r)
             
         
-        return UnexpectedResult(r)
+        return UnexpectedResult(r)    
     #
     # get /repos/{owner}/{repo}/tarball/{ref}
     #
-    def ReposDownloadTarballArchive(self, owner:str, repo:str, ref:str):
+    def ReposDownloadTarballArchive(self, owner:str, repo:str, ref:str, chunk_size=0, fetch_url=False):
         """Gets a redirect URL to download a tar archive for a repository. If you omit `:ref`, the repository’s default branch (usually
 `master`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
 the `Location` header to make a second `GET` request.
@@ -2054,26 +2054,40 @@ the `Location` header to make a second `GET` request.
         repo -- 
         ref -- 
         
+        chunk_size - if 0 entire contents will try to be received.   For large files it is suggested
+                     to set chunk_size to a bufferable size, and a generator will be returned that
+                     will iterate over the content
+                     
+        fetch_url - return the url for the file
+        
+        
         """
         
         data = {}
         
         
+        stream = bool(chunk_size)
+        
         r = self._session.get(f"{self._url}/repos/{owner}/{repo}/tarball/{ref}", 
-                           params=data,
+                           params=data, stream=stream, allow_redirects=not fetch_url,
                            **self._requests_kwargs())
         self._updateStats(r.headers)
+        
+        if r.status_code // 100 == 3:
+            return r.Location
     
+        if r.status_code != 200:
+            return UnexpectedResult(r)
+
+        if not stream:
+            return r.content
         
-        if r.status_code == 302:
-            return HttpResponse(r)
+        return self._generatorForResult(r, chunk_size)
             
-        
-        return UnexpectedResult(r)
     #
     # get /repos/{owner}/{repo}/zipball/{ref}
     #
-    def ReposDownloadZipballArchive(self, owner:str, repo:str, ref:str):
+    def ReposDownloadZipballArchive(self, owner:str, repo:str, ref:str, chunk_size=0, fetch_url=False):
         """Gets a redirect URL to download a zip archive for a repository. If you omit `:ref`, the repository’s default branch (usually
 `master`) will be used. Please make sure your HTTP framework is configured to follow redirects or you will need to use
 the `Location` header to make a second `GET` request.
@@ -2087,22 +2101,36 @@ the `Location` header to make a second `GET` request.
         repo -- 
         ref -- 
         
+        chunk_size - if 0 entire contents will try to be received.   For large files it is suggested
+                     to set chunk_size to a bufferable size, and a generator will be returned that
+                     will iterate over the content
+                     
+        fetch_url - return the url for the file
+        
+        
         """
         
         data = {}
         
         
+        stream = bool(chunk_size)
+        
         r = self._session.get(f"{self._url}/repos/{owner}/{repo}/zipball/{ref}", 
-                           params=data,
+                           params=data, stream=stream, allow_redirects=not fetch_url,
                            **self._requests_kwargs())
         self._updateStats(r.headers)
+        
+        if r.status_code // 100 == 3:
+            return r.Location
     
+        if r.status_code != 200:
+            return UnexpectedResult(r)
+
+        if not stream:
+            return r.content
         
-        if r.status_code == 302:
-            return HttpResponse(r)
-            
+        return self._generatorForResult(r, chunk_size)
         
-        return UnexpectedResult(r)
     #
     # put /repos/{owner}/{repo}/lfs
     #
