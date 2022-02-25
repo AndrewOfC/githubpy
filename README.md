@@ -24,6 +24,8 @@ $ pip install githubV3py
 
 ```python
 
+from githubV3py import GitHubClient
+
 ghc = GitHubClient(token=githubtoken)
 
 ascii_art = ghc.MetaGetOctocat("Hello World").data.decode('utf-8')
