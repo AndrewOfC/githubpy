@@ -53,7 +53,7 @@ class BasicTests(unittest.TestCase):
         self.assertTrue(found)
             
         result = ghc.ReposDelete("GitHubPyTest", reponame)
-        self.assertEqual(result.status_code, 204)
+        self.assertEqual(result.status_code//100, 2) # any 200 should work
         
         return
     
