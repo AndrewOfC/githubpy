@@ -35,7 +35,7 @@ def main():
   parser.add_argument("--repo", help="Repo name")
   parser.add_argument("--job", help="Regex to match jobname")
   parser.add_argument("--id", help="job id")
-  parser.add_argument("--list", help="list only")
+  parser.add_argument("--list", action='store_true', help="list only")
   parser.add_argument("--failed", action="store_true", help="Only gather failed jobs")
   parser.add_argument("-n", "--count", type=int, default=1)
   parser.add_argument("-v", "--verbose", action='store_true')
@@ -46,6 +46,7 @@ def main():
   
   githubGenerate = githubV3py.GitHubClient.generate
   
+  done = False
   for workflow in githubGenerate(ghc.ActionsListRepoWorkflows, options.owner, options.repo, 
                                                    extractor=attrgetter('workflows')):
     
@@ -65,14 +66,22 @@ def main():
       ##
       ##
       for job in githubGenerate(ghc.ActionsListJobsForWorkflowRun, options.owner, options.repo, run.id, extractor=attrgetter('jobs')):
-        print(f"{run.created_at.isoformat()} {job.name:12} {run.head_branch:10} {job.status} {job.conclusion}")
-        
-        #result = ghc.ActionsDownloadJobLogsForWorkflowRun(options.owner, options.repo, job.id)
+        if options.list:          
+          print(f"{run.created_at.isoformat()} {job.name:15s} {run.head_branch:10} {job.status} {job.conclusion}")
+        else:
+          print(f"##")
+          print(f"## {job.name}#{run.run_attempt} {job.conclusion}")
+          print(f"##")
+          result = ghc.ActionsDownloadJobLogsForWorkflowRun(options.owner, options.repo, job.id)
        
-        #sys.stdout.write(result.decode('utf-8'))
-        count += 1
-        if count >= options.count:  
-          break
+          sys.stdout.write(result.decode('utf-8'))
+      count += 1
+      if count >= options.count: 
+        done = True
+        break
+    if done:
+      break
+  
 
   if options.verbose:
     print(f"Ratelimit remaining: {ghc.rateLimitRemaining} Reset: {ghc.rateLimitReset:%c}")
