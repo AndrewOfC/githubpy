@@ -31,7 +31,7 @@ def main():
     parser = argparse.ArgumentParser(description="Simple program to draw the 'Octocat' with ascii art")
     
     parser.add_argument('text', nargs='?', default="Hello World")
-    parser.add_argument("-t", "--token", default='', help="Github Access Token")
+    parser.add_argument("-t", "--token", default='', help="Access Token from https://github.com/settings/tokens/new")
     parser.add_argument("-v", "--verbose", action='store_true', help="display remaining rate-limit")
     
     options = parser.parse_args()

@@ -20,8 +20,8 @@
 ## OR OTHER DEALINGS IN THE SOFTWARE.
 ##
 import sys
+from time import sleep
 from githubV3py import *
-
 
 def main():
     import argparse
@@ -33,22 +33,32 @@ def main():
     parser.add_argument("-r", "--repo")
     parser.add_argument("-w", "--workflow", action='append', default=[], help="Name of the .yml file in .github/workflows")
     parser.add_argument("-b", "--branch", default='master', help="Branch or tag")
+    parser.add_argument("-n", "--count", type=int, default=1, help="Launch N times (for testing)")
+    parser.add_argument("-s", "--seconds", type=int, default=15, help="time between launches")
     parser.add_argument("-v", "--verbose", action='store_true')
     
     options = parser.parse_args()
     
     ghc = GitHubClient(token=options.token)
     
-    result = ghc.ActionsCreateWorkflowDispatch(options.owner, 
-                                               options.repo, 
-                                               options.workflow[0], 
-                                               options.branch, inputs={})
-    if not isinstance(result, HttpResponse) or result.status_code != 204:
-        print(f"ERROR: {result.message}")
-        sys.exit(2)
+    
+    for i in range(options.count):
         
-    if options.verbose:
-        print(f"# workflow {options.workflow[0]} on {options.branch} launched successfully")
+        result = ghc.ActionsCreateWorkflowDispatch(options.owner, 
+                                                   options.repo, 
+                                                   options.workflow[0], 
+                                                   options.branch, inputs={})
+        
+        
+        if not isinstance(result, HttpResponse) or result.status_code != 204:
+            print(f"ERROR: {result.message}")
+            sys.exit(2)
+            
+        if options.verbose:
+            print(f"# workflow {options.workflow[0]} on {options.branch} launched successfully")
+
+        if i != options.count-1:
+            sleep(options.seconds)
     
     
     return

@@ -346,8 +346,8 @@ def main():
     
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("-o", "--owner")
-    parser.add_argument("-t", "--token")
+    parser.add_argument("-o", "--owner", help="repo owner")
+    parser.add_argument("-t", "--token", help="access token from: https://github.com/settings/tokens/new")
     
     options = parser.parse_args()
     
