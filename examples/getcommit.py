@@ -9,16 +9,17 @@ def main():
     parser.add_argument("-o", "--owner")
     parser.add_argument("-r", "--repo") 
     parser.add_argument("-t", "--token")
+    parser.add_argument("-s", "--sha")
 
     options = parser.parse_args()
     
 
     ghc = githubV3py.GitHubClient(token=options.token)
     
+    commits = ghc.SearchCommits(f"hash:{options.sha} merge:false")
     
-    commits = ghc.ReposListCommits(options.owner, options.repo, sha='c0ad6e2')
-    
-    
+    print(f"Commit {options.sha}:  {commits.items[0].commit.message}")
+      
     return
 
 if __name__ == '__main__':
