@@ -36,7 +36,7 @@ class DownloadTests(unittest.TestCase):
   
   @classmethod
   def setUpClass(clazz):
-    ghc = clazz._ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'], usesession=True)
+    ghc = clazz._ghc = GitHubClient(token=os.environ['TOKEN'], usesession=True)
     # trigger a simple build    
         
     now = datetime.datetime.now()

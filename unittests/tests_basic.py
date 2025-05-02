@@ -32,7 +32,7 @@ class BasicTests(unittest.TestCase):
     
     def test_create_delete_repo(self):
         reponame = f'foobar-py-{PlatformString()}'
-        ghc = GitHubClient(os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(os.environ['TOKEN'])
         
         result = ghc.ReposDelete("GitHubPyTest", reponame)
         self.assertTrue((isinstance(result, HttpResponse) and result.status_code == 204) or result.message == 'Not Found')
@@ -59,7 +59,7 @@ class BasicTests(unittest.TestCase):
     
     def test_pagination(self):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         count = 7
         
@@ -71,7 +71,7 @@ class BasicTests(unittest.TestCase):
         
     def test_datetime_usage(self):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         since = datetime.datetime(2021, 9, 2)
         until = datetime.datetime(2021, 9, 3)
@@ -89,7 +89,7 @@ class BasicTests(unittest.TestCase):
         
     def test_generation(self):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         count = 7
         
@@ -104,7 +104,7 @@ class BasicTests(unittest.TestCase):
         
     def test_generation_error(self):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         count = 7
         
@@ -123,7 +123,7 @@ class BasicTests(unittest.TestCase):
     # disabled for now, github  isn't using passswords anymore... for now       
     def xtest_workflow_artifacts(self):
         
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         # launch a workflow
         

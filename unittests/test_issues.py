@@ -37,7 +37,7 @@ class IssueTests(unittest.TestCase):
     
     @classmethod
     def setUpClass(clazz):
-        ghc = clazz._ghc = githubV3py.GitHubClient(token=os.environ['GITHUB_TOKEN'], usesession=True)
+        ghc = clazz._ghc = githubV3py.GitHubClient(token=os.environ['TOKEN'], usesession=True)
     
         
         t = datetime.datetime.now()

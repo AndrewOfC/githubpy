@@ -1,0 +1,32 @@
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        required: true
+        type: string
+      python-version:
+        required: true
+        type: string
+
+
+jobs:
+  build_and_test:
+    env:
+      TOKEN: ${{ secrets.GITHUBPYTEST_ACCT_TOKEN }}
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Build
+        run: |
+          pip install -r requirements.txt
+          python --version
+          pip install ./
+      - name: Test
+        working-directory: unittests
+        run: python -m unittest -v

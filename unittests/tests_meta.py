@@ -64,14 +64,14 @@ class MetaTests(unittest.TestCase):
         return
     
     def test_octocat(self):
-        self.octocat_test(os.environ['GITHUB_TOKEN'])
+        self.octocat_test(os.environ['TOKEN'])
     
     def test_callableToken(self):
-        self.octocat_test(lambda: os.environ['GITHUB_TOKEN'])
+        self.octocat_test(lambda: os.environ['TOKEN'])
     
     
     def test_emojis(self):
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         resp = ghc.EmojisGet()
         
@@ -87,7 +87,7 @@ class MetaTests(unittest.TestCase):
         ##
         ## Sllight chance that we'll do queries at the 'reset' rollover
         ##
-        ghc = GitHubClient(token=os.environ['GITHUB_TOKEN'])
+        ghc = GitHubClient(token=os.environ['TOKEN'])
         
         rl = ghc.RateLimitGet()
         
